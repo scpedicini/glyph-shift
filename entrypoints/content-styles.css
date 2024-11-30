@@ -1,0 +1,44 @@
+.pmapper-tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.pmapper-tooltip::after {
+  content: attr(data-pmapper-original);
+  position: absolute;
+  bottom: 100%; /* Position above the element */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  z-index: 10;
+}
+
+.pmapper-tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
+@font-face {
+  font-family: 'ASL Hands';
+  src: url('assets/asl-hands.woff2') format('woff2');
+}
+
+.pmapper-swapped {
+
+}
+
+.finger-spelling {
+  font-family: 'ASL Hands';
+}
+
