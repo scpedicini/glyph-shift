@@ -1,25 +1,30 @@
 {
   "name": "phonetic-mapper",
-  "description": "manifest.json description",
+  "description": "A simple educational extension that helps you learn various phonetic alphabets by randomly replacing words with their phonetic equivalents as you browse.",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "wxt",
+    "dev": "wxt --debug --mode development --port 9411",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.280",
+    "@types/node": "^22.10.1",
+    "csv-stringify": "^6.5.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3",
-    "wxt": "^0.19.13"
+    "vitest": "^2.1.8",
+    "wxt": "^0.20.7"
   },
   "dependencies": {
-    "csv-stringify": "^6.5.2"
+    "webext-bridge": "^6.0.1"
   }
 }

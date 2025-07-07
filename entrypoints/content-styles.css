@@ -1,37 +1,36 @@
 .pmapper-tooltip {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .pmapper-tooltip::after {
-  content: attr(data-pmapper-original);
-  position: absolute;
-  bottom: 100%; /* Position above the element */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: black;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s;
-  z-index: 10;
+    content: attr(data-pmapper-original);
+    position: absolute;
+    bottom: 100%; /* Position above the element */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+    z-index: 10;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: normal !important;
 }
 
 .pmapper-tooltip:hover::after {
-  opacity: 1;
-  visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
 
-
-
-
 @font-face {
-  font-family: 'ASL Hands';
-  src: url('assets/asl-hands.woff2') format('woff2');
+    font-family: 'ASL Hands';
+    src: url(~/assets/asl-hands.woff2) format('woff2');
 }
 
 .pmapper-swapped {
@@ -39,6 +38,41 @@
 }
 
 .finger-spelling {
-  font-family: 'ASL Hands';
+    font-family: 'ASL Hands' !important;
+    font-size: 1.5em;
 }
 
+@font-face {
+    font-family: 'Braille Unicode Alt';
+    src: url(~/assets/braille-unicode-alt.woff2) format('woff2');
+}
+
+.braille-unicode {
+    font-family: 'Braille Unicode Alt' !important;
+    font-size: 2em;
+    letter-spacing: -0.1em;
+
+    /* Font Smoothing */
+    -webkit-font-smoothing: antialiased;  /* For WebKit (Chrome, Safari) */
+    -moz-osx-font-smoothing: grayscale;   /* For Firefox on macOS */
+
+    /* Text Rendering */
+    text-rendering: optimizeLegibility;
+
+    /* Transformations (adjust as needed) */
+    transform: scale(1);
+
+    vertical-align: middle;
+}
+
+.morse-code {
+    font-family: "Morse Code" !important;
+    font-size: 2.5em !important;
+    font-weight: 400 !important;
+    vertical-align: -0.1em !important;
+}
+
+@font-face {
+    font-family: 'Morse Code';
+    src: url(~/assets/morse-code.woff2) format('woff2');
+}

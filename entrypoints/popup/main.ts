@@ -1,24 +1,72 @@
-import './style.css';
-import typescriptLogo from '@/assets/typescript.svg';
-import viteLogo from '/wxt.svg';
-import { setupCounter } from '@/components/counter';
+import { storage } from 'wxt/storage'
+import {DEFAULT_CONFIG, PhoneticConfig} from "@/utils/common";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://wxt.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="WXT logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>WXT + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the WXT and TypeScript logos to learn more
-    </p>
-  </div>
-`;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log("DOM loaded")
+    const phoneticConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG
+
+    // Set initial values
+    const slider = document.getElementById('swapFrequency') as HTMLInputElement
+    const aslCheckbox = document.getElementById('aslEnabled') as HTMLInputElement
+    const morseCheckbox = document.getElementById('morseEnabled') as HTMLInputElement
+    const braille1Checkbox = document.getElementById('braille1Enabled') as HTMLInputElement
+    const braille2Checkbox = document.getElementById('braille2Enabled') as HTMLInputElement
+
+    let lockEvents = true;
+
+    slider.value = phoneticConfig.swapFrequency.toString();
+    aslCheckbox.checked = phoneticConfig.aslEnabled;
+    morseCheckbox.checked = phoneticConfig.morseEnabled;
+    braille1Checkbox.checked = phoneticConfig.braille1Enabled;
+    braille2Checkbox.checked = phoneticConfig.braille2Enabled
+
+    // Update displayed percentage
+    const percentageDisplay = document.getElementById('percentageDisplay')!
+    percentageDisplay.textContent = `${phoneticConfig.swapFrequency}%`
+    lockEvents = false;
+
+    slider.addEventListener('input', async (e) => {
+        if(lockEvents) return;
+        console.log("slider input event!");
+            const value = parseInt((e.target as HTMLInputElement).value)
+            percentageDisplay.textContent = `${value}%`
+            await storage.setItem('local:phoneticConfig', {
+                ...phoneticConfig,
+                swapFrequency: value
+            })
+    });
+
+    // Add event listeners
+    aslCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        await storage.setItem('local:phoneticConfig', {
+            ...phoneticConfig,
+            aslEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    morseCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        await storage.setItem('local:phoneticConfig', {
+            ...phoneticConfig,
+            morseEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    braille1Checkbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        await storage.setItem('local:phoneticConfig', {
+            ...phoneticConfig,
+            braille1Enabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    braille2Checkbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        await storage.setItem('local:phoneticConfig', {
+            ...phoneticConfig,
+            braille2Enabled: (e.target as HTMLInputElement).checked
+        })
+    });
+})

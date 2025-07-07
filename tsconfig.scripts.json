@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "ES2018",
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalResolver": true
+  }
+}

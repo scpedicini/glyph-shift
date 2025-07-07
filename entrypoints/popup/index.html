@@ -1,13 +1,95 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Default Popup Title</title>
-    <meta name="manifest.type" content="browser_action" />
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="./main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phonetic Mapper</title>
+  <meta name="manifest.type" content="browser_action"/>
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+<div id="app">
+  <a href="https://wxt.dev" target="_blank">
+    <img src="wxt.svg" class="logo" alt="WXT logo"/>
+  </a>
+  <h1>Phonetic Mapper</h1>
+
+  <div class="card">
+    <h2>Swap Frequency</h2>
+    <div class="slider-container">
+      <input
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          id="swapFrequency"
+          class="slider"
+      >
+      <div class="slider-value">
+        <span id="percentageDisplay">50%</span>
+      </div>
+    </div>
+    <p class="description">
+      This changes how often words are swapped with a phonetic substitute from 0 to 100%
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Languages</h2>
+    <div class="language-option">
+      <label class="checkbox-container">
+        <input type="checkbox" id="aslEnabled">
+        <span class="checkmark"></span>
+        <div class="label-text">
+          <span class="language-name">ASL</span>
+          <span class="language-description">
+                Replaces alphabet with the equivalent finger spelling in American Sign Language
+              </span>
+        </div>
+      </label>
+    </div>
+    <div class="language-option">
+      <label class="checkbox-container">
+        <input type="checkbox" id="morseEnabled">
+        <span class="checkmark"></span>
+        <div class="label-text">
+          <span class="language-name">Morse Code</span>
+          <span class="language-description">
+                Replaces alphabet with the equivalent Morse Code
+              </span>
+        </div>
+      </label>
+    </div>
+    <!-- let's add Braille 1 which is just letter substitution -->
+    <div class="language-option">
+      <label class="checkbox-container">
+        <input type="checkbox" id="braille1Enabled">
+        <span class="checkmark"></span>
+        <div class="label-text">
+          <span class="language-name">Braille 1</span>
+          <span class="language-description">
+                Replaces alphabet with the equivalent Braille letter
+          </span>
+        </div>
+      </label>
+    </div>
+    <!-- let's add Braille 2 which is support for contracted words -->
+    <div class="language-option">
+      <label class="checkbox-container">
+        <input type="checkbox" id="braille2Enabled">
+        <span class="checkmark"></span>
+        <div class="label-text">
+          <span class="language-name">Braille 2</span>
+          <span class="language-description">
+                Replaces common words with their contracted Braille equivalents in Unified English Braille. This is currently a WIP and may not work entirely as expected.
+          </span>
+        </div>
+      </label>
+    </div>
+
+
+  </div>
+</div>
+<script type="module" src="./main.ts"></script>
+</body>
 </html>

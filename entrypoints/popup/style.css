@@ -31,10 +31,11 @@ body {
   min-height: 100vh;
 }
 
+/*
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
+}*/
 
 #app {
   max-width: 1280px;
@@ -94,4 +95,131 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+
+  .card {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-bottom: 1.5em;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1.5em;
+  margin-bottom: 1em;
+}
+
+
+/* Slider styles */
+.slider-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  background: #555;
+  border-radius: 2px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #646cff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #535bf2;
+}
+
+.slider-value {
+  min-width: 3em;
+  text-align: right;
+}
+
+/* Checkbox styles */
+.language-option {
+  margin-top: 0.5em;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #646cff;
+  border-radius: 4px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox-container input:checked + .checkmark:after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #646cff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.label-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.language-name {
+  font-weight: 500;
+}
+
+.language-description {
+  font-size: 0.9em;
+  color: #888;
+}
+
+
+@font-face {
+  font-family: "Permanent Marker";
+  src: url(~/assets/PermanentMarker-Regular.ttf) format('truetype');
+}
+
+.permanent-marker {
+  font-family: "Permanent Marker";
+}
+
+
+.description {
+  color: #888;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+  font-family: "Permanent Marker";
 }
