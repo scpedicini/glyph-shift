@@ -2,7 +2,7 @@
   "name": "phonetic-mapper",
   "description": "A simple educational extension that helps you learn various phonetic alphabets by randomly replacing words with their phonetic equivalents as you browse.",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "wxt --debug --mode development --port 9411",
