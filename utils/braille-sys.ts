@@ -76,7 +76,7 @@ export class BrailleSys {
         return braille_word;
     }
 
-    static brailleMap2 = {
+    static brailleMap2: { [key: string]: string } = {
         "and": "⠯",
         "ar": "⠜",
         "ble": "⠼",
