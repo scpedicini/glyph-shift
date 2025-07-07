@@ -78,7 +78,7 @@ export class BrailleSys {
 
     static brailleMap2 = {
         "and": "⠯",
-        "ar": "⠜",a
+        "ar": "⠜",
         "ble": "⠼",
         "ch": "⠡",
         "ed": "⠫",
