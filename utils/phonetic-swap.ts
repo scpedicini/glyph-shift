@@ -3,6 +3,7 @@ interface IPhoneticSwap {
     readonly description: string;
     swap: (input: string) => string;
     initialize: () => void;
+    canSwap: (input: string) => boolean;
 }
 
 class HiraganaSwap implements IPhoneticSwap {
@@ -15,6 +16,10 @@ class HiraganaSwap implements IPhoneticSwap {
     }
 
     initialize(): void {
+    }
+
+    canSwap(input: string): boolean {
+        return true;
     }
 }
 
@@ -31,10 +36,17 @@ class FingerspellingSwap implements IPhoneticSwap {
         // add a custom data-attribute called pmapper-original with the original text
         span.dataset.pmapperOriginal = input;
 
-        let retValue = "";
-        return retValue;
+        // add the text to the span
+        span.textContent = input;
+
+        return span.outerHTML;
     }
 
     initialize(): void {
+    }
+
+    // only return true if the input is composed entirely of A-Z or a-z characters
+    canSwap(input: string): boolean {
+        return /^[a-zA-Z]+$/.test(input);
     }
 }
