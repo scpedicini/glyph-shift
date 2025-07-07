@@ -1,4 +1,4 @@
-import {storage} from 'wxt/storage';
+import { storage } from '#imports';
 import './content-styles.css'
 import {sendMessage} from 'webext-bridge/content-script';
 import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage} from "@/utils/common";
