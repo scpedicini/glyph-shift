@@ -11,8 +11,8 @@ graph TD
     subgraph Build Time
         A[combined_cmu_ipa_data.csv] --> B{Prepare Data Script};
         C[ipa-to-hiragana.csv] --> B;
-        B --> D[word-to-ipa.json];
-        B --> E[ipa-to-hiragana.json];
+        B --> D[hiragana-word-to-ipa.json];
+        B --> E[hiragana-ipa-to-hiragana.json];
     end
 
     subgraph Run Time
@@ -32,14 +32,14 @@ graph TD
     - Performs the conversion pipeline.
 
 2.  **Data Sources (Optimized)**
-    - **Source CSVs:**
+    - **Source CSVs:** (can be located anywhere in the project)
         - `/scripts/combined_cmu_ipa_data.csv`
         - `/components/ipa-to-hiragana.csv`
     - **Build-Time Script:**
-        - A new script, `/scripts/prepare-data.ts`, will parse the source CSVs.
+        - A new script, `/scripts/prepare-data.ts`, will parse the source CSVs using `papaparse`.
     - **Public Data Assets (Generated):**
-        - `/public/data/word-to-ipa.json`
-        - `/public/data/ipa-to-hiragana.json`
+        - `/public/data/hiragana-word-to-ipa.json`
+        - `/public/data/hiragana-ipa-to-hiragana.json`
 
 3.  **Utility: IPA Parser**
     - Parses IPA strings into individual phonemes using a longest-match-first algorithm.
@@ -50,20 +50,20 @@ graph TD
 ### 1. Data Pre-processing (Build Step)
 
 Create a new script at `/scripts/prepare-data.ts`. This script will:
-1.  **Add a CSV parsing library** (e.g., `papaparse` or `csv-parse`) to `devDependencies`.
-2.  Read `/scripts/combined_cmu_ipa_data.csv` and generate `/public/data/word-to-ipa.json`.
+1.  **Add `papaparse`** to `devDependencies` for CSV parsing.
+2.  Read `/scripts/combined_cmu_ipa_data.csv` and generate `/public/data/hiragana-word-to-ipa.json`.
     - **JSON Structure:** To keep file size minimal, use a compact array of arrays: `[ [word: string, ipa_pronunciations: string[]], ... ]`.
     - **Example:** `[ ["HELLO", ["həˈloʊ", "hɛˈloʊ"]], ["WORLD", ["wɝld"]] ]`
-3.  Read `/components/ipa-to-hiragana.csv` and generate `/public/data/ipa-to-hiragana.json`.
+3.  Read `/components/ipa-to-hiragana.csv` and generate `/public/data/hiragana-ipa-to-hiragana.json`.
     - **JSON Structure:** `Map<string, { hiragana: string, score: number }>` (e.g., `{ "oʊ": { "hiragana": "おう", "score": 0.9 } }`)
-4.  Integrate this script into the build process by adding it to the `package.json` `scripts`:
+4.  **Manual execution only** - Add the script to `package.json` but do NOT integrate into automatic builds:
     ```json
     "scripts": {
       "prepare-data": "tsx scripts/prepare-data.ts",
-      "build": "npm run prepare-data && wxt build",
-      // ... other scripts
+      // ... other scripts (do NOT add to build script)
     }
     ```
+    - Document in README.md that `npm run prepare-data` must be run manually after modifying CSV files.
 
 ### 2. Data Structures (in `HiraganaSwap`)
 
@@ -125,17 +125,19 @@ The parser will use the `ipaToHiraganaMap` to define its phoneme inventory.
 
 - **Word not found**: `canSwap()` returns `false`.
 - **Unmappable phonemes**: The entire pronunciation is considered invalid. If all pronunciations for a word are invalid, `canSwap()` returns `false`.
-- **Data file not found**: Log an error during initialization and disable the swapper.
+- **Data file not found**: Log error to console (console.error) during initialization and disable the swapper by having `canSwap()` always return `false`.
+- **Async method failures**: If data loading fails, log error to console and return `false` from `canSwap()` or `null` from `swap()`.
 - **Compound/hyphenated words**: Treat as-is. If "cat-food" isn't in the dictionary, it won't be swapped. Future enhancement could be to split and look up parts.
 
 ## Implementation Steps
 
 ### Phase 1: Data Preparation
-1.  Choose and add a CSV parsing library to `devDependencies`.
+1.  Add `papaparse` to `devDependencies`.
 2.  Create the `/scripts/prepare-data.ts` script.
 3.  Implement the logic to parse both CSVs and write the corresponding JSON files to `/public/data/`.
-4.  Update `package.json` to run this script before the `build` command.
-5.  Move the source CSVs to more appropriate locations (`/data/sources/` perhaps, or keep as-is) and update `.gitignore` if necessary.
+4.  Add `prepare-data` script to `package.json` (manual execution only).
+5.  Update README.md to document that `npm run prepare-data` must be run manually after CSV modifications.
+6.  CSV files can remain in current locations or be moved as needed.
 
 ### Phase 2: Data Loading
 1.  Update the `HiraganaSwap.initialize()` method to `fetch` the new JSON files.
@@ -152,8 +154,10 @@ The parser will use the `ipaToHiraganaMap` to define its phoneme inventory.
 2.  Use the refined scoring logic (average score) to select the best pronunciation.
 
 ### Phase 5: Integration & Testing
-1.  Ensure the `hiragana-text` CSS class is applied.
-2.  Perform integration tests with various English words, including those with multiple pronunciations and edge cases.
+1.  **Update ALL swap classes to async** - Convert `canSwap` and `swap` methods in all classes to async/Promise-based.
+2.  Ensure the `hiragana-text` CSS class is applied.
+3.  Perform integration tests with various English words, including those with multiple pronunciations and edge cases.
+4.  Verify the entire extension still works after making all swap methods async.
 
 ## Architectural Changes for Asynchronous Loading
 
@@ -186,11 +190,15 @@ To accommodate fetching data without blocking, the following changes must be mad
     }
     ```
 
-3.  **Update Synchronous Swappers**: All other swapper classes (`MorseCodeSwap`, `BrailleSwap`, etc.) must have their `canSwap` and `swap` methods updated with the `async` keyword to conform to the updated interface. This is a non-breaking change for their internal logic.
+3.  **Update ALL Synchronous Swappers** (REQUIRED): Every swapper class (`MorseCodeSwap`, `BrailleSwap`, `FingerspellingSwap`, `VorticonSwap`) MUST have their `canSwap` and `swap` methods updated with the `async` keyword to conform to the updated interface. This is mandatory to prevent breaking the extension.
     ```typescript
     // Example for MorseCodeSwap
     async canSwap(input: string): Promise<boolean> {
         return /^[a-zA-Z]+$/.test(input);
+    }
+    
+    async swap(input: string): Promise<string> {
+        return `<span class="morse-code pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}">${input.toLowerCase()}</span>`;
     }
     ```
 
