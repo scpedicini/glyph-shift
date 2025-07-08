@@ -223,3 +223,39 @@ h2 {
   margin-top: 0.5em;
   font-family: "Permanent Marker";
 }
+
+/* Footer styles */
+.footer {
+  margin-top: 2em;
+  padding-top: 1.5em;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-link {
+  font-size: 0.85em;
+  color: #888;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #646cff;
+}
+
+.footer-brand {
+  font-weight: 600;
+  background: linear-gradient(135deg, #646cff 0%, #535bf2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (prefers-color-scheme: light) {
+  .footer {
+    border-top-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .footer-link {
+    color: #666;
+  }
+}

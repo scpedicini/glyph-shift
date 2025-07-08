@@ -32,9 +32,8 @@ Unlike the other extensions which focus more on language translation, the Phonet
 
 # TODO
 
-- [ ] Add more alphabets
 - [ ] Kofi link
-- [ ] Links to Specular Realms and Mordenstar (https://specularrealms.com and https://mordenstar.com)
+- [X] Links to Specular Realms and Mordenstar (https://specularrealms.com and https://mordenstar.com)
 - [ ] Reference to learning resources
 - [X] Vorticon alphabet
 
