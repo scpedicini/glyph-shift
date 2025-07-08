@@ -18,16 +18,18 @@ Phonetic Mapper is a browser extension that allows you to select various phoneti
 
 ## Prior Art
 
-ReadLang
-
 Language Immersion
+https://github.com/google/chrome-language-immersion
 
-WordWiz
+Polyglot
+https://code.google.com/archive/p/chrome-polyglot/
 
+MindTheWord
+https://chromewebstore.google.com/detail/mind-the-word/fabjlaokbhaoehejcoblhahcekmogbom?hl=en
 
 ## How is your project different from these other projects?
 
-Unlike the other extensions which focus more on language translation, the Phonetic Mapper focuses more on learning "writing systems" or "alphabets". Unlike full fledged languages, these methods of communication are relatively simple and can usually be learned in a few hours. This extension is meant to be a fun way to review your knowledge of these alphabets.
+Unlike the other extensions which focus more on language translation, the Phonetic Mapper focuses more on learning "writing systems" or "alphabets". These methods of communication are relatively simple and can usually be learned in a few hours. This extension is meant to be a fun way to review your knowledge of these alphabets just in case you forget to feed your babel fish.
 
 
 # TODO
