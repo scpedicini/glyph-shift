@@ -147,7 +147,8 @@ The parser will use the `ipaToHiraganaMap` to define its phoneme inventory.
 ### Phase 3: IPA Parser Utility
 1.  Implement the longest-match-first parsing algorithm using the `ipaPhonemeInventory`.
 2.  Handle stripping of diacritics/modifiers.
-3.  Add unit tests for the parser.
+3.  Create `tests/hiragana.test.ts` with unit tests for the parser.
+4.  Add tests progressively as each component is built.
 
 ### Phase 4: Core Conversion Logic
 1.  Implement the main `swap()` and `canSwap()` methods.
@@ -155,9 +156,11 @@ The parser will use the `ipaToHiraganaMap` to define its phoneme inventory.
 
 ### Phase 5: Integration & Testing
 1.  **Update ALL swap classes to async** - Convert `canSwap` and `swap` methods in all classes to async/Promise-based.
-2.  Ensure the `hiragana-text` CSS class is applied.
-3.  Perform integration tests with various English words, including those with multiple pronunciations and edge cases.
-4.  Verify the entire extension still works after making all swap methods async.
+2.  Create `tests/general.test.ts` to test the async interface changes across all swap classes.
+3.  Ensure the `hiragana-text` CSS class is applied.
+4.  Perform integration tests with various English words, including those with multiple pronunciations and edge cases.
+5.  Verify the entire extension still works after making all swap methods async.
+6.  Add comprehensive test coverage for edge cases in `tests/hiragana.test.ts`.
 
 ## Architectural Changes for Asynchronous Loading
 
@@ -204,8 +207,30 @@ To accommodate fetching data without blocking, the following changes must be mad
 
 4.  **Confirm `background.ts` Compatibility**: The `onMessage` handlers in the background script already support `Promise`-based return values, so no changes are needed there. They will correctly `await` the results from the now-asynchronous `canSwap` and `swap` calls.
 
+## Testing Strategy
+
+Throughout implementation, progressively add unit tests:
+
+1. **`tests/hiragana.test.ts`** - Tests specific to HiraganaSwap:
+   - IPA parser functionality (longest-match algorithm)
+   - Word to IPA lookup
+   - IPA to Hiragana mapping
+   - Score calculation and pronunciation selection
+   - Edge cases (missing words, unmappable phonemes)
+
+2. **`tests/general.test.ts`** - Tests for async interface changes:
+   - Verify all swap classes implement async methods correctly
+   - Test Promise resolution/rejection
+   - Ensure backward compatibility
+
+3. **Test-Driven Development**:
+   - Write tests before or alongside implementation
+   - Run tests after each significant change
+   - Ensure all tests pass before moving to next phase
+
 ## Success Criteria
 1.  Accurate conversion of common English words to Hiragana.
 2.  **Fast initial load time** due to pre-processed data.
 3.  Graceful handling of unmappable words.
-4.  Comprehensive test coverage for the parser and conversion logic.
+4.  Comprehensive test coverage (>80%) for the parser and conversion logic.
+5.  All existing tests continue to pass after async migration.
