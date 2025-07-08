@@ -16,8 +16,8 @@ export interface IPhoneticSwap {
 
 
 export class HiraganaSwap implements IPhoneticSwap {
-    readonly title = 'Hiragana to Katakana';
-    readonly description = 'Converts all Hiragana characters to Katakana';
+    readonly title = 'Hiragana';
+    readonly description = 'Converts English words to Hiragana';
 
     swap(input: string): string {
         let retValue = "";
