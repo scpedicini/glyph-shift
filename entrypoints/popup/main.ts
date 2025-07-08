@@ -31,8 +31,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("slider input event!");
             const value = parseInt((e.target as HTMLInputElement).value)
             percentageDisplay.textContent = `${value}%`
+            const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG
             await storage.setItem('local:phoneticConfig', {
-                ...phoneticConfig,
+                ...currentConfig,
                 swapFrequency: value
             })
     });
@@ -40,32 +41,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Add event listeners
     aslCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
-            ...phoneticConfig,
+            ...currentConfig,
             aslEnabled: (e.target as HTMLInputElement).checked
         })
     });
 
     morseCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
-            ...phoneticConfig,
+            ...currentConfig,
             morseEnabled: (e.target as HTMLInputElement).checked
         })
     });
 
     braille1Checkbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
-            ...phoneticConfig,
+            ...currentConfig,
             braille1Enabled: (e.target as HTMLInputElement).checked
         })
     });
 
     braille2Checkbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
-            ...phoneticConfig,
+            ...currentConfig,
             braille2Enabled: (e.target as HTMLInputElement).checked
         })
     });
