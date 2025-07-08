@@ -14,7 +14,8 @@ export default defineContentScript({
             const rndNumber = await sendMessage('get-random-number', {data: 'Hello from content script'});
             console.log('Received random number:', rndNumber);
 
-            const phoneticConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig') || DEFAULT_CONFIG;
+            const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
+            const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
             setupHighlighting(phoneticConfig);
         });
     },
@@ -33,6 +34,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
 
     if (phoneticConfig.morseEnabled) {
         langs.push(SwapLangs.MorseCode);
+    }
+
+    if (phoneticConfig.vorticonEnabled) {
+        langs.push(SwapLangs.Vorticon);
     }
 
     return langs;

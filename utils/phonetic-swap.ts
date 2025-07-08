@@ -69,6 +69,24 @@ export class MorseCodeSwap implements IPhoneticSwap {
     }
 }
 
+export class VorticonSwap implements IPhoneticSwap {
+    readonly title = 'English to Vorticon';
+    readonly description = 'Converts English text to Vorticon (Standard Galactic Alphabet)';
+
+    swap(input: string): string {
+        // Create span element using template string
+        return `<span class="vorticon-sga pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}">${input}</span>`;
+    }
+
+    initialize(): void {
+    }
+
+    // only return true if the input is composed entirely of A-Z or a-z characters
+    canSwap(input: string): boolean {
+        return /^[a-zA-Z]+$/.test(input);
+    }
+}
+
 
 
 export class BrailleSwap implements IPhoneticSwap {
@@ -110,6 +128,9 @@ export class LanguageFactory {
                     break;
                 case SwapLangs.MorseCode:
                     this.swapMap[swapLang] = new MorseCodeSwap();
+                    break;
+                case SwapLangs.Vorticon:
+                    this.swapMap[swapLang] = new VorticonSwap();
                     break;
             }
 

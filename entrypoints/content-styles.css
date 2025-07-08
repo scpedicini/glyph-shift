@@ -76,3 +76,14 @@
     font-family: 'Morse Code';
     src: url(~/assets/morse-code.woff2) format('woff2');
 }
+
+@font-face {
+    font-family: 'Vorticon SGA';
+    src: url(~/assets/sga-k3-direct.otf.woff2) format('woff2');
+}
+
+.vorticon-sga {
+    font-family: 'Vorticon SGA' !important;
+    font-size: 1.25em !important;
+    /* vertical-align: baseline !important; */
+}
