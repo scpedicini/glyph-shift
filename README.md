@@ -43,3 +43,24 @@ Unlike the other extensions which focus more on language translation, the Phonet
 # Future Language Support
 
 - [ ] Braille 2, aka contracted Grade 2 braille
+
+# Data Preparation
+
+## Hiragana Data
+
+The Hiragana conversion feature requires pre-processed data files. If you modify the source CSV files, you must regenerate the JSON data files:
+
+1. After modifying any of these files:
+   - `/scripts/combined_cmu_ipa_data.csv` - English word to IPA pronunciation mappings
+   - `/components/ipa-to-hiragana.csv` - IPA phoneme to Hiragana mappings
+
+2. Run the data preparation script:
+   ```bash
+   npm run prepare-data
+   ```
+
+3. This will regenerate the JSON files in `/public/data/`:
+   - `hiragana-word-to-ipa.json`
+   - `hiragana-ipa-to-hiragana.json`
+
+**Note:** The data preparation script is NOT run automatically during builds. You must run it manually after any CSV modifications.

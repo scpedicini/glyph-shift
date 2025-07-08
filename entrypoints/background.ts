@@ -1,5 +1,5 @@
 import {onMessage} from "webext-bridge/background";
-import {CanSwapMessage, SwapLangs} from "@/utils/common";
+import {CanSwapMessage, SwapMessage, SwapLangs} from "@/utils/common";
 import {IPhoneticSwap, LanguageFactory} from "@/utils/phonetic-swap";
 
 
@@ -14,25 +14,25 @@ export default defineBackground(() => {
         return Math.random();
     });
 
-    onMessage('can-swap', ({data}) => {
+    onMessage('can-swap', async ({data}) => {
         console.log('Received message:', data);
 
         const { swapLanguage, input } = data as CanSwapMessage;
 
         const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
 
-        const response = phoneticSwapper && phoneticSwapper.canSwap(input);
+        const response = phoneticSwapper && await phoneticSwapper.canSwap(input);
         return response;
     });
 
-    onMessage('swap', ({data}) => {
+    onMessage('swap', async ({data}) => {
         console.log('Received message:', data);
 
         const { swapLanguage, input, options } = data as SwapMessage;
 
         const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
 
-        const response = phoneticSwapper && phoneticSwapper.swap(input, options);
+        const response = phoneticSwapper && await phoneticSwapper.swap(input, options);
         return response;
     });
 
