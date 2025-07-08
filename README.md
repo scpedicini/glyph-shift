@@ -37,3 +37,8 @@ Unlike the other extensions which focus more on language translation, the Phonet
 - [ ] Links to Specular Realms and Mordenstar
 - [ ] Reference to learning resources
 - [ ] Vorticon alphabet
+
+
+# Future Language Support
+
+- [ ] Braille 2, aka contracted Grade 2 braille
