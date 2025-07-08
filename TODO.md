@@ -1,5 +1,34 @@
 # Unfinished Tasks
 
+## KatakanaSwap
+
+This will be built likely similar to the `HiraganaSwap` class but converts English to Katakana. There is a file of loanwords called `katakana_loan_words.tsv` which contains data in the following format:
+
+```tsv
+katakana	english
+パーセント	percent
+アメリカ	America
+ページ	page
+センター	center
+```
+
+You will probably want to write another preprocessing script to convert this into a nice compact JSON file. Bear in mind that this KatakanaSwap (eventually) is going to be something like this:
+
+1. Check if input has a direct katakana equivalent in the `katakana_loan_words` JSON dictionary
+2. Else try to use 
+
+## Add Japanese Util functions
+
+Add two new functions to @utils/japanese-utils.ts - hiraganaToKatakana(string): string and katakanaToHiragana(string): string
+
+Nuances to keep in mind:
+Small kana like ッ (small tsu), ャュョ (ya, yu, yo) also have 1:1 equivalents in hiragana: っ, ゃ, ゅ, ょ.
+Elongation mark (ー) in katakana has no hiragana equivalent. In hiragana, you'd usually repeat the vowel:
+カー (kā) → かあ (ka-a)
+But for transliterations, it's fine to just keep ー when mimicking English sound length.
+
+
+
 ## Add Hiragana
 
 HiraganaSwap class needs to be implemented to convert English words to Hiragana. There are two files that likely will need to be used in this process. The first one is the `combined_cmu_ipa_data.csv` file.
