@@ -3,6 +3,7 @@ import {IPhoneticSwap} from './interfaces';
 export class FingerspellingSwap implements IPhoneticSwap {
     readonly title = 'English to ASL Fingerspelling';
     readonly description = 'Converts English words to ASL fingerspelling';
+    readonly isNeglectable = false;
 
     async swap(input: string): Promise<string> {
         // Create span element using template string

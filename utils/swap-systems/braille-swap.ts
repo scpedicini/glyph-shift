@@ -5,6 +5,7 @@ import {BrailleSys} from '@/utils/braille-sys';
 export class BrailleSwap implements IPhoneticSwap {
     readonly title = 'English to Braille';
     readonly description = 'Converts English words to Braille';
+    readonly isNeglectable = false;
 
     async swap(input: string, options?: BrailleOptions): Promise<string> {
         const useAdvancedWords = options?.advancedWords || false;

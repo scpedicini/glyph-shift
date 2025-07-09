@@ -3,6 +3,7 @@ import {IPhoneticSwap} from './interfaces';
 export class VorticonSwap implements IPhoneticSwap {
     readonly title = 'English to Vorticon';
     readonly description = 'Converts English text to Vorticon (Standard Galactic Alphabet)';
+    readonly isNeglectable = false;
 
     async swap(input: string): Promise<string> {
         // Create span element using template string

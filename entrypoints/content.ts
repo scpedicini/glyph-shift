@@ -1,7 +1,7 @@
 import { storage } from '#imports';
 import './content-styles.css'
 import {sendMessage} from 'webext-bridge/content-script';
-import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
+import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG, GetSwapInfoMessage, SwapInfo} from "@/utils/common";
 import {isStringPopulated} from "@/utils/misc-functions";
 
 export default defineContentScript({
@@ -56,6 +56,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
     const pendingNodes: Node[] = [];
     const processedNodes = new WeakSet();
     let isProcessing = false; // Flag to prevent recursive processing
+    const neglectedSwapModules: SwapLangs[] = []; // Track modules that couldn't swap recent words
 
     async function timeoutFn() {
         while(pendingNodes.length > 0) {
@@ -114,21 +115,58 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
 
                 if(word && word.trim().length > 3 && successfulRoll) {
 
-
-                    const enabledLangs = getEnabledLangs(phoneticConfig);
-                    const viableLangs: SwapLangs[] = [];
-
-                    for (const lang of enabledLangs) {
-                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: word} as CanSwapMessage);
+                    let selectedLang: SwapLangs | null = null;
+                    
+                    // First, check neglected modules for one that can handle this word
+                    for (let i = 0; i < neglectedSwapModules.length; i++) {
+                        const neglectedLang = neglectedSwapModules[i];
+                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: neglectedLang, input: word} as CanSwapMessage);
                         if (canSwap) {
-                            viableLangs.push(lang);
+                            // Found a neglected module that can handle this word
+                            selectedLang = neglectedLang;
+                            // Remove it from neglected list
+                            neglectedSwapModules.splice(i, 1);
+                            console.log(`[PMapper] Used neglected module ${neglectedLang} for word "${word}". Remaining neglected: ${neglectedSwapModules}`);
+                            break;
                         }
                     }
 
-                    if (viableLangs.length > 0) {
-                        // console.log('Viable langs:', viableLangs);
-                        // pick a random lang
-                        const lang = viableLangs[Math.floor(Math.random() * viableLangs.length)];
+                    // If no neglected module could handle it, use normal selection process
+                    if (!selectedLang) {
+                        const enabledLangs = getEnabledLangs(phoneticConfig);
+                        const viableLangs: SwapLangs[] = [];
+                        const failedLangs: SwapLangs[] = [];
+
+                        for (const lang of enabledLangs) {
+                            const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: word} as CanSwapMessage);
+                            if (canSwap) {
+                                viableLangs.push(lang);
+                            } else {
+                                failedLangs.push(lang);
+                            }
+                        }
+
+                        // Add failed languages to neglected list if not already there and if they are neglectable
+                        for (const failedLang of failedLangs) {
+                            if (!neglectedSwapModules.includes(failedLang)) {
+                                // Check if this module is neglectable
+                                const swapInfo = await sendMessage<SwapInfo>('get-swap-info', {swapLanguage: failedLang} as GetSwapInfoMessage);
+                                if (swapInfo.isNeglectable) {
+                                    neglectedSwapModules.push(failedLang);
+                                    console.log(`[PMapper] Added ${failedLang} to neglected modules for word "${word}". Neglected list: ${neglectedSwapModules}`);
+                                }
+                            }
+                        }
+
+                        if (viableLangs.length > 0) {
+                            // console.log('Viable langs:', viableLangs);
+                            // pick a random lang
+                            selectedLang = viableLangs[Math.floor(Math.random() * viableLangs.length)];
+                        }
+                    }
+
+                    if (selectedLang) {
+                        const lang = selectedLang;
 
                         let options: any = { };
                         if(lang === SwapLangs.Braille) {

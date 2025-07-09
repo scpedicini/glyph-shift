@@ -4,6 +4,7 @@ import {IKatakanaDataLoader, ExtensionKatakanaDataLoader} from '@/utils/data-loa
 export class KatakanaSwap implements IPhoneticSwap {
     readonly title = 'Katakana';
     readonly description = 'Converts English words to Katakana';
+    readonly isNeglectable = true;
 
     // Instance data storage
     private loanWordsMap: Map<string, string> = new Map();

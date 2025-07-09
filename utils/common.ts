@@ -44,4 +44,12 @@ export type BrailleOptions = {
     advancedWords: boolean;
 }
 
+export type GetSwapInfoMessage = {
+    swapLanguage: SwapLangs;
+}
+
+export type SwapInfo = {
+    isNeglectable: boolean;
+}
+
 

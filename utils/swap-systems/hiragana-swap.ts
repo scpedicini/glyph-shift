@@ -5,6 +5,7 @@ import {katakanaToHiragana} from '@/utils/japanese-utils';
 export class HiraganaSwap implements IPhoneticSwap {
     readonly title = 'Hiragana';
     readonly description = 'Converts English words to Hiragana';
+    readonly isNeglectable = true;
 
     // Instance data storage
     private engKanaMap: Map<string, string[]> = new Map();

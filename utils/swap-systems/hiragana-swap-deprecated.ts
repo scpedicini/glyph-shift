@@ -7,6 +7,7 @@ import {IHiraganaDataLoader_Deprecated, ExtensionDataLoader_Deprecated} from '@/
 export class HiraganaSwap_Deprecated implements IPhoneticSwap {
     readonly title = 'Hiragana';
     readonly description = 'Converts English words to Hiragana';
+    readonly isNeglectable = true;
 
     // Instance data storage
     private wordToIpaMap: Map<string, string[]> = new Map();
