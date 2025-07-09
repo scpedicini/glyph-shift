@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { HiraganaSwap } from '@/utils/phonetic-swap';
+import { HiraganaSwap_Deprecated } from '@/utils/phonetic-swap';
 import { FileSystemDataLoader } from '@/utils/data-loaders';
 import * as path from 'path';
 
 describe('HiraganaSwap Integration Tests', () => {
-    let hiraganaSwap: HiraganaSwap;
+    let hiraganaSwap: HiraganaSwap_Deprecated;
 
     beforeAll(() => {
         // Create paths to the actual JSON files
@@ -13,7 +13,7 @@ describe('HiraganaSwap Integration Tests', () => {
         
         // Create HiraganaSwap with FileSystemDataLoader
         const dataLoader = new FileSystemDataLoader(wordToIpaPath, ipaToHiraganaPath);
-        hiraganaSwap = new HiraganaSwap(dataLoader);
+        hiraganaSwap = new HiraganaSwap_Deprecated(dataLoader);
         hiraganaSwap.initialize();
     });
 

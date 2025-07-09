@@ -1,5 +1,9 @@
 # Unfinished Tasks
 
+## Modify HiraganaSwap
+
+We have renamed HiraganaSwap to HiraganaSwap_Deprecated in order to accomodate for a new HiraganaSwap class that will be built using a significantly simpler architecture. It will still need to rely on data loader type approach but it is only a single fil, called: `
+
 ## KatakanaSwap
 
 This will be built likely similar to the `HiraganaSwap` class but converts English to Katakana. There is a file of loanwords called `katakana_loan_words.tsv` which contains data in the following format:
@@ -12,10 +16,9 @@ katakana	english
 センター	center
 ```
 
-You will probably want to write another preprocessing script to convert this into a nice compact JSON file. Bear in mind that this KatakanaSwap (eventually) is going to be something like this:
+You will probably want to write another preprocessing script to convert this into a nice compact JSON file like we did with the hiragana 
+related stuff. KatakanaSwap will need to rely on a data loader similar to HiraganaSwap_Deprecated but it will only need to load the `katakana_loan_words.json` file since the check for a equivalent katakana word will be a simple lookup in the JSON file.
 
-1. Check if input has a direct katakana equivalent in the `katakana_loan_words` JSON dictionary
-2. Else try to use 
 
 ## Add Japanese Util functions
 
@@ -27,6 +30,16 @@ Elongation mark (ー) in katakana has no hiragana equivalent. In hiragana, you'd
 カー (kā) → かあ (ka-a)
 But for transliterations, it's fine to just keep ー when mimicking English sound length.
 
+
+
+
+# Finished Tasks
+
+## Vorticon Alphabet
+
+The Standard Galactic Alphabet (SGA) is a writing system used throughout the Commander Keen series. It is a simple substitution cypher, where each letter in the Latin alphabet has been substituted with a different symbol. The SGA can be used to write in different languages; however, in the games the SGA is used to write messages in the English language only.
+
+Use the `assets/sga-k3-direct.otf.woff2` font file to display the SGA characters in the extension. Implementation should be nearly identical to the Morse code swapper since its just a different font for A-Z/a-z characters.
 
 
 ## Add Hiragana
@@ -52,11 +65,3 @@ kɪ,き,0.85,
 kɛ,け,0.85,
 moʊ,もう,0.85
 ```
-
-# Finished Tasks
-
-## Vorticon Alphabet
-
-The Standard Galactic Alphabet (SGA) is a writing system used throughout the Commander Keen series. It is a simple substitution cypher, where each letter in the Latin alphabet has been substituted with a different symbol. The SGA can be used to write in different languages; however, in the games the SGA is used to write messages in the English language only.
-
-Use the `assets/sga-k3-direct.otf.woff2` font file to display the SGA characters in the extension. Implementation should be nearly identical to the Morse code swapper since its just a different font for A-Z/a-z characters.

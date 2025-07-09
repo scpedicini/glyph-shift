@@ -47,6 +47,7 @@ describe('Japanese Utility Functions', () => {
       expect(katakanaToHiragana('アイウエオ')).toBe('あいうえお');
       expect(katakanaToHiragana('カキクケコ')).toBe('かきくけこ');
       expect(katakanaToHiragana('サシスセソ')).toBe('さしすせそ');
+      expect(katakanaToHiragana('スポーツ')).toBe('すぽーつ'); // popular loan word for 'sport'
     });
 
     it('should convert small katakana kana to small hiragana', () => {

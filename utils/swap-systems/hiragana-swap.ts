@@ -1,7 +1,10 @@
 import {IPhoneticSwap} from './interfaces';
 import {IHiraganaDataLoader, ExtensionDataLoader} from '@/utils/data-loaders';
 
-export class HiraganaSwap implements IPhoneticSwap {
+/**
+ * This has been deprecated in favor of the new HiraganaSwap class
+ */
+export class HiraganaSwap_Deprecated implements IPhoneticSwap {
     readonly title = 'Hiragana';
     readonly description = 'Converts English words to Hiragana';
 

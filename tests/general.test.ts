@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { 
-    HiraganaSwap, 
+    HiraganaSwap_Deprecated, 
     FingerspellingSwap, 
     MorseCodeSwap, 
     VorticonSwap, 
@@ -14,7 +14,7 @@ describe('Async Interface Implementation', () => {
     const emptyDataLoader = new InMemoryDataLoader([], {});
     
     const swappers: { name: string; instance: IPhoneticSwap }[] = [
-        { name: 'HiraganaSwap', instance: new HiraganaSwap(emptyDataLoader) },
+        { name: 'HiraganaSwap', instance: new HiraganaSwap_Deprecated(emptyDataLoader) },
         { name: 'FingerspellingSwap', instance: new FingerspellingSwap() },
         { name: 'MorseCodeSwap', instance: new MorseCodeSwap() },
         { name: 'VorticonSwap', instance: new VorticonSwap() },

@@ -1,7 +1,7 @@
 import {SwapLangs} from "@/utils/common";
 import {
     IPhoneticSwap,
-    HiraganaSwap,
+    HiraganaSwap_Deprecated,
     FingerspellingSwap,
     BrailleSwap,
     MorseCodeSwap,
@@ -11,7 +11,7 @@ import {
 export {
     IPhoneticSwap, 
     ISwapConfig,
-    HiraganaSwap,
+    HiraganaSwap_Deprecated,
     FingerspellingSwap,
     BrailleSwap,
     MorseCodeSwap,
@@ -27,7 +27,7 @@ export class LanguageFactory {
             let _swapLang: IPhoneticSwap | undefined;
             switch (swapLang) {
                 case SwapLangs.Hiragana:
-                    this.swapMap[swapLang] = new HiraganaSwap();
+                    // this.swapMap[swapLang] = new HiraganaSwap_Deprecated();
                     break;
                 case SwapLangs.Fingerspelling:
                     this.swapMap[swapLang] = new FingerspellingSwap();
