@@ -44,6 +44,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
         langs.push(SwapLangs.Katakana);
     }
 
+    if (phoneticConfig.hiraganaEnabled) {
+        langs.push(SwapLangs.Hiragana);
+    }
+
     return langs;
 }
 

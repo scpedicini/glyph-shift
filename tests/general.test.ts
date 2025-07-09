@@ -1,20 +1,20 @@
 import { describe, it, expect } from 'vitest';
-import { 
-    HiraganaSwap_Deprecated, 
-    FingerspellingSwap, 
-    MorseCodeSwap, 
-    VorticonSwap, 
+import {
     BrailleSwap,
-    IPhoneticSwap 
-} from '@/utils/phonetic-swap';
-import { InMemoryDataLoader } from '@/utils/data-loaders';
+    FingerspellingSwap,
+    HiraganaSwap,
+    IPhoneticSwap,
+    MorseCodeSwap,
+    VorticonSwap
+} from '@/utils/swap-systems';
+import { InMemoryHiraganaDataLoader } from '@/utils/data-loaders';
 
 describe('Async Interface Implementation', () => {
     // Create HiraganaSwap with empty data loader to avoid browser dependency
-    const emptyDataLoader = new InMemoryDataLoader([], {});
+    const emptyDataLoader = new InMemoryHiraganaDataLoader({});
     
     const swappers: { name: string; instance: IPhoneticSwap }[] = [
-        { name: 'HiraganaSwap', instance: new HiraganaSwap_Deprecated(emptyDataLoader) },
+        { name: 'HiraganaSwap', instance: new HiraganaSwap(emptyDataLoader) },
         { name: 'FingerspellingSwap', instance: new FingerspellingSwap() },
         { name: 'MorseCodeSwap', instance: new MorseCodeSwap() },
         { name: 'VorticonSwap', instance: new VorticonSwap() },
@@ -37,10 +37,13 @@ describe('Async Interface Implementation', () => {
                 expect(resolved === null || typeof resolved === 'string').toBe(true);
             });
 
-            it('should have synchronous initialize method', () => {
-                // initialize should not return a promise
+            it('should have an initialize method', () => {
                 const result = instance.initialize();
-                expect(result).toBe(undefined);
+                if (name === 'HiraganaSwap') {
+                    expect(result).toBeInstanceOf(Promise);
+                } else {
+                    expect(result).toBe(undefined);
+                }
             });
         });
     });

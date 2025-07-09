@@ -4,8 +4,8 @@
  * Run with: tsx scripts/hiragana-example.ts
  */
 
-import { HiraganaSwap_Deprecated } from '../utils/phonetic-swap';
-import { FileSystemDataLoader } from '../utils/data-loaders';
+import { HiraganaSwap_Deprecated } from '../utils/swap-systems/hiragana-swap-deprecated';
+import { FileSystemDataLoader_Deprecated } from '../utils/data-loaders'
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -22,7 +22,7 @@ async function main() {
 
     // Create HiraganaSwap with FileSystemDataLoader
     console.log('Loading data from:', dataDir);
-    const dataLoader = new FileSystemDataLoader(wordToIpaPath, ipaToHiraganaPath);
+    const dataLoader = new FileSystemDataLoader_Deprecated(wordToIpaPath, ipaToHiraganaPath);
     const hiraganaSwap = new HiraganaSwap_Deprecated(dataLoader);
     
     // Initialize (this loads the data)

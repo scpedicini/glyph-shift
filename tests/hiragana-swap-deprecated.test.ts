@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { HiraganaSwap_Deprecated } from '@/utils/phonetic-swap';
-import { InMemoryDataLoader } from '@/utils/data-loaders';
+import { HiraganaSwap_Deprecated } from '@/utils/swap-systems/hiragana-swap-deprecated';
+import { InMemoryDataLoader_Deprecated } from '@/utils/data-loaders';
 
 describe('HiraganaSwap_DeprecatedTests', () => {
     let hiraganaSwap: HiraganaSwap_Deprecated;
@@ -32,7 +32,7 @@ describe('HiraganaSwap_DeprecatedTests', () => {
         };
 
         // Create HiraganaSwap with InMemoryDataLoader
-        const dataLoader = new InMemoryDataLoader(wordToIpaData, ipaToHiraganaData);
+        const dataLoader = new InMemoryDataLoader_Deprecated(wordToIpaData, ipaToHiraganaData);
         hiraganaSwap = new HiraganaSwap_Deprecated(dataLoader);
         hiraganaSwap.initialize();
     });

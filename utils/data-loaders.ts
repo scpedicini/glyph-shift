@@ -1,12 +1,12 @@
 // Data loader interfaces and implementations for flexible data access
 
-export interface IHiraganaDataLoader {
+export interface IHiraganaDataLoader_Deprecated {
     loadWordToIpa(): Promise<Array<[string, string[]]>>;
     loadIpaToHiragana(): Promise<Record<string, { hiragana: string; score: number }>>;
 }
 
 // For use in browser extensions
-export class ExtensionDataLoader implements IHiraganaDataLoader {
+export class ExtensionDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
     async loadWordToIpa(): Promise<Array<[string, string[]]>> {
         const url = browser.runtime.getURL('/data/hiragana-word-to-ipa.json');
         const response = await fetch(url);
@@ -21,7 +21,7 @@ export class ExtensionDataLoader implements IHiraganaDataLoader {
 }
 
 // For use in tests with predefined data
-export class InMemoryDataLoader implements IHiraganaDataLoader {
+export class InMemoryDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
     constructor(
         private wordToIpaData: Array<[string, string[]]>,
         private ipaToHiraganaData: Record<string, { hiragana: string; score: number }>
@@ -37,7 +37,7 @@ export class InMemoryDataLoader implements IHiraganaDataLoader {
 }
 
 // For use with remote URLs (web apps)
-export class RemoteDataLoader implements IHiraganaDataLoader {
+export class RemoteDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
     constructor(
         private wordToIpaUrl: string,
         private ipaToHiraganaUrl: string
@@ -55,7 +55,7 @@ export class RemoteDataLoader implements IHiraganaDataLoader {
 }
 
 // For use in Node.js environments
-export class FileSystemDataLoader implements IHiraganaDataLoader {
+export class FileSystemDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
     constructor(
         private wordToIpaPath: string,
         private ipaToHiraganaPath: string
@@ -82,6 +82,42 @@ export class FileSystemDataLoader implements IHiraganaDataLoader {
         }
     }
 }
+
+// New Hiragana data loader
+export interface IHiraganaDataLoader {
+    loadEngKanaDict(): Promise<Record<string, string[]>>;
+}
+
+export class ExtensionHiraganaDataLoader implements IHiraganaDataLoader {
+    async loadEngKanaDict(): Promise<Record<string, string[]>> {
+        const url = browser.runtime.getURL('/data/eng_kana_dict.json');
+        const response = await fetch(url);
+        return response.json();
+    }
+}
+
+export class InMemoryHiraganaDataLoader implements IHiraganaDataLoader {
+    constructor(private engKanaDict: Record<string, string[]>) {}
+
+    async loadEngKanaDict(): Promise<Record<string, string[]>> {
+        return Promise.resolve(this.engKanaDict);
+    }
+}
+
+export class FileSystemHiraganaDataLoader implements IHiraganaDataLoader {
+    constructor(private engKanaDictPath: string) {}
+
+    async loadEngKanaDict(): Promise<Record<string, string[]>> {
+        if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+            const fs = await import('fs/promises');
+            const content = await fs.readFile(this.engKanaDictPath, 'utf-8');
+            return JSON.parse(content);
+        } else {
+            throw new Error('FileSystemHiraganaDataLoader can only be used in Node.js environments');
+        }
+    }
+}
+
 
 // Katakana data loader interfaces
 export interface IKatakanaDataLoader {

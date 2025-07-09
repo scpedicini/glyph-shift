@@ -1,21 +1,22 @@
 import {SwapLangs} from "@/utils/common";
+import { ExtensionHiraganaDataLoader } from "@/utils/data-loaders";
 import {
-    IPhoneticSwap,
-    HiraganaSwap_Deprecated,
-    KatakanaSwap,
-    FingerspellingSwap,
     BrailleSwap,
+    FingerspellingSwap,
+    HiraganaSwap,
+    IPhoneticSwap,
+    KatakanaSwap,
     MorseCodeSwap,
     VorticonSwap
 } from "@/utils/swap-systems";
 
 export {
-    IPhoneticSwap, 
-    ISwapConfig,
-    HiraganaSwap_Deprecated,
-    KatakanaSwap,
-    FingerspellingSwap,
     BrailleSwap,
+    FingerspellingSwap,
+    HiraganaSwap,
+    IPhoneticSwap,
+    ISwapConfig,
+    KatakanaSwap,
     MorseCodeSwap,
     VorticonSwap
 } from "@/utils/swap-systems";
@@ -29,8 +30,7 @@ export class LanguageFactory {
             let _swapLang: IPhoneticSwap | undefined;
             switch (swapLang) {
                 case SwapLangs.Hiragana:
-                    // to be replaced with the new HiraganaSwap class in the future
-                    _swapLang = new HiraganaSwap_Deprecated();
+                    _swapLang = new HiraganaSwap(new ExtensionHiraganaDataLoader());
                     break;
                 case SwapLangs.Katakana:
                     _swapLang = new KatakanaSwap();
