@@ -27,7 +27,8 @@ export class LanguageFactory {
             let _swapLang: IPhoneticSwap | undefined;
             switch (swapLang) {
                 case SwapLangs.Hiragana:
-                    // this.swapMap[swapLang] = new HiraganaSwap_Deprecated();
+                    // to be replaced with the new HiraganaSwap class in the future
+                    this.swapMap[swapLang] = new HiraganaSwap_Deprecated();
                     break;
                 case SwapLangs.Fingerspelling:
                     this.swapMap[swapLang] = new FingerspellingSwap();
