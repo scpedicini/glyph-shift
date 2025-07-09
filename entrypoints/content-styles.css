@@ -87,3 +87,9 @@
     font-size: 1.25em !important;
     /* vertical-align: baseline !important; */
 }
+
+.katakana-text {
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif !important;
+    font-size: 1.1em !important;
+    font-weight: 500 !important;
+}

@@ -2,6 +2,7 @@ import {SwapLangs} from "@/utils/common";
 import {
     IPhoneticSwap,
     HiraganaSwap_Deprecated,
+    KatakanaSwap,
     FingerspellingSwap,
     BrailleSwap,
     MorseCodeSwap,
@@ -12,6 +13,7 @@ export {
     IPhoneticSwap, 
     ISwapConfig,
     HiraganaSwap_Deprecated,
+    KatakanaSwap,
     FingerspellingSwap,
     BrailleSwap,
     MorseCodeSwap,
@@ -28,23 +30,29 @@ export class LanguageFactory {
             switch (swapLang) {
                 case SwapLangs.Hiragana:
                     // to be replaced with the new HiraganaSwap class in the future
-                    this.swapMap[swapLang] = new HiraganaSwap_Deprecated();
+                    _swapLang = new HiraganaSwap_Deprecated();
+                    break;
+                case SwapLangs.Katakana:
+                    _swapLang = new KatakanaSwap();
                     break;
                 case SwapLangs.Fingerspelling:
-                    this.swapMap[swapLang] = new FingerspellingSwap();
+                    _swapLang = new FingerspellingSwap();
                     break;
                 case SwapLangs.Braille:
-                    this.swapMap[swapLang] = new BrailleSwap();
+                    _swapLang = new BrailleSwap();
                     break;
                 case SwapLangs.MorseCode:
-                    this.swapMap[swapLang] = new MorseCodeSwap();
+                    _swapLang = new MorseCodeSwap();
                     break;
                 case SwapLangs.Vorticon:
-                    this.swapMap[swapLang] = new VorticonSwap();
+                    _swapLang = new VorticonSwap();
                     break;
             }
 
-            _swapLang && _swapLang!.initialize();
+            if (_swapLang) {
+                _swapLang.initialize();
+                this.swapMap[swapLang] = _swapLang;
+            }
         }
 
         return this.swapMap[swapLang]!;

@@ -5,6 +5,7 @@ export type PhoneticConfig = {
     braille1Enabled: boolean;
     braille2Enabled: boolean;
     vorticonEnabled: boolean;
+    katakanaEnabled: boolean;
 }
 
 export const DEFAULT_CONFIG: PhoneticConfig = {
@@ -13,12 +14,13 @@ export const DEFAULT_CONFIG: PhoneticConfig = {
     morseEnabled: false,
     braille1Enabled: false,
     braille2Enabled: false,
-    vorticonEnabled: false
+    vorticonEnabled: false,
+    katakanaEnabled: false
 }
 
 export enum SwapLangs {
     Hiragana = 'Hiragana',
-    // Katakana = 'Katakana',
+    Katakana = 'Katakana',
     Fingerspelling = 'Fingerspelling',
     Braille = 'Braille',
     MorseCode = 'MorseCode',

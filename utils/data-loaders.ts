@@ -82,3 +82,57 @@ export class FileSystemDataLoader implements IHiraganaDataLoader {
         }
     }
 }
+
+// Katakana data loader interfaces
+export interface IKatakanaDataLoader {
+    loadLoanWords(): Promise<Record<string, string>>;
+}
+
+// For use in browser extensions
+export class ExtensionKatakanaDataLoader implements IKatakanaDataLoader {
+    async loadLoanWords(): Promise<Record<string, string>> {
+        const url = browser.runtime.getURL('/data/katakana-loan-words.json');
+        const response = await fetch(url);
+        return response.json();
+    }
+}
+
+// For use in tests with predefined data
+export class InMemoryKatakanaDataLoader implements IKatakanaDataLoader {
+    constructor(
+        private loanWordsData: Record<string, string>
+    ) {}
+
+    async loadLoanWords(): Promise<Record<string, string>> {
+        return Promise.resolve(this.loanWordsData);
+    }
+}
+
+// For use with remote URLs (web apps)
+export class RemoteKatakanaDataLoader implements IKatakanaDataLoader {
+    constructor(
+        private loanWordsUrl: string
+    ) {}
+
+    async loadLoanWords(): Promise<Record<string, string>> {
+        const response = await fetch(this.loanWordsUrl);
+        return response.json();
+    }
+}
+
+// For use in Node.js environments
+export class FileSystemKatakanaDataLoader implements IKatakanaDataLoader {
+    constructor(
+        private loanWordsPath: string
+    ) {}
+
+    async loadLoanWords(): Promise<Record<string, string>> {
+        if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+            const fs = await import('fs/promises');
+            const content = await fs.readFile(this.loanWordsPath, 'utf-8');
+            return JSON.parse(content);
+        } else {
+            throw new Error('FileSystemKatakanaDataLoader can only be used in Node.js environments');
+        }
+    }
+}

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const braille1Checkbox = document.getElementById('braille1Enabled') as HTMLInputElement
     // const braille2Checkbox = document.getElementById('braille2Enabled') as HTMLInputElement
     const vorticonCheckbox = document.getElementById('vorticonEnabled') as HTMLInputElement
+    const katakanaCheckbox = document.getElementById('katakanaEnabled') as HTMLInputElement
 
     let lockEvents = true;
 
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     braille1Checkbox.checked = phoneticConfig.braille1Enabled;
     // braille2Checkbox.checked = phoneticConfig.braille2Enabled;
     vorticonCheckbox.checked = phoneticConfig.vorticonEnabled || false
+    katakanaCheckbox.checked = phoneticConfig.katakanaEnabled || false
 
     // Update displayed percentage
     const percentageDisplay = document.getElementById('percentageDisplay')!
@@ -91,6 +93,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         await storage.setItem('local:phoneticConfig', {
             ...mergedConfig,
             vorticonEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    katakanaCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
+        const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        await storage.setItem('local:phoneticConfig', {
+            ...mergedConfig,
+            katakanaEnabled: (e.target as HTMLInputElement).checked
         })
     });
     } catch (error) {

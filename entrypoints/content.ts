@@ -1,7 +1,7 @@
 import { storage } from '#imports';
 import './content-styles.css'
 import {sendMessage} from 'webext-bridge/content-script';
-import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage} from "@/utils/common";
+import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
 import {isStringPopulated} from "@/utils/misc-functions";
 
 export default defineContentScript({
@@ -38,6 +38,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
 
     if (phoneticConfig.vorticonEnabled) {
         langs.push(SwapLangs.Vorticon);
+    }
+
+    if (phoneticConfig.katakanaEnabled) {
+        langs.push(SwapLangs.Katakana);
     }
 
     return langs;

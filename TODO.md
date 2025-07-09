@@ -2,35 +2,16 @@
 
 ## Modify HiraganaSwap
 
-We have renamed HiraganaSwap to HiraganaSwap_Deprecated in order to accomodate for a new HiraganaSwap class that will be built using a significantly simpler architecture. It will still need to rely on data loader type approach but it is only a single fil, called: `
+We have renamed HiraganaSwap to HiraganaSwap_Deprecated in order to accomodate for a new HiraganaSwap class that will be built using a significantly simpler architecture. It will still need to rely on data loader type approach but it is only a single file, called: `eng_kana_dict.json`. This file is a JSON file that contains a mapping of English words to their Hiragana equivalents. The format of the JSON file is as follows:
 
-## KatakanaSwap
-
-This will be built likely similar to the `HiraganaSwap` class but converts English to Katakana. There is a file of loanwords called `katakana_loan_words.tsv` which contains data in the following format:
-
-```tsv
-katakana	english
-パーセント	percent
-アメリカ	America
-ページ	page
-センター	center
+```json
+{
+    "the":["ゼ","ゼ","ジー"],
+    // etc.
+}
 ```
 
-You will probably want to write another preprocessing script to convert this into a nice compact JSON file like we did with the hiragana 
-related stuff. KatakanaSwap will need to rely on a data loader similar to HiraganaSwap_Deprecated but it will only need to load the `katakana_loan_words.json` file since the check for a equivalent katakana word will be a simple lookup in the JSON file.
-
-
-## Add Japanese Util functions
-
-Add two new functions to @utils/japanese-utils.ts - hiraganaToKatakana(string): string and katakanaToHiragana(string): string
-
-Nuances to keep in mind:
-Small kana like ッ (small tsu), ャュョ (ya, yu, yo) also have 1:1 equivalents in hiragana: っ, ゃ, ゅ, ょ.
-Elongation mark (ー) in katakana has no hiragana equivalent. In hiragana, you'd usually repeat the vowel:
-カー (kā) → かあ (ka-a)
-But for transliterations, it's fine to just keep ー when mimicking English sound length.
-
-
+You will note that it is possible for a word to contain multiple possible representations. You may choose one at random. You will also observe that this is katakana (and not hiragana), thus you will need to use the appropriate conversion function found in the `japanese-utils.ts` file to convert the katakana to hiragana.
 
 
 # Finished Tasks
@@ -65,3 +46,33 @@ kɪ,き,0.85,
 kɛ,け,0.85,
 moʊ,もう,0.85
 ```
+
+
+
+## KatakanaSwap
+
+This will be built likely similar to the `HiraganaSwap` class but converts English to Katakana. There is a file of loanwords called `katakana_loan_words.tsv` which contains data in the following format:
+
+```tsv
+katakana	english
+パーセント	percent
+アメリカ	America
+ページ	page
+センター	center
+```
+
+You will probably want to write another preprocessing script to convert this into a nice compact JSON file like we did with the hiragana 
+related stuff. KatakanaSwap will need to rely on a data loader similar to HiraganaSwap_Deprecated but it will only need to load the `katakana_loan_words.json` file since the check for a equivalent katakana word will be a simple lookup in the JSON file.
+
+
+## Add Japanese Util functions
+
+Add two new functions to @utils/japanese-utils.ts - hiraganaToKatakana(string): string and katakanaToHiragana(string): string
+
+Nuances to keep in mind:
+Small kana like ッ (small tsu), ャュョ (ya, yu, yo) also have 1:1 equivalents in hiragana: っ, ゃ, ゅ, ょ.
+Elongation mark (ー) in katakana has no hiragana equivalent. In hiragana, you'd usually repeat the vowel:
+カー (kā) → かあ (ka-a)
+But for transliterations, it's fine to just keep ー when mimicking English sound length.
+
+
