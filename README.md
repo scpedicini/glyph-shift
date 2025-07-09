@@ -43,6 +43,7 @@ Unlike the other extensions which focus more on language translation, the Phonet
 # Future Language Support
 
 - [ ] Braille 2, aka contracted Grade 2 braille
+- [ ] Support for numerals in swap systems
 
 # Data Preparation
 
