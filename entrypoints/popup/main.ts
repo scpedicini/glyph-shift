@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const vorticonCheckbox = document.getElementById('vorticonEnabled') as HTMLInputElement
     const katakanaCheckbox = document.getElementById('katakanaEnabled') as HTMLInputElement
     const hiraganaCheckbox = document.getElementById('hiraganaEnabled') as HTMLInputElement
+    const romanCheckbox = document.getElementById('romanEnabled') as HTMLInputElement
 
     let lockEvents = true;
 
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     vorticonCheckbox.checked = phoneticConfig.vorticonEnabled || false
     katakanaCheckbox.checked = phoneticConfig.katakanaEnabled || false
     hiraganaCheckbox.checked = phoneticConfig.hiraganaEnabled || false
+    romanCheckbox.checked = phoneticConfig.romanEnabled || false
 
     // Update displayed percentage
     const percentageDisplay = document.getElementById('percentageDisplay')!
@@ -115,6 +117,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         await storage.setItem('local:phoneticConfig', {
             ...mergedConfig,
             hiraganaEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    romanCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
+        const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        await storage.setItem('local:phoneticConfig', {
+            ...mergedConfig,
+            romanEnabled: (e.target as HTMLInputElement).checked
         })
     });
     } catch (error) {

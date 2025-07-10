@@ -7,6 +7,7 @@ import {
     IPhoneticSwap,
     KatakanaSwap,
     MorseCodeSwap,
+    RomanSwap,
     VorticonSwap
 } from "@/utils/swap-systems";
 
@@ -18,6 +19,7 @@ export {
     ISwapConfig,
     KatakanaSwap,
     MorseCodeSwap,
+    RomanSwap,
     VorticonSwap
 } from "@/utils/swap-systems";
 
@@ -46,6 +48,9 @@ export class LanguageFactory {
                     break;
                 case SwapLangs.Vorticon:
                     _swapLang = new VorticonSwap();
+                    break;
+                case SwapLangs.Roman:
+                    _swapLang = new RomanSwap();
                     break;
             }
 

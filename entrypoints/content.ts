@@ -48,6 +48,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
         langs.push(SwapLangs.Hiragana);
     }
 
+    if (phoneticConfig.romanEnabled) {
+        langs.push(SwapLangs.Roman);
+    }
+
     return langs;
 }
 
@@ -113,7 +117,8 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
                 let wordReplacement = word;
                 const successfulRoll = Math.random() * 100 < phoneticConfig.swapFrequency;
 
-                if(word && word.trim().length > 3 && successfulRoll) {
+                // instead of checking minimum string length, we'll add that into the individual swap modules under canSwap
+                if(isStringPopulated(word) && successfulRoll) {
 
                     let selectedLang: SwapLangs | null = null;
                     
