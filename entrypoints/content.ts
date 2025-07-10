@@ -52,6 +52,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
         langs.push(SwapLangs.Roman);
     }
 
+    if (phoneticConfig.hexEnabled) {
+        langs.push(SwapLangs.Hex);
+    }
+
     return langs;
 }
 

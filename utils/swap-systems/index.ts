@@ -6,3 +6,4 @@ export * from './morse-code-swap';
 export * from './vorticon-swap';
 export * from './braille-swap';
 export * from './roman-swap';
+export * from './hex-swap';

@@ -4,6 +4,7 @@ import {
     BrailleSwap,
     FingerspellingSwap,
     HiraganaSwap,
+    HexSwap,
     IPhoneticSwap,
     KatakanaSwap,
     MorseCodeSwap,
@@ -15,6 +16,7 @@ export {
     BrailleSwap,
     FingerspellingSwap,
     HiraganaSwap,
+    HexSwap,
     IPhoneticSwap,
     ISwapConfig,
     KatakanaSwap,
@@ -51,6 +53,9 @@ export class LanguageFactory {
                     break;
                 case SwapLangs.Roman:
                     _swapLang = new RomanSwap();
+                    break;
+                case SwapLangs.Hex:
+                    _swapLang = new HexSwap();
                     break;
             }
 
