@@ -59,6 +59,35 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
     return langs;
 }
 
+// Helper interface for word with punctuation info
+interface WordWithPunctuation {
+    cleanWord: string;
+    trailingPunctuation: string;
+}
+
+// Extract trailing punctuation from a word
+function extractTrailingPunctuation(word: string): WordWithPunctuation {
+    // Match common ending punctuation marks
+    const match = word.match(/^(.+?)([.,!?;:\)\]}'"…]+)$/);
+    
+    if (match) {
+        return {
+            cleanWord: match[1],
+            trailingPunctuation: match[2]
+        };
+    }
+    
+    return {
+        cleanWord: word,
+        trailingPunctuation: ''
+    };
+}
+
+// Reattach punctuation to a swapped word
+function reattachPunctuation(swappedWord: string, punctuation: string): string {
+    return swappedWord + punctuation;
+}
+
 
 function setupHighlighting(phoneticConfig: PhoneticConfig) {
     const pendingNodes: Node[] = [];
@@ -123,13 +152,15 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
 
                 // instead of checking minimum string length, we'll add that into the individual swap modules under canSwap
                 if(isStringPopulated(word) && successfulRoll) {
+                    // Extract punctuation before processing
+                    const { cleanWord, trailingPunctuation } = extractTrailingPunctuation(word);
 
                     let selectedLang: SwapLangs | null = null;
                     
                     // First, check neglected modules for one that can handle this word
                     for (let i = 0; i < neglectedSwapModules.length; i++) {
                         const neglectedLang = neglectedSwapModules[i];
-                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: neglectedLang, input: word} as CanSwapMessage);
+                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: neglectedLang, input: cleanWord} as CanSwapMessage);
                         if (canSwap) {
                             // Found a neglected module that can handle this word
                             selectedLang = neglectedLang;
@@ -147,7 +178,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
                         const failedLangs: SwapLangs[] = [];
 
                         for (const lang of enabledLangs) {
-                            const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: word} as CanSwapMessage);
+                            const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: cleanWord} as CanSwapMessage);
                             if (canSwap) {
                                 viableLangs.push(lang);
                             } else {
@@ -184,13 +215,14 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
                             } as BrailleOptions;
                         }
 
-                        const swapped = await sendMessage<string>('swap', {swapLanguage: lang, input: word, options } as SwapMessage);
+                        const swapped = await sendMessage<string>('swap', {swapLanguage: lang, input: cleanWord, options } as SwapMessage);
 
                         if (isStringPopulated(swapped)) {
                             if(shuffleText) {
-                                console.log(`Swapped ${word} to ${swapped} using ${lang}`);
+                                console.log(`Swapped ${cleanWord} to ${swapped} using ${lang}`);
                             }
-                            wordReplacement = swapped;
+                            // Reattach punctuation to the swapped word
+                            wordReplacement = reattachPunctuation(swapped, trailingPunctuation);
                         }
                     }
 
