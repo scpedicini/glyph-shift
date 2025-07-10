@@ -19,6 +19,6 @@ export class BrailleSwap implements IPhoneticSwap {
     }
 
     async canSwap(input: string): Promise<boolean> {
-        return /^[a-zA-Z]+$/.test(input);
+        return isAlphabetical(input, 4);
     }
 }

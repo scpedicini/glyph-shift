@@ -19,6 +19,10 @@ describe('RomanSwap', () => {
             expect(await romanSwap.canSwap('3999')).toBe(true);
         });
 
+        it('should return true for mixed valid numbers and delimiters', async () => {
+            expect(await romanSwap.canSwap('2013-1-22')).toBe(true);
+        });
+
         it('should return false for numbers outside the range', async () => {
             expect(await romanSwap.canSwap('0')).toBe(false);
             expect(await romanSwap.canSwap('-5')).toBe(false);

@@ -80,6 +80,8 @@ export class RomanSwap implements IPhoneticSwap {
             }
         }
         
-        return numberCount >= 2 && !hasInvalidPart;
+        const _isSwappable = numberCount >= 2 && !hasInvalidPart;
+        console.log(`Checking if we can swap: ${input} -> ${_isSwappable}`);
+        return _isSwappable;
     }
 }

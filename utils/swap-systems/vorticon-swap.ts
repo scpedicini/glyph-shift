@@ -15,6 +15,6 @@ export class VorticonSwap implements IPhoneticSwap {
 
     // only return true if the input is composed entirely of A-Z or a-z characters
     async canSwap(input: string): Promise<boolean> {
-        return /^[a-zA-Z]+$/.test(input);
+        return isAlphabetical(input, 4);
     }
 }

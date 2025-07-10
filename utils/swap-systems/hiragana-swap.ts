@@ -81,6 +81,6 @@ export class HiraganaSwap implements IPhoneticSwap {
         }
         console.log(`Checking if we can swap: ${input}`);
         const normalizedInput = input.toLowerCase();
-        return this.engKanaMap.has(normalizedInput);
+        return (typeof input === 'string') && (input.length > 2) &&this.engKanaMap.has(normalizedInput);
     }
 }
