@@ -191,12 +191,14 @@ h1 {
 .toggle-switch.compact .toggle-slider:before {
   height: 18px;
   width: 18px;
-  left: 1px;
-  bottom: 1px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
 }
 
 .toggle-switch.compact input:checked + .toggle-slider:before {
-  transform: translateX(20px);
+  transform: translateX(20px) translateY(-50%);
 }
 
 /* Status indicator */
