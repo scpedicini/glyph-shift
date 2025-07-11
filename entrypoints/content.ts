@@ -83,10 +83,6 @@ function extractTrailingPunctuation(word: string): WordWithPunctuation {
     };
 }
 
-// Reattach punctuation to a swapped word
-function reattachPunctuation(swappedWord: string, punctuation: string): string {
-    return swappedWord + punctuation;
-}
 
 
 function setupHighlighting(phoneticConfig: PhoneticConfig) {
@@ -221,8 +217,8 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
                             if(shuffleText) {
                                 console.log(`Swapped ${cleanWord} to ${swapped} using ${lang}`);
                             }
-                            // Reattach punctuation to the swapped word
-                            wordReplacement = reattachPunctuation(swapped, trailingPunctuation);
+                            // The swapped result already contains HTML span, so we need to append punctuation after the span
+                            wordReplacement = swapped + trailingPunctuation;
                         }
                     }
 

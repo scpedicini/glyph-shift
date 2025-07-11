@@ -43,11 +43,13 @@ Unlike the other extensions which focus more on language translation, the Phonet
 # Future Language Support
 
 - [ ] Braille 2, aka contracted Grade 2 braille
-- [ ] Support for numerals in swap systems
+- [X] Support for numerals in swap systems
 
 # Data Preparation
 
-## Hiragana Data
+## Hiragana Data (Deprecated)
+
+This was part of the `HiraganaSwap_Deprecated` module which is no longer used in this extension in favor of a simpler dictionary of common Katakana words which are then 1:1 mapped over to the equivalent Hiragana.
 
 The Hiragana conversion feature requires pre-processed data files. If you modify the source CSV files, you must regenerate the JSON data files:
 
