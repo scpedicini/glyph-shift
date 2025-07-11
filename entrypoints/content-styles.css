@@ -18,15 +18,28 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s;
-    z-index: 10;
+    z-index: 9999; /* Increased z-index to ensure tooltip appears above links */
     font-family: 'Arial', sans-serif;
     letter-spacing: normal !important;
+    pointer-events: none; /* Ensure tooltip doesn't interfere with mouse events */
 }
 
 .pmapper-tooltip:hover::after {
     opacity: 1;
     visibility: visible;
 }
+
+/* Ensure tooltips work properly inside links */
+/* a .pmapper-tooltip {
+    position: relative;
+    z-index: 1;
+} */
+
+/* Maintain tooltip visibility when hovering over links */
+/* a:hover .pmapper-tooltip::after {
+    opacity: 1;
+    visibility: visible;
+} */
 
 @font-face {
     font-family: 'ASL Hands';
