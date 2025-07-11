@@ -4,31 +4,41 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: rgba(255, 255, 255, 0.92);
+  background-color: #1a1b26;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  
+  --primary-color: #7c3aed;
+  --primary-hover: #6d28d9;
+  --secondary-color: #a78bfa;
+  --surface-color: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--secondary-color);
   text-decoration: inherit;
+  transition: color 0.2s ease;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--primary-color);
 }
 
 body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  min-width: 380px;
+  min-height: 600px;
+  background: linear-gradient(135deg, #1a1b26 0%, #20222e 100%);
 }
 
 /*
@@ -38,28 +48,28 @@ h1 {
 }*/
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 380px;
+  margin: 0;
+  padding: 1.5rem;
+  text-align: left;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #54bc4ae0);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
+  display: none;
 }
 
-.card {
-  padding: 2em;
-}
 
 .read-the-docs {
   color: #888;
@@ -86,37 +96,88 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #1a1b26;
+    background-color: #f8f9fa;
+    --primary-color: #7c3aed;
+    --primary-hover: #6d28d9;
+    --secondary-color: #8b5cf6;
+    --surface-color: rgba(0, 0, 0, 0.03);
+    --surface-hover: rgba(0, 0, 0, 0.05);
+    --text-secondary: rgba(0, 0, 0, 0.65);
+    --border-color: rgba(0, 0, 0, 0.08);
   }
+  
+  body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  
   a:hover {
-    color: #747bff;
+    color: var(--primary-hover);
   }
+  
   button {
     background-color: #f9f9f9;
   }
 
   .card {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .card:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+  }
+  
+  .slider {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  
+  .checkmark {
+    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.03);
+  }
+  
+  .checkbox-container:hover .checkmark {
+    border-color: var(--secondary-color);
+    background: rgba(124, 58, 237, 0.05);
   }
 }
 
 h1 {
-  font-size: 1.8em;
-  margin-bottom: 1.5em;
+  font-size: em;
+  margin-bottom: 1.2em;
   text-align: center;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: 1.2em;
-  margin-bottom: 0.5em;
+  font-size: 1.1em;
+  margin-bottom: 0.8em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.01em;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  padding: 1.5em;
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 1.25em;
   margin-bottom: 1em;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.card:hover {
+  background: var(--surface-hover);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.1);
 }
 
 
@@ -131,33 +192,50 @@ h2 {
 .slider {
   flex: 1;
   -webkit-appearance: none;
-  height: 4px;
-  background: #555;
-  border-radius: 2px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  position: relative;
+  transition: background 0.3s ease;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  background: #646cff;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
   border-radius: 50%;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
 }
 
 .slider::-webkit-slider-thumb:hover {
-  background: #535bf2;
+  background: var(--primary-hover);
+  transform: scale(1.1);
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.5);
+}
+
+.slider::-webkit-slider-thumb:active {
+  transform: scale(0.95);
 }
 
 .slider-value {
-  min-width: 3em;
+  min-width: 3.5em;
   text-align: right;
+  font-weight: 600;
+  font-size: 1.1em;
 }
 
 /* Checkbox styles */
 .language-option {
-  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+  transition: all 0.2s ease;
+}
+
+.language-option:hover {
+  transform: translateX(4px);
 }
 
 .checkbox-container {
@@ -172,24 +250,49 @@ h2 {
 }
 
 .checkmark {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #646cff;
-  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
   position: relative;
   flex-shrink: 0;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.checkbox-container:hover .checkmark {
+  border-color: var(--secondary-color);
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.checkbox-container input:checked + .checkmark {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .checkbox-container input:checked + .checkmark:after {
   content: '';
   position: absolute;
-  left: 6px;
-  top: 2px;
-  width: 5px;
-  height: 10px;
-  border: solid #646cff;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 11px;
+  border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+  opacity: 1;
+  animation: checkmark 0.2s ease-out;
+}
+
+@keyframes checkmark {
+  from {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+  }
 }
 
 .label-text {
@@ -198,12 +301,16 @@ h2 {
 }
 
 .language-name {
-  font-weight: 500;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 0.2em;
+  font-size: 0.95em;
 }
 
 .language-description {
-  font-size: 0.9em;
-  color: #888;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 
@@ -218,44 +325,57 @@ h2 {
 
 
 .description {
-  color: #888;
-  font-size: 0.9em;
-  margin-top: 0.5em;
+  color: var(--text-secondary);
+  font-size: 0.85em;
+  margin-top: 0.75em;
   font-family: "Permanent Marker";
+  line-height: 1.4;
+  text-align: center;
 }
 
 /* Footer styles */
 .footer {
-  margin-top: 2em;
-  padding-top: 1.5em;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1.5em;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
 }
 
 .footer-link {
-  font-size: 0.85em;
-  color: #888;
+  font-size: 0.8em;
+  color: var(--text-secondary);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
 }
 
 .footer-link:hover {
-  color: #646cff;
+  color: var(--secondary-color);
+  transform: translateY(-1px);
 }
 
 .footer-brand {
   font-weight: 600;
-  background: linear-gradient(135deg, #646cff 0%, #535bf2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.footer-link:hover .footer-brand {
+  transform: scale(1.05);
 }
 
 @media (prefers-color-scheme: light) {
   .footer {
-    border-top-color: rgba(0, 0, 0, 0.1);
+    border-top-color: var(--border-color);
   }
   
   .footer-link {
-    color: #666;
+    color: var(--text-secondary);
   }
 }
