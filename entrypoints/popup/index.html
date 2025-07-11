@@ -9,20 +9,15 @@
 </head>
 <body>
 <div id="app">
-  <h1>Phonetic Mapper</h1>
-
-  <div class="card">
-    <h2>Extension Status</h2>
-    <div class="toggle-container">
-      <label class="toggle-switch">
+  <div class="header-container">
+    <h1>Phonetic Mapper</h1>
+    <div class="compact-toggle">
+      <label class="toggle-switch compact">
         <input type="checkbox" id="extensionEnabled">
         <span class="toggle-slider"></span>
       </label>
-      <span id="statusText" class="status-text">Active</span>
+      <span id="statusText" class="status-indicator"></span>
     </div>
-    <p class="description">
-      Toggle the extension on or off
-    </p>
   </div>
 
   <div class="card">

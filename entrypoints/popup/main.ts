@@ -61,8 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     lockEvents = false;
 
     function updateStatusText(enabled: boolean) {
-        statusText.textContent = enabled ? 'Active' : 'Inactive';
-        statusText.classList.toggle('inactive', !enabled);
+        statusText.classList.toggle('active', enabled);
     }
 
     // Add event listener for extension toggle

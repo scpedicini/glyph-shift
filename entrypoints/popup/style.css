@@ -147,15 +147,70 @@ button:focus-visible {
 }
 
 h1 {
-  font-size: em;
-  margin-bottom: 1.2em;
-  text-align: center;
+  font-size: 1.6em;
+  margin: 0;
   font-weight: 600;
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.02em;
+}
+
+/* Header container styles */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5em;
+  padding: 0.5em 0;
+}
+
+.compact-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+/* Compact toggle switch */
+.toggle-switch.compact {
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch.compact .toggle-slider {
+  border-radius: 24px;
+  border-width: 1px;
+}
+
+.toggle-switch.compact .toggle-slider:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.toggle-switch.compact .toggle-slider:before {
+  height: 18px;
+  width: 18px;
+  left: 1px;
+  bottom: 1px;
+}
+
+.toggle-switch.compact input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* Status indicator */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--danger-color);
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.status-indicator.active {
+  background-color: var(--success-color);
 }
 
 h2 {
@@ -194,6 +249,7 @@ h2 {
 .slider {
   flex: 1;
   -webkit-appearance: none;
+  appearance: none;
   height: 6px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
