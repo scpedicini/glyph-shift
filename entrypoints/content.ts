@@ -8,6 +8,8 @@ export default defineContentScript({
     matches: ['*://*.wikipedia.org/*', 'http://0.0.0.0/*'],
     main() {
         console.log('main() content script');
+        let currentObserver: MutationObserver | null = null;
+        
         window.addEventListener('pageshow', async () => {
             console.log('Content script loaded');
 
@@ -16,7 +18,19 @@ export default defineContentScript({
 
             const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
             const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
-            setupHighlighting(phoneticConfig);
+            
+            // Only setup highlighting if the extension is enabled
+            if (phoneticConfig.enabled) {
+                currentObserver = setupHighlighting(phoneticConfig);
+            }
+        });
+        
+        // Listen for storage changes to enable/disable highlighting
+        storage.watch<PhoneticConfig>('local:phoneticConfig', (newConfig, oldConfig) => {
+            if (newConfig?.enabled !== oldConfig?.enabled) {
+                // Reload page when extension is toggled
+                window.location.reload();
+            }
         });
     },
 });
@@ -85,7 +99,7 @@ function extractTrailingPunctuation(word: string): WordWithPunctuation {
 
 
 
-function setupHighlighting(phoneticConfig: PhoneticConfig) {
+function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
     const pendingNodes: Node[] = [];
     const processedNodes = new WeakSet();
     let isProcessing = false; // Flag to prevent recursive processing
@@ -273,4 +287,6 @@ function setupHighlighting(phoneticConfig: PhoneticConfig) {
 
     // Process initial content
     document.body.childNodes.forEach(processNode);
+    
+    return observer;
 }

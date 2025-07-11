@@ -1,4 +1,5 @@
 export type PhoneticConfig = {
+    enabled: boolean; // Master toggle for the extension
     swapFrequency: number; // 0-100
     aslEnabled: boolean;
     morseEnabled: boolean;
@@ -12,6 +13,7 @@ export type PhoneticConfig = {
 }
 
 export const DEFAULT_CONFIG: PhoneticConfig = {
+    enabled: true,
     swapFrequency: 5,
     aslEnabled: false,
     morseEnabled: false,
