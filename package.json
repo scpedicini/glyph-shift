@@ -14,7 +14,11 @@
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
     "test": "vitest run",
-    "prepare-data": "tsx scripts/prepare-data.ts"
+    "prepare-data": "npm run prepare-data:hiragana && npm run prepare-data:katakana && npm run prepare-data:cockney",
+    "prepare-data:hiragana": "tsx scripts/prepare-data.ts",
+    "prepare-data:katakana": "tsx scripts/prepare-katakana-data.ts",
+    "prepare-data:cockney": "tsx scripts/prepare-cockney-data.ts",
+    "prepare-data:all": "npm run prepare-data"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.280",

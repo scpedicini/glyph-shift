@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const hiraganaCheckbox = document.getElementById('hiraganaEnabled') as HTMLInputElement
     const romanCheckbox = document.getElementById('romanEnabled') as HTMLInputElement
     const hexCheckbox = document.getElementById('hexEnabled') as HTMLInputElement
+    const cockneyCheckbox = document.getElementById('cockneyEnabled') as HTMLInputElement
+    const cockneyFullRhymeCheckbox = document.getElementById('cockneyFullRhyme') as HTMLInputElement
 
     let lockEvents = true;
 
@@ -54,6 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     hiraganaCheckbox.checked = phoneticConfig.hiraganaEnabled || false
     romanCheckbox.checked = phoneticConfig.romanEnabled || false
     hexCheckbox.checked = phoneticConfig.hexEnabled || false
+    cockneyCheckbox.checked = phoneticConfig.cockneyEnabled || false
+    cockneyFullRhymeCheckbox.checked = phoneticConfig.cockneyFullRhyme || false
 
     // Update displayed percentage
     const percentageDisplay = document.getElementById('percentageDisplay')!
@@ -186,6 +190,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         await storage.setItem('local:phoneticConfig', {
             ...mergedConfig,
             hexEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    cockneyCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
+        const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        await storage.setItem('local:phoneticConfig', {
+            ...mergedConfig,
+            cockneyEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    cockneyFullRhymeCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
+        const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        await storage.setItem('local:phoneticConfig', {
+            ...mergedConfig,
+            cockneyFullRhyme: (e.target as HTMLInputElement).checked
         })
     });
     } catch (error) {

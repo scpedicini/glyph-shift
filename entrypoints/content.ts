@@ -70,6 +70,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
         langs.push(SwapLangs.Hex);
     }
 
+    if (phoneticConfig.cockneyEnabled) {
+        langs.push(SwapLangs.Cockney);
+    }
+
     return langs;
 }
 
@@ -223,6 +227,10 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                             options = {
                                 advancedWords: phoneticConfig.braille2Enabled
                             } as BrailleOptions;
+                        } else if(lang === SwapLangs.Cockney) {
+                            options = {
+                                useFullRhyme: phoneticConfig.cockneyFullRhyme
+                            };
                         }
 
                         const swapped = await sendMessage<string>('swap', {swapLanguage: lang, input: cleanWord, options } as SwapMessage);

@@ -172,3 +172,70 @@ export class FileSystemKatakanaDataLoader implements IKatakanaDataLoader {
         }
     }
 }
+
+// Cockney rhyming slang data structures
+export interface CockneyEntry {
+    english: string;
+    rhyme: string;
+    cockney: string;
+    notes: string;
+    synonyms: string;
+}
+
+export interface ProcessedCockneyData {
+    [english: string]: CockneyEntry[];
+}
+
+// Cockney data loader interfaces
+export interface ICockneyDataLoader {
+    loadCockneyData(): Promise<ProcessedCockneyData>;
+}
+
+// For use in browser extensions
+export class ExtensionCockneyDataLoader implements ICockneyDataLoader {
+    async loadCockneyData(): Promise<ProcessedCockneyData> {
+        const url = browser.runtime.getURL('/data/cockney-rhyming-slang.json');
+        const response = await fetch(url);
+        return response.json();
+    }
+}
+
+// For use in tests with predefined data
+export class InMemoryCockneyDataLoader implements ICockneyDataLoader {
+    constructor(
+        private cockneyData: ProcessedCockneyData
+    ) {}
+
+    async loadCockneyData(): Promise<ProcessedCockneyData> {
+        return Promise.resolve(this.cockneyData);
+    }
+}
+
+// For use with remote URLs (web apps)
+export class RemoteCockneyDataLoader implements ICockneyDataLoader {
+    constructor(
+        private cockneyDataUrl: string
+    ) {}
+
+    async loadCockneyData(): Promise<ProcessedCockneyData> {
+        const response = await fetch(this.cockneyDataUrl);
+        return response.json();
+    }
+}
+
+// For use in Node.js environments
+export class FileSystemCockneyDataLoader implements ICockneyDataLoader {
+    constructor(
+        private cockneyDataPath: string
+    ) {}
+
+    async loadCockneyData(): Promise<ProcessedCockneyData> {
+        if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+            const fs = await import('fs/promises');
+            const content = await fs.readFile(this.cockneyDataPath, 'utf-8');
+            return JSON.parse(content);
+        } else {
+            throw new Error('FileSystemCockneyDataLoader can only be used in Node.js environments');
+        }
+    }
+}

@@ -7,3 +7,4 @@ export * from './vorticon-swap';
 export * from './braille-swap';
 export * from './roman-swap';
 export * from './hex-swap';
+export * from './cockney-swap';

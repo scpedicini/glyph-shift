@@ -10,6 +10,8 @@ export type PhoneticConfig = {
     hiraganaEnabled: boolean;
     romanEnabled: boolean;
     hexEnabled: boolean;
+    cockneyEnabled: boolean;
+    cockneyFullRhyme: boolean;
 }
 
 export const DEFAULT_CONFIG: PhoneticConfig = {
@@ -23,7 +25,9 @@ export const DEFAULT_CONFIG: PhoneticConfig = {
     katakanaEnabled: false,
     hiraganaEnabled: false,
     romanEnabled: false,
-    hexEnabled: false
+    hexEnabled: false,
+    cockneyEnabled: false,
+    cockneyFullRhyme: false
 }
 
 export enum SwapLangs {
@@ -34,7 +38,8 @@ export enum SwapLangs {
     MorseCode = 'MorseCode',
     Vorticon = 'Vorticon',
     Roman = 'Roman',
-    Hex = 'Hex'
+    Hex = 'Hex',
+    Cockney = 'Cockney'
 }
 
 export type CanSwapMessage = {
@@ -50,6 +55,10 @@ export type SwapMessage = {
 
 export type BrailleOptions = {
     advancedWords: boolean;
+}
+
+export type CockneyOptions = {
+    useFullRhyme: boolean;
 }
 
 export type GetSwapInfoMessage = {

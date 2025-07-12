@@ -373,6 +373,33 @@ h2 {
   line-height: 1.4;
 }
 
+.sub-option {
+  margin-left: 2.5em;
+  margin-top: 0.5em;
+}
+
+.checkbox-container.small {
+  gap: 0.75em;
+}
+
+.checkmark.small {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.checkbox-container input:checked + .checkmark.small:after {
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+}
+
+.small-text {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+}
+
 
 @font-face {
   font-family: "Permanent Marker";

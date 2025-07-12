@@ -44,26 +44,39 @@ Unlike the other extensions which focus more on language translation, the Phonet
 
 - [ ] Braille 2, aka contracted Grade 2 braille
 - [X] Support for numerals in swap systems
+- [ ] Cockney rhyming slang should incorporate English synonyms, base forms, etc. to make it more flexible
 
 # Data Preparation
 
-## Hiragana Data (Deprecated)
+The extension requires pre-processed data files for various phonetic systems. If you modify the source CSV/TSV files, you must regenerate the JSON data files.
 
-This was part of the `HiraganaSwap_Deprecated` module which is no longer used in this extension in favor of a simpler dictionary of common Katakana words which are then 1:1 mapped over to the equivalent Hiragana.
+## Available Scripts
 
-The Hiragana conversion feature requires pre-processed data files. If you modify the source CSV files, you must regenerate the JSON data files:
+- `npm run prepare-data` - Run all data preparation scripts
+- `npm run prepare-data:hiragana` - Prepare Hiragana phonetic data
+- `npm run prepare-data:katakana` - Prepare Katakana loan words data
+- `npm run prepare-data:cockney` - Prepare Cockney rhyming slang data
 
-1. After modifying any of these files:
-   - `/scripts/combined_cmu_ipa_data.csv` - English word to IPA pronunciation mappings
-   - `/components/ipa-to-hiragana.csv` - IPA phoneme to Hiragana mappings
+## Data Sources
 
-2. Run the data preparation script:
-   ```bash
-   npm run prepare-data
-   ```
+### Hiragana Data
+- Source files:
+  - `/scripts/combined_cmu_ipa_data.csv` - English word to IPA pronunciation mappings
+  - `/components/ipa-to-hiragana.csv` - IPA phoneme to Hiragana mappings
+- Output: 
+  - `/public/data/hiragana-word-to-ipa.json`
+  - `/public/data/hiragana-ipa-to-hiragana.json`
 
-3. This will regenerate the JSON files in `/public/data/`:
-   - `hiragana-word-to-ipa.json`
-   - `hiragana-ipa-to-hiragana.json`
+### Katakana Data
+- Source file: `/scripts/katakana_loan_words.tsv` - Japanese loan words
+- Output: `/public/data/katakana-loan-words.json`
 
-**Note:** The data preparation script is NOT run automatically during builds. You must run it manually after any CSV modifications.
+### Cockney Rhyming Slang Data
+- Source file: `/components/cockney-rhyming-slang.csv` - Cockney rhyming slang mappings
+- Features:
+  - Supports multiple rhymes for the same word
+  - Handles synonyms (comma-delimited in the Synonyms column)
+  - Preserves all metadata (English, Rhyme, Cockney, Notes, Synonyms)
+- Output: `/public/data/cockney-rhyming-slang.json`
+
+**Note:** The data preparation scripts are NOT run automatically during builds. You must run them manually after any CSV/TSV modifications.

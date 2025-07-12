@@ -2,6 +2,7 @@ import {SwapLangs} from "@/utils/common";
 import { ExtensionHiraganaDataLoader } from "@/utils/data-loaders";
 import {
     BrailleSwap,
+    CockneySwap,
     FingerspellingSwap,
     HiraganaSwap,
     HexSwap,
@@ -14,6 +15,7 @@ import {
 
 export {
     BrailleSwap,
+    CockneySwap,
     FingerspellingSwap,
     HiraganaSwap,
     HexSwap,
@@ -56,6 +58,9 @@ export class LanguageFactory {
                     break;
                 case SwapLangs.Hex:
                     _swapLang = new HexSwap();
+                    break;
+                case SwapLangs.Cockney:
+                    _swapLang = new CockneySwap();
                     break;
             }
 
