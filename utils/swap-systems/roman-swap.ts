@@ -1,5 +1,6 @@
 import { DelimitedNumberSwapBase } from './delimited-number-swap-base';
 import { toRoman } from '../roman-numerals';
+import { logger } from '@/utils/logger';
 
 export class RomanSwap extends DelimitedNumberSwapBase {
     readonly title = 'Number to Roman Numeral';
@@ -25,7 +26,7 @@ export class RomanSwap extends DelimitedNumberSwapBase {
     // Override canSwap to add logging if needed
     async canSwap(input: string): Promise<boolean> {
         const result = await super.canSwap(input);
-        console.log(`Checking if we can swap: ${input} -> ${result}`);
+        logger.debug(`Checking if we can swap: ${input} -> ${result}`);
         return result;
     }
 }

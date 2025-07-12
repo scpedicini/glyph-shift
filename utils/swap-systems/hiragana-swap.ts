@@ -1,6 +1,7 @@
 import {IPhoneticSwap} from './interfaces';
 import {IHiraganaDataLoader, ExtensionHiraganaDataLoader} from '@/utils/data-loaders';
 import {katakanaToHiragana} from '@/utils/japanese-utils';
+import { logger } from '@/utils/logger';
 
 export class HiraganaSwap implements IPhoneticSwap {
     readonly title = 'Hiragana';
@@ -38,7 +39,7 @@ export class HiraganaSwap implements IPhoneticSwap {
 
             this.isInitialized = true;
         } catch (error) {
-            console.error('Failed to load Hiragana data:', error);
+            logger.error('Failed to load Hiragana data:', error);
             this.isInitialized = false;
         }
     }
@@ -58,7 +59,7 @@ export class HiraganaSwap implements IPhoneticSwap {
         
 
         if (!katakanaOptions || katakanaOptions.length === 0) {
-            console.log(`No Hiragana equivalent found for: ${input}`);
+            logger.debug(`No Hiragana equivalent found for: ${input}`);
             return null;
         }
 
@@ -66,7 +67,7 @@ export class HiraganaSwap implements IPhoneticSwap {
         const katakana = katakanaOptions[Math.floor(Math.random() * katakanaOptions.length)];
         const hiragana = katakanaToHiragana(katakana);
 
-        console.log(`Hiragana equivalent for "${input}" is "${hiragana}"`);
+        logger.debug(`Hiragana equivalent for "${input}" is "${hiragana}"`);
 
         // Return the Hiragana wrapped in HTML
         return `<span class="hiragana-text pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}">${hiragana}</span>`;
@@ -76,10 +77,10 @@ export class HiraganaSwap implements IPhoneticSwap {
         await this.initPromise;
         
         if (!this.isInitialized) {
-            console.error('HiraganaSwap is not initialized');
+            logger.error('HiraganaSwap is not initialized');
             return false;
         }
-        console.log(`Checking if we can swap: ${input}`);
+        logger.debug(`Checking if we can swap: ${input}`);
         const normalizedInput = input.toLowerCase();
         return (typeof input === 'string') && (input.length > 2) &&this.engKanaMap.has(normalizedInput);
     }

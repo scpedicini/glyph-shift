@@ -2,12 +2,13 @@ import {onMessage} from "webext-bridge/background";
 import { storage } from '#imports';
 import {CanSwapMessage, SwapMessage, SwapLangs, GetSwapInfoMessage, SwapInfo, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
 import {IPhoneticSwap, LanguageFactory} from "@/utils/phonetic-swap";
+import { logger } from "@/utils/logger";
 
 
 
 
 export default defineBackground(() => {
-    console.log('Hello background!', {id: browser.runtime.id});
+    logger.debug('Hello background!', {id: browser.runtime.id});
 
     // Update icon based on enabled state
     async function updateIcon() {
@@ -47,12 +48,12 @@ export default defineBackground(() => {
     });
 
     onMessage("get-random-number", ({data}) => {
-        console.log('Received message:', data);
+        logger.debug('Received message:', data);
         return Math.random();
     });
 
     onMessage('can-swap', async ({data}) => {
-        console.log('Received message:', data);
+        logger.debug('Received message:', data);
 
         const { swapLanguage, input } = data as CanSwapMessage;
 
@@ -63,7 +64,7 @@ export default defineBackground(() => {
     });
 
     onMessage('swap', async ({data}) => {
-        console.log('Received message:', data);
+        logger.debug('Received message:', data);
 
         const { swapLanguage, input, options } = data as SwapMessage;
 
@@ -74,7 +75,7 @@ export default defineBackground(() => {
     });
 
     onMessage('get-swap-info', async ({data}) => {
-        console.log('Received message:', data);
+        logger.debug('Received message:', data);
 
         const { swapLanguage } = data as GetSwapInfoMessage;
 

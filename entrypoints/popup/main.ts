@@ -1,13 +1,14 @@
 import { storage } from '#imports'
 import {DEFAULT_CONFIG, PhoneticConfig} from "@/utils/common";
+import { logger } from "@/utils/logger";
 
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        console.log("DOM loaded")
+        logger.debug("DOM loaded")
         const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG
-        console.log('Loaded config:', phoneticConfig)
+        logger.debug('Loaded config:', phoneticConfig)
 
     // Set initial values
     const extensionToggle = document.getElementById('extensionEnabled') as HTMLInputElement
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     slider.addEventListener('input', async (e) => {
         if(lockEvents) return;
-        console.log("slider input event!");
+        logger.debug("slider input event!");
             const value = parseInt((e.target as HTMLInputElement).value)
             percentageDisplay.textContent = `${value}%`
             const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
@@ -213,6 +214,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
     });
     } catch (error) {
-        console.error('Error in popup initialization:', error)
+        logger.error('Error in popup initialization:', error)
     }
 })

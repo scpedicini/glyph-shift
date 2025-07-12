@@ -1,5 +1,6 @@
 import {IPhoneticSwap} from './interfaces';
 import {IHiraganaDataLoader_Deprecated, ExtensionDataLoader_Deprecated} from '@/utils/data-loaders';
+import { logger } from '@/utils/logger';
 
 /**
  * This has been deprecated in favor of the new HiraganaSwap class
@@ -52,7 +53,7 @@ export class HiraganaSwap_Deprecated implements IPhoneticSwap {
 
             this.isInitialized = true;
         } catch (error) {
-            console.error('Failed to load Hiragana data:', error);
+            logger.error('Failed to load Hiragana data:', error);
             this.isInitialized = false;
         }
     }

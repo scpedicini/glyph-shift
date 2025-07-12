@@ -3,18 +3,19 @@ import './content-styles.css'
 import {sendMessage} from 'webext-bridge/content-script';
 import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG, GetSwapInfoMessage, SwapInfo} from "@/utils/common";
 import {isStringPopulated} from "@/utils/misc-functions";
+import { logger } from "@/utils/logger";
 
 export default defineContentScript({
     matches: ['*://*.wikipedia.org/*', 'http://0.0.0.0/*'],
     main() {
-        console.log('main() content script');
+        logger.debug('main() content script');
         let currentObserver: MutationObserver | null = null;
         
         window.addEventListener('pageshow', async () => {
-            console.log('Content script loaded');
+            logger.debug('Content script loaded');
 
             const rndNumber = await sendMessage('get-random-number', {data: 'Hello from content script'});
-            console.log('Received random number:', rndNumber);
+            logger.debug('Received random number:', rndNumber);
 
             const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
             const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
@@ -139,7 +140,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
         if (node instanceof Element && node.hasAttribute('data-pmapper-processed')) return;
 
         if (node.nodeType === Node.TEXT_NODE) {
-            // console.log(`Processing node: ${node.textContent}`);
+            // logger.debug(`Processing node: ${node.textContent}`);
 
             if (processedNodes.has(node)) return;
 
@@ -180,7 +181,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                             selectedLang = neglectedLang;
                             // Remove it from neglected list
                             neglectedSwapModules.splice(i, 1);
-                            console.log(`[PMapper] Used neglected module ${neglectedLang} for word "${word}". Remaining neglected: ${neglectedSwapModules}`);
+                            logger.info(`Used neglected module ${neglectedLang} for word "${word}". Remaining neglected: ${neglectedSwapModules}`);
                             break;
                         }
                     }
@@ -207,13 +208,13 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                                 const swapInfo = await sendMessage<SwapInfo>('get-swap-info', {swapLanguage: failedLang} as GetSwapInfoMessage);
                                 if (swapInfo.isNeglectable) {
                                     neglectedSwapModules.push(failedLang);
-                                    console.log(`[PMapper] Added ${failedLang} to neglected modules for word "${word}". Neglected list: ${neglectedSwapModules}`);
+                                    logger.info(`Added ${failedLang} to neglected modules for word "${word}". Neglected list: ${neglectedSwapModules}`);
                                 }
                             }
                         }
 
                         if (viableLangs.length > 0) {
-                            // console.log('Viable langs:', viableLangs);
+                            // logger.debug('Viable langs:', viableLangs);
                             // pick a random lang
                             selectedLang = viableLangs[Math.floor(Math.random() * viableLangs.length)];
                         }
@@ -237,7 +238,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
 
                         if (isStringPopulated(swapped)) {
                             if(shuffleText) {
-                                console.log(`Swapped ${cleanWord} to ${swapped} using ${lang}`);
+                                logger.debug(`Swapped ${cleanWord} to ${swapped} using ${lang}`);
                             }
                             // The swapped result already contains HTML span, so we need to append punctuation after the span
                             wordReplacement = swapped + trailingPunctuation;
@@ -251,7 +252,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
             }
 
             if(madeReplacementToTextNode) {
-                // console.log('Replaced:', text, '->', sb);
+                // logger.debug('Replaced:', text, '->', sb);
                 // wrap the entire text node in a span since we'll have multiple child spans depending on the matches
                 const masterSpan = document.createElement('span');
                 masterSpan.setAttribute('data-pmapper-processed', 'true');
@@ -275,7 +276,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
         for (const mutation of mutations) {
             // const nodesTypesToSkip = ["SCRIPT", "STYLE", "NOSCRIPT"];
             // if (nodesTypesToSkip.includes(mutation.target.nodeName)) {
-            //     console.log('Skipping:', mutation.target.nodeName);
+            //     logger.debug('Skipping:', mutation.target.nodeName);
             //     continue;
             // }
 

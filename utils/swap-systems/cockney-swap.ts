@@ -1,5 +1,6 @@
 import {IPhoneticSwap} from './interfaces';
 import {ICockneyDataLoader, ExtensionCockneyDataLoader, CockneyEntry, ProcessedCockneyData} from '@/utils/data-loaders';
+import { logger } from '@/utils/logger';
 
 export interface CockneySwapOptions {
     useFullRhyme?: boolean; // If true, use the full rhyme; if false/undefined, use the cockney (shortened) version
@@ -33,7 +34,7 @@ export class CockneySwap implements IPhoneticSwap {
             this.cockneyData = await this.dataLoader.loadCockneyData();
             this.isInitialized = true;
         } catch (error) {
-            console.error('Failed to load Cockney data:', error);
+            logger.error('Failed to load Cockney data:', error);
             this.isInitialized = false;
         }
     }
@@ -52,7 +53,7 @@ export class CockneySwap implements IPhoneticSwap {
         const entries = this.cockneyData[normalizedInput];
         
         if (!entries || entries.length === 0) {
-            console.log(`No Cockney equivalent found for: ${input}`);
+            logger.debug(`No Cockney equivalent found for: ${input}`);
             return null;
         }
 
@@ -64,11 +65,11 @@ export class CockneySwap implements IPhoneticSwap {
         const translation = useFullRhyme ? selectedEntry.rhyme : selectedEntry.cockney;
         
         if (!translation) {
-            console.log(`No ${useFullRhyme ? 'rhyme' : 'cockney'} translation found for: ${input}`);
+            logger.debug(`No ${useFullRhyme ? 'rhyme' : 'cockney'} translation found for: ${input}`);
             return null;
         }
 
-        console.log(`Cockney equivalent for "${input}" is "${translation}" (${useFullRhyme ? 'full rhyme' : 'shortened'})`);
+        logger.debug(`Cockney equivalent for "${input}" is "${translation}" (${useFullRhyme ? 'full rhyme' : 'shortened'})`);
         
         // Add a data attribute with notes if available
         const notesAttr = selectedEntry.notes ? `data-pmapper-notes="${selectedEntry.notes}"` : '';
@@ -81,11 +82,11 @@ export class CockneySwap implements IPhoneticSwap {
         await this.initPromise;
         
         if (!this.isInitialized) {
-            console.error('CockneySwap is not initialized');
+            logger.error('CockneySwap is not initialized');
             return false;
         }
         
-        console.log(`Checking if we can swap: ${input}`);
+        logger.debug(`Checking if we can swap: ${input}`);
         const normalizedInput = input.toLowerCase().trim();
         return typeof input === 'string' && input.length > 0 && normalizedInput in this.cockneyData;
     }

@@ -1,5 +1,6 @@
 import {IPhoneticSwap} from './interfaces';
 import {IKatakanaDataLoader, ExtensionKatakanaDataLoader} from '@/utils/data-loaders';
+import { logger } from '@/utils/logger';
 
 export class KatakanaSwap implements IPhoneticSwap {
     readonly title = 'Katakana';
@@ -36,7 +37,7 @@ export class KatakanaSwap implements IPhoneticSwap {
 
             this.isInitialized = true;
         } catch (error) {
-            console.error('Failed to load Katakana data:', error);
+            logger.error('Failed to load Katakana data:', error);
             this.isInitialized = false;
         }
     }
@@ -56,10 +57,10 @@ export class KatakanaSwap implements IPhoneticSwap {
         
 
         if (!katakana) {
-            console.log(`No Katakana equivalent found for: ${input}`);
+            logger.debug(`No Katakana equivalent found for: ${input}`);
             return null;
         } else {
-            console.log(`Katakana equivalent for "${input}" is "${katakana}"`);
+            logger.debug(`Katakana equivalent for "${input}" is "${katakana}"`);
         }
 
         // Return the Katakana wrapped in HTML
@@ -70,10 +71,10 @@ export class KatakanaSwap implements IPhoneticSwap {
         await this.initPromise;
         
         if (!this.isInitialized) {
-            console.error('KatakanaSwap is not initialized');
+            logger.error('KatakanaSwap is not initialized');
             return false;
         }
-        console.log(`Checking if we can swap: ${input}`);
+        logger.debug(`Checking if we can swap: ${input}`);
         const normalizedInput = input.toUpperCase();
         return typeof input === 'string' && input.length > 2 && this.loanWordsMap.has(normalizedInput);
     }
