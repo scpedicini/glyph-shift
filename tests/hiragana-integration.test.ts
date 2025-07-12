@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { HiraganaSwap } from '../utils/swap-systems/hiragana-swap';
-import { FileSystemHiraganaDataLoader } from '../utils/data-loaders';
+import { FileSystemHiraganaDataLoader } from '../utils/data-loaders-node';
 import path from 'path';
 
 describe('HiraganaSwap with FileSystemDataLoader', () => {

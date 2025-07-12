@@ -5,7 +5,7 @@
  */
 
 import { HiraganaSwap_Deprecated } from '../utils/swap-systems/hiragana-swap-deprecated';
-import { FileSystemDataLoader_Deprecated } from '../utils/data-loaders'
+import { FileSystemDataLoader_Deprecated } from '../utils/data-loaders-node';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 

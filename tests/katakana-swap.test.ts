@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { KatakanaSwap } from '../utils/swap-systems/katakana-swap';
-import { InMemoryKatakanaDataLoader, FileSystemKatakanaDataLoader } from '../utils/data-loaders';
+import { InMemoryKatakanaDataLoader } from '../utils/data-loaders';
+import { FileSystemKatakanaDataLoader } from '../utils/data-loaders-node';
 import * as path from 'path';
 
 describe('KatakanaSwap with InMemoryKatakanaDataLoader', () => {
