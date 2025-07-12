@@ -35,7 +35,7 @@ function normalizeString(str: string): string {
 
 async function prepareCockneyData() {
   console.log('Processing cockney-rhyming-slang.csv...');
-  const csvPath = path.join(__dirname, '../components/cockney-rhyming-slang.csv');
+  const csvPath = path.join(__dirname, '../data-sources/cockney-rhyming-slang.csv');
   const data = await readCsvFile(csvPath);
   
   // Group by normalized English word

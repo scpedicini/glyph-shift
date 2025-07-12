@@ -61,18 +61,18 @@ The extension requires pre-processed data files for various phonetic systems. If
 
 ### Hiragana Data
 - Source files:
-  - `/scripts/combined_cmu_ipa_data.csv` - English word to IPA pronunciation mappings
-  - `/components/ipa-to-hiragana.csv` - IPA phoneme to Hiragana mappings
+  - `/data-sources/combined_cmu_ipa_data.csv` - English word to IPA pronunciation mappings
+  - `/data-sources/ipa-to-hiragana.csv` - IPA phoneme to Hiragana mappings
 - Output: 
   - `/public/data/hiragana-word-to-ipa.json`
   - `/public/data/hiragana-ipa-to-hiragana.json`
 
 ### Katakana Data
-- Source file: `/scripts/katakana_loan_words.tsv` - Japanese loan words
+- Source file: `/data-sources/katakana_loan_words.tsv` - Japanese loan words
 - Output: `/public/data/katakana-loan-words.json`
 
 ### Cockney Rhyming Slang Data
-- Source file: `/components/cockney-rhyming-slang.csv` - Cockney rhyming slang mappings
+- Source file: `/data-sources/cockney-rhyming-slang.csv` - Cockney rhyming slang mappings
 - Features:
   - Supports multiple rhymes for the same word
   - Handles synonyms (comma-delimited in the Synonyms column)

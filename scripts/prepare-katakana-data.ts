@@ -9,7 +9,7 @@ async function prepareLoanWordsData() {
     console.log('Starting loan words data preparation...');
     
     // Read the TSV file
-    const tsvPath = path.join(__dirname, 'katakana_loan_words.tsv');
+    const tsvPath = path.join(__dirname, '../data-sources/katakana_loan_words.tsv');
     const tsvContent = await fs.readFile(tsvPath, 'utf-8');
     
     // Parse TSV

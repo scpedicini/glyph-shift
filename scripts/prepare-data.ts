@@ -30,7 +30,7 @@ function readCsvFile(filePath: string): Promise<any[]> {
 
 async function prepareWordToIpaData() {
   console.log('Processing combined_cmu_ipa_data.csv...');
-  const csvPath = path.join(__dirname, 'combined_cmu_ipa_data.csv');
+  const csvPath = path.join(__dirname, '../data-sources/combined_cmu_ipa_data.csv');
   const data = await readCsvFile(csvPath);
   
   // Group by word and collect all IPA pronunciations
@@ -56,7 +56,7 @@ async function prepareWordToIpaData() {
 
 async function prepareIpaToHiraganaData() {
   console.log('Processing ipa-to-hiragana.csv...');
-  const csvPath = path.join(__dirname, '../components/ipa-to-hiragana.csv');
+  const csvPath = path.join(__dirname, '../data-sources/ipa-to-hiragana.csv');
   const data = await readCsvFile(csvPath);
   
   // Convert to map format
