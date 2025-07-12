@@ -1,3 +1,5 @@
+import { EXTENSION_CONFIG } from './config';
+
 /**
  * Log levels for controlling logger output
  * NONE - No logging at all
@@ -32,6 +34,10 @@ class Logger {
   }
 
   private shouldLog(level: LogLevel): boolean {
+    // Check global disable flag first
+    if (EXTENSION_CONFIG.LOGGING_DISABLED) {
+      return false;
+    }
     return this.isDevelopment && level <= this.level;
   }
 
@@ -82,7 +88,10 @@ const defaultLogger = new Logger({
 /**
  * Default logger instance with manual override controls
  * 
- * Usage:
+ * To disable ALL logging globally:
+ *   Edit utils/config.ts and set LOGGING_DISABLED: true
+ * 
+ * Programmatic usage:
  *   logger.disable()                    // Turn off all logging
  *   logger.enable()                     // Restore default log level based on environment
  *   logger.setLevel(logger.LogLevel.WARN)  // Set specific log level
