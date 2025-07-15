@@ -5,7 +5,7 @@ export default defineConfig({
   // extensionApi: 'webextension-polyfill',  // <- deprecated
   manifest: {
     name: 'Glyphshift',
-    permissions: ['storage'],
+    permissions: ['storage', 'activeTab', 'scripting'],
     action: {
       default_popup: 'popup.html',
       default_icon: {
