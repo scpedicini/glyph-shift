@@ -1,29 +1,5 @@
 # Unfinished Tasks
 
-## Priority for Failed Swaps
-
-
-So if you look through the substitution system, you'll notice that given a "text" (if its a text chosen to be swapped) - first things first, we aggregate a list of Swap modules that are capable of swapping it out - then we choose one at random.
-
-What I want to improve is this - let's keep a list something like neglectedSwapModules. 
-
-Lets take an example
-
-Let's say user has these enabled:
-BrailleSwap, KatakanaSwap, MorseSwap
-
-Then we see a word "cookie"
-
-BrailleSwap and MorseSwap are valid for it, but KatakanaSwap canSwap returns false.
-
-First we check to see if neglectedSwapModules already contains KatakanaSwap. If it does not,  we append KatakanaSwap to the end of the neglectedSwapModules list.
-
-Now later, we encounter a word "horse". Before we even check for valid SwapModules, we check our neglectedSwapModules. We then iterate from (beginning of list to end), searching for a module that returns canSwap true.
-
-If we find one, we slice it out of the neglectedSwapModules list, and use it on this text node.
-
-This helps so that modules that get neglected because canSwap returns false can still get priority later. This is particularly useful for modules that are not as frequently applicable, like KatakanaSwap, which relies on a list of well-defined loanwords vs something like MorseSwap which is applicable to any text that contains A-Z/a-z characters.
-
 
 # Finished Tasks
 
@@ -99,3 +75,29 @@ We have renamed HiraganaSwap to HiraganaSwap_Deprecated in order to accomodate f
 ```
 
 You will note that it is possible for a word to contain multiple possible representations. You may choose one at random. You will also observe that this is katakana (and not hiragana), thus you will need to use the appropriate conversion function found in the `japanese-utils.ts` file to convert the katakana to hiragana.
+
+
+## Priority for Failed Swaps
+
+
+So if you look through the substitution system, you'll notice that given a "text" (if its a text chosen to be swapped) - first things first, we aggregate a list of Swap modules that are capable of swapping it out - then we choose one at random.
+
+What I want to improve is this - let's keep a list something like neglectedSwapModules. 
+
+Lets take an example
+
+Let's say user has these enabled:
+BrailleSwap, KatakanaSwap, MorseSwap
+
+Then we see a word "cookie"
+
+BrailleSwap and MorseSwap are valid for it, but KatakanaSwap canSwap returns false.
+
+First we check to see if neglectedSwapModules already contains KatakanaSwap. If it does not,  we append KatakanaSwap to the end of the neglectedSwapModules list.
+
+Now later, we encounter a word "horse". Before we even check for valid SwapModules, we check our neglectedSwapModules. We then iterate from (beginning of list to end), searching for a module that returns canSwap true.
+
+If we find one, we slice it out of the neglectedSwapModules list, and use it on this text node.
+
+This helps so that modules that get neglected because canSwap returns false can still get priority later. This is particularly useful for modules that are not as frequently applicable, like KatakanaSwap, which relies on a list of well-defined loanwords vs something like MorseSwap which is applicable to any text that contains A-Z/a-z characters.
+
