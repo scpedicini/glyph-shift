@@ -33,6 +33,14 @@ export default defineContentScript({
                 window.location.reload();
             }
         });
+        
+        // Listen for regeneration messages from background script
+        browser.runtime.onMessage.addListener((message) => {
+            if (message.type === 'regenerateContent') {
+                logger.debug('Received regeneration request from background script');
+                window.location.reload();
+            }
+        });
     },
 });
 

@@ -3,12 +3,48 @@ import { storage } from '#imports';
 import {CanSwapMessage, SwapMessage, SwapLangs, GetSwapInfoMessage, SwapInfo, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
 import {IPhoneticSwap, LanguageFactory} from "@/utils/phonetic-swap";
 import { logger } from "@/utils/logger";
+import { EXTENSION_CONFIG } from "@/utils/config";
 
 
 
 
 export default defineBackground(() => {
     logger.debug('Hello background!', {id: browser.runtime.id});
+
+    // Handle popup port connections
+    browser.runtime.onConnect.addListener((port) => {
+        if (port.name === "popup") {
+            logger.debug('Popup connected');
+            
+            // When popup disconnects, check if we need to regenerate
+            port.onDisconnect.addListener(async () => {
+                logger.debug('Popup disconnected');
+                
+                // Check if settings changed and extension is enabled
+                const settingsChanged = await storage.getItem<boolean>('local:settingsChanged');
+                const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
+                const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
+                
+                logger.debug('Popup close state:', { settingsChanged, enabled: phoneticConfig.enabled, regenerateOnChanges: EXTENSION_CONFIG.REGENERATE_ON_CHANGES });
+                
+                if (EXTENSION_CONFIG.REGENERATE_ON_CHANGES && settingsChanged && phoneticConfig.enabled) {
+                    logger.debug('Settings changed and extension enabled, triggering regeneration');
+                    
+                    // Reset the dirty flag
+                    await storage.setItem('local:settingsChanged', false);
+                    
+                    // Get all active tabs and send regeneration message
+                    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+                    for (const tab of tabs) {
+                        if (tab.id && tab.url && (tab.url.includes('wikipedia.org') || tab.url.includes('0.0.0.0'))) {
+                            logger.debug('Sending regeneration message to tab:', tab.url);
+                            await browser.tabs.sendMessage(tab.id, { type: 'regenerateContent' });
+                        }
+                    }
+                }
+            });
+        }
+    });
 
     // Update icon based on enabled state
     async function updateIcon() {

@@ -4,4 +4,5 @@
  */
 export const EXTENSION_CONFIG = {
   LOGGING_DISABLED: false, // Set to true to disable all logging
+  REGENERATE_ON_CHANGES: false, // Set to false to disable page regeneration when settings change
 };
