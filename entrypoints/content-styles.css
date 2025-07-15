@@ -20,6 +20,8 @@
     transition: opacity 0.3s;
     z-index: 9999; /* Increased z-index to ensure tooltip appears above links */
     font-family: 'Arial', sans-serif;
+    font-size: 14px !important; /* Fixed font size for readability */
+    line-height: 1.4 !important; /* Consistent line height */
     letter-spacing: normal !important;
     pointer-events: none; /* Ensure tooltip doesn't interfere with mouse events */
 }
