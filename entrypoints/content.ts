@@ -6,7 +6,7 @@ import {isStringPopulated} from "@/utils/misc-functions";
 import { logger } from "@/utils/logger";
 
 export default defineContentScript({
-    matches: ['*://*.wikipedia.org/*', 'http://0.0.0.0/*'],
+    matches: ['<all_urls>'],
     main() {
         logger.debug('main() content script');
         let currentObserver: MutationObserver | null = null;

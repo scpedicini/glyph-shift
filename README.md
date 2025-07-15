@@ -15,7 +15,7 @@ Does one of the following describe you?
 
 ## What is this?
 
-Phonetic Mapper is a browser extension that allows you to select various phonetic alphabets (such as morse or braille) - and it will replace random words on the page with the phonetic equivalent. This is useful for learning new alphabets or for fun.
+Glyphshift is a browser extension that allows you to select various writing systems (such as morse or braille) - and it will replace random words on the page with their equivalents. This is useful for learning new alphabets or for fun.
 
 
 ## Prior Art
@@ -31,13 +31,13 @@ https://chromewebstore.google.com/detail/mind-the-word/fabjlaokbhaoehejcoblhahce
 
 ## How is your project different from these other projects?
 
-Unlike the other extensions which focus more on language translation, the Phonetic Mapper focuses more on learning "writing systems" or "alphabets". These methods of communication are relatively simple and can usually be learned in a few hours. This extension is meant to be a fun way to review your knowledge of these alphabets just in case you forget to feed your babel fish.
+Unlike the other extensions which focus more on language translation, Glyphshift focuses more on learning "writing systems" or "alphabets". These methods of communication are relatively simple and can usually be learned in a few hours. This extension is meant to be a fun way to review your knowledge of these alphabets just in case you forget to feed your babel fish.
 
 
 # TODO
 
 - [ ] Kofi link
-- [X] Links to Specular Realms and Mordenstar (https://specularrealms.com and https://mordenstar.com)
+- [X] Links to Shaun Pedicini's about page
 - [ ] Reference to learning resources
 - [X] Vorticon alphabet
 

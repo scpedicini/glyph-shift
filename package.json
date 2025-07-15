@@ -1,8 +1,8 @@
 {
-  "name": "phonetic-mapper",
-  "description": "A simple educational extension that helps you learn various phonetic alphabets by randomly replacing words with their phonetic equivalents as you browse.",
+  "name": "glyphshift",
+  "description": "Transform web text into 9 different phonetic alphabets by randomly replacing words. Learn Hiragana, Braille, Morse Code, and more while browsing normally.",
   "private": true,
-  "version": "0.0.2",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt --debug --mode development --port 9411",

@@ -4,6 +4,7 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   // extensionApi: 'webextension-polyfill',  // <- deprecated
   manifest: {
+    name: 'Glyphshift',
     permissions: ['storage'],
     action: {
       default_popup: 'popup.html',
