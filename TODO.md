@@ -1,8 +1,6 @@
 # Unfinished Tasks
 
-## Light Mode
 
-The popup interface looks perfect in dark mode, but it needs to be properly adjusted for light mode.
 
 See the `tmp/Glyphshift-Bad-Light-Mode.png` screenshot for reference.
 
@@ -114,3 +112,6 @@ If we find one, we slice it out of the neglectedSwapModules list, and use it on 
 
 This helps so that modules that get neglected because canSwap returns false can still get priority later. This is particularly useful for modules that are not as frequently applicable, like KatakanaSwap, which relies on a list of well-defined loanwords vs something like MorseSwap which is applicable to any text that contains A-Z/a-z characters.
 
+## Light Mode
+
+The popup interface looks perfect in dark mode, but it needs to be properly adjusted for light mode.

@@ -534,6 +534,92 @@ h2 {
 }
 
 @media (prefers-color-scheme: light) {
+  h2 {
+    color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .language-name {
+    color: rgba(0, 0, 0, 0.95);
+  }
+  
+  .status-text {
+    color: rgba(0, 0, 0, 0.95);
+  }
+  
+  .status-text.inactive {
+    color: var(--danger-color);
+  }
+  
+  /* Toggle switch styles for light mode */
+  .toggle-slider {
+    background-color: rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  
+  .toggle-switch.compact .toggle-slider {
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .toggle-switch.compact .toggle-slider:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Slider styles for light mode */
+  .slider {
+    background: rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  .slider-value {
+    color: rgba(0, 0, 0, 0.9);
+  }
+  
+  /* Description text (permanent marker font) */
+  .description {
+    color: rgba(0, 0, 0, 0.65);
+  }
+  
+  /* Checkbox overrides for light mode */
+  .checkmark {
+    border-color: rgba(0, 0, 0, 0.4) !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .checkbox-container:hover .checkmark {
+    border-color: var(--primary-color) !important;
+    background: rgba(124, 58, 237, 0.1) !important;
+  }
+  
+  .checkmark.small {
+    border-color: rgba(0, 0, 0, 0.4) !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .checkbox-container:hover .checkmark.small {
+    border-color: var(--primary-color) !important;
+    background: rgba(124, 58, 237, 0.1) !important;
+  }
+  
+  /* Checked checkbox styles for light mode */
+  .checkbox-container input:checked + .checkmark {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+  
+  .checkbox-container input:checked + .checkmark.small {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+  
+  /* Checkmark symbol color for light mode - keep white on purple background */
+  .checkbox-container input:checked + .checkmark:after {
+    border-color: white !important;
+  }
+  
+  .checkbox-container input:checked + .checkmark.small:after {
+    border-color: white !important;
+  }
+  
   .footer {
     border-top-color: var(--border-color);
   }
