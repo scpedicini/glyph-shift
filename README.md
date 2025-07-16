@@ -1,6 +1,6 @@
 # Overview
 
-Imagine yourself in the world of Blade Runner, a cyberpunk universe where nothing make any sense because everything is written in at least four completely different languages.
+Imagine yourself in the world of Blade Runner, a cyberpunk universe where nothing make any sense because everything is written in at least four completely different languages. Glyphshift is a browser extension that allows you to select various writing systems (such as morse or braille) - and it will replace random words on the page with their equivalents. This is useful for learning new alphabets or for fun.
 
 Does one of the following describe you?
 
@@ -12,9 +12,10 @@ Does one of the following describe you?
 
 # FAQ
 
-## What is this?
+## How is Glyphshift different from other language learning tools?
 
-Glyphshift is a browser extension that allows you to select various writing systems (such as morse or braille) - and it will replace random words on the page with their equivalents. This is useful for learning new alphabets or for fun.
+Unlike many other swap-based extensions, Glyphshift focuses on phonetic and symbolic systems (such as Morse code or ASL fingerspelling) rather than full languages (such as Spanish or German) - making it significantly easier to use and more accessible for quick learning and practice.
+
 
 
 ## Prior Art
