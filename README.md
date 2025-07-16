@@ -58,11 +58,8 @@ Unlike the other extensions which focus more on language translation, Glyphshift
 
 ## TODO
 
-- [ ] Kofi link
-- [X] Links to Shaun Pedicini's about page
 - [ ] Reference to learning resources
 - [X] Vorticon alphabet
-
 
 ## Future Language Support
 
