@@ -1,7 +1,5 @@
 # Unfinished Tasks
 
-
-
 # Finished Tasks
 
 ## Vorticon Alphabet
@@ -118,3 +116,23 @@ The hover text should always be the same size, regardless of the font size of th
 ## Extension Permissions
 
 Based on the repository's overall functionality, please set the appropriate permissions in the `wxt.config.ts` file.
+
+
+## Add Font Attributions
+
+Add font attributions to the README.md file
+
+Morse code font attribution:
+https://www.fontspace.com/morso-kode-font-f7440
+Designed by Morten L T
+
+Permanent Marker Regular
+Name: Permanent Marker Regular. Version 1.001
+It was designed by Font Diner, Inc Manufacturer: Font Diner, Inc
+© Copyright (c) 2010 by Font Diner, Inc. All rights reserved.
+License: Licensed under the Apache License, Version 2.0
+
+ASL Fingerspelling font attribution:
+https://www.dafont.com/asl-hands-by-frank.font
+Designed by Frank Gemignani
+100% Freeware

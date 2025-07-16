@@ -54,6 +54,25 @@ https://chromewebstore.google.com/detail/mind-the-word/fabjlaokbhaoehejcoblhahce
 
 Unlike the other extensions which focus more on language translation, Glyphshift focuses more on learning "writing systems" or "alphabets". These methods of communication are relatively simple and can usually be learned in a few hours. This extension is meant to be a fun way to review your knowledge of these alphabets.
 
+# Font Attributions
+
+## Morse Code Font
+- **Font:** Morso Kode Font
+- **Designer:** Morten L T
+- **Source:** https://www.fontspace.com/morso-kode-font-f7440
+
+## Permanent Marker Font
+- **Font:** Permanent Marker Regular Version 1.001
+- **Designer:** Font Diner, Inc
+- **Copyright:** © Copyright (c) 2010 by Font Diner, Inc. All rights reserved.
+- **License:** Licensed under the Apache License, Version 2.0
+
+## ASL Fingerspelling Font
+- **Font:** ASL Hands by Frank
+- **Designer:** Frank Gemignani
+- **License:** 100% Freeware
+- **Source:** https://www.dafont.com/asl-hands-by-frank.font
+
 # Development
 
 ## TODO
