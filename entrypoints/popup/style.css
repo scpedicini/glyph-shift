@@ -219,6 +219,23 @@ h1 {
   transform: none;
 }
 
+/* Regenerating state - continuous spin */
+.regenerate-button.regenerating {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .compact-toggle {
   display: flex;
   align-items: center;

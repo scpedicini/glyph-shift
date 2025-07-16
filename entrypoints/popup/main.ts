@@ -115,7 +115,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     regenerateButton.addEventListener('click', async () => {
         logger.debug('Manual regeneration triggered');
         
-        // Disable button briefly to prevent spam
+        // Add regenerating class and disable button
+        regenerateButton.classList.add('regenerating');
         regenerateButton.disabled = true;
         
         // Send regeneration message to active tabs
@@ -126,8 +127,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
         
-        // Re-enable button after a short delay
+        // Remove regenerating class and re-enable button after a delay
         setTimeout(() => {
+            regenerateButton.classList.remove('regenerating');
             regenerateButton.disabled = false;
         }, 1000);
     });
