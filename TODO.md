@@ -1,9 +1,6 @@
 # Unfinished Tasks
 
 
-## Extension Permissions
-
-Based on the repository's overall functionality, please set the appropriate permissions in the `wxt.config.ts` file.
 
 # Finished Tasks
 
@@ -116,3 +113,8 @@ See the `tmp/Glyphshift-Bad-Light-Mode.png` screenshot for reference.
 ## The hover-over text (the original English) size should not be relative to the font size of the transformed text.
 
 The hover text should always be the same size, regardless of the font size of the transformed text to ensure readability. 
+
+
+## Extension Permissions
+
+Based on the repository's overall functionality, please set the appropriate permissions in the `wxt.config.ts` file.
