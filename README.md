@@ -60,6 +60,7 @@ Unlike the other extensions which focus more on language translation, Glyphshift
 - **Font:** Morso Kode Font
 - **Designer:** Morten L T
 - **Source:** https://www.fontspace.com/morso-kode-font-f7440
+- **License:** 100% Freeware
 
 ## Permanent Marker Font
 - **Font:** Permanent Marker Regular Version 1.001
@@ -70,8 +71,8 @@ Unlike the other extensions which focus more on language translation, Glyphshift
 ## ASL Fingerspelling Font
 - **Font:** ASL Hands by Frank
 - **Designer:** Frank Gemignani
-- **License:** 100% Freeware
 - **Source:** https://www.dafont.com/asl-hands-by-frank.font
+- **License:** 100% Freeware
 
 # Development
 
