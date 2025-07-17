@@ -28,8 +28,12 @@ export default defineContentScript({
         
         // Listen for storage changes to enable/disable highlighting
         storage.watch<PhoneticConfig>('local:phoneticConfig', (newConfig, oldConfig) => {
-            if (newConfig?.enabled !== oldConfig?.enabled) {
-                // Reload page when extension is toggled
+            // Only reload if the enabled state actually changed from a known value
+            // This prevents reloading on first-time config saves or when individual languages are toggled
+            if (oldConfig?.enabled !== undefined && 
+                newConfig?.enabled !== undefined && 
+                oldConfig.enabled !== newConfig.enabled) {
+                // Reload page when extension is toggled on/off
                 window.location.reload();
             }
         });
