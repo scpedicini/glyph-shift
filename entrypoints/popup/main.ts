@@ -1,6 +1,7 @@
 import { storage } from '#imports'
 import {DEFAULT_CONFIG, PhoneticConfig} from "@/utils/common";
 import { logger } from "@/utils/logger";
+import { sendMessage } from 'webext-bridge/popup';
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -120,20 +121,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         regenerateButton.disabled = true;
         
         try {
-            // Get active tabs
-            const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+            // Get only the active tab in current window
+            const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
             
-            for (const tab of tabs) {
-                if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
-                    try {
-                        // First try to send message to content script
-                        await browser.tabs.sendMessage(tab.id, { type: 'regenerateContent' });
-                        logger.debug(`Regeneration message sent to tab ${tab.id}`);
-                    } catch (error) {
-                        // If message fails (due to bfcache or other issues), reload the tab directly
-                        logger.warn(`Failed to send message to tab ${tab.id}, reloading tab instead:`, error);
-                        await browser.tabs.reload(tab.id);
-                    }
+            if (activeTab && activeTab.id && activeTab.url && 
+                !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
+                try {
+                    // Use webext-bridge to send message to content script
+                    await sendMessage('regenerateContent', {}, `content-script@${activeTab.id}`);
+                    logger.debug(`Regeneration message sent to tab ${activeTab.id}`);
+                } catch (error) {
+                    // If message fails (due to bfcache or other issues), reload the tab directly
+                    logger.warn(`Failed to send message to tab ${activeTab.id}, reloading tab instead:`, error);
+                    await browser.tabs.reload(activeTab.id);
                 }
             }
         } catch (error) {

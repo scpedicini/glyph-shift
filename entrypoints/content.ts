@@ -1,6 +1,6 @@
 import { storage } from '#imports';
 import './content-styles.css'
-import {sendMessage} from 'webext-bridge/content-script';
+import {sendMessage, onMessage} from 'webext-bridge/content-script';
 import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG, GetSwapInfoMessage, SwapInfo} from "@/utils/common";
 import {isStringPopulated} from "@/utils/misc-functions";
 import { logger } from "@/utils/logger";
@@ -38,12 +38,10 @@ export default defineContentScript({
             }
         });
         
-        // Listen for regeneration messages from background script
-        browser.runtime.onMessage.addListener((message) => {
-            if (message.type === 'regenerateContent') {
-                logger.debug('Received regeneration request from background script');
-                window.location.reload();
-            }
+        // Listen for regeneration messages using webext-bridge
+        onMessage('regenerateContent', () => {
+            logger.debug('Received regeneration request from popup');
+            window.location.reload();
         });
     },
 });

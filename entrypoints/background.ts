@@ -1,4 +1,4 @@
-import {onMessage} from "webext-bridge/background";
+import {onMessage, sendMessage} from "webext-bridge/background";
 import { storage } from '#imports';
 import {CanSwapMessage, SwapMessage, GetSwapInfoMessage, SwapInfo, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
 import {IPhoneticSwap, LanguageFactory} from "@/utils/phonetic-swap";
@@ -9,7 +9,7 @@ import { EXTENSION_CONFIG } from "@/utils/config";
 
 
 export default defineBackground(() => {
-    logger.debug('Glyphshift v1.0.1', {id: browser.runtime.id});
+    logger.debug('Glyphshift v1.0.2', {id: browser.runtime.id});
 
     // Update icon based on enabled state
     async function updateIcon() {
@@ -88,12 +88,16 @@ export default defineBackground(() => {
                     // Reset the dirty flag
                     await storage.setItem('local:settingsChanged', false);
                     
-                    // Get all active tabs and send regeneration message
-                    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
-                    for (const tab of tabs) {
-                        if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
-                            logger.debug('Sending regeneration message to tab:', tab.url);
-                            await browser.tabs.sendMessage(tab.id, { type: 'regenerateContent' });
+                    // Get only the active tab in current window
+                    const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
+                    if (activeTab && activeTab.id && activeTab.url && 
+                        !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
+                        logger.debug('Sending regeneration message to tab:', activeTab.url);
+                        try {
+                            await sendMessage('regenerateContent', {}, `content-script@${activeTab.id}`);
+                        } catch (error) {
+                            logger.warn('Failed to send regeneration message, reloading tab instead:', error);
+                            await browser.tabs.reload(activeTab.id);
                         }
                     }
                 }
