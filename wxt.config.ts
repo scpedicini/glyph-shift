@@ -16,10 +16,24 @@ export default defineConfig({
         48: 'icon/48.png',
         128: 'icon/128.png'
       }
-    }
+    },
+    web_accessible_resources: [
+      {
+        resources: [
+          'fonts/*.woff2',
+          'fonts/*.ttf'
+        ],
+        matches: ['<all_urls>']
+      }
+    ]
   },
   webExt: {                       // was: runner
     chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
     startUrls: ['https://simple.wikipedia.org/wiki/Commodore_64'],
   },
+  vite: () => ({
+    build: {
+      assetsInlineLimit: 0, // Disable inlining of assets, force all to be files
+    }
+  }),
 });

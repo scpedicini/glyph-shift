@@ -62,12 +62,6 @@ Unlike the other extensions which focus more on language translation, Glyphshift
 - **Source:** https://www.fontspace.com/morso-kode-font-f7440
 - **License:** 100% Freeware
 
-## Permanent Marker Font
-- **Font:** Permanent Marker Regular Version 1.001
-- **Designer:** Font Diner, Inc
-- **Copyright:** © Copyright (c) 2010 by Font Diner, Inc. All rights reserved.
-- **License:** Licensed under the Apache License, Version 2.0
-
 ## ASL Fingerspelling Font
 - **Font:** ASL Hands by Frank
 - **Designer:** Frank Gemignani

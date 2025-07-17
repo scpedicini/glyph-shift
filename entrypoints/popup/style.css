@@ -471,21 +471,12 @@ h2 {
 }
 
 
-@font-face {
-  font-family: "Permanent Marker";
-  src: url(~/assets/PermanentMarker-Regular.ttf) format('truetype');
-}
-
-.permanent-marker {
-  font-family: "Permanent Marker";
-}
 
 
 .description {
   color: var(--text-secondary);
   font-size: 0.85em;
   margin-top: 0.75em;
-  font-family: "Permanent Marker";
   line-height: 1.4;
   text-align: center;
 }

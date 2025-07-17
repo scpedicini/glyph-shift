@@ -45,7 +45,7 @@
 
 @font-face {
     font-family: 'ASL Hands';
-    src: url(~/assets/asl-hands.woff2) format('woff2');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/asl-hands.woff2') format('woff2');
 }
 
 .pmapper-swapped {
@@ -59,7 +59,7 @@
 
 @font-face {
     font-family: 'Braille Unicode Alt';
-    src: url(~/assets/braille-unicode-alt.woff2) format('woff2');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/braille-unicode-alt.woff2') format('woff2');
 }
 
 .braille-unicode {
@@ -89,12 +89,12 @@
 
 @font-face {
     font-family: 'Morse Code';
-    src: url(~/assets/morse-code.woff2) format('woff2');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/morse-code.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Vorticon SGA';
-    src: url(~/assets/sga-k3-direct.otf.woff2) format('woff2');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/sga-k3-direct.otf.woff2') format('woff2');
 }
 
 .vorticon-sga {
