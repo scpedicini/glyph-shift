@@ -298,7 +298,9 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
         subtree: true
     });
 
-    window.addEventListener('unload', () => {
+    // Use 'pagehide' instead of 'unload' to avoid permissions policy violations
+    // 'unload' is deprecated and blocked by modern browser security policies
+    window.addEventListener('pagehide', () => {
         observer.disconnect();
     });
 

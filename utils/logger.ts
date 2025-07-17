@@ -38,7 +38,9 @@ class Logger {
     if (EXTENSION_CONFIG.LOGGING_DISABLED) {
       return false;
     }
-    return this.isDevelopment && level <= this.level;
+    // Allow logging in production if FORCE_LOGS_IN_PROD is enabled
+    const allowLogging = this.isDevelopment || EXTENSION_CONFIG.FORCE_LOGS_IN_PROD;
+    return allowLogging && level <= this.level;
   }
 
   private formatMessage(level: string, ...args: unknown[]): unknown[] {
@@ -81,7 +83,9 @@ class Logger {
 
 // Create default logger instance
 const defaultLogger = new Logger({
-  level: process.env.NODE_ENV === 'production' ? LogLevel.ERROR : LogLevel.DEBUG,
+  level: process.env.NODE_ENV === 'production' && !EXTENSION_CONFIG.FORCE_LOGS_IN_PROD 
+    ? LogLevel.ERROR 
+    : LogLevel.DEBUG,
   prefix: '[PMapper]',
 });
 
@@ -106,7 +110,11 @@ export const logger = {
   getLevel: defaultLogger.getLevel.bind(defaultLogger),
   // Convenience methods
   disable: () => defaultLogger.setLevel(LogLevel.NONE),
-  enable: () => defaultLogger.setLevel(process.env.NODE_ENV === 'production' ? LogLevel.ERROR : LogLevel.DEBUG),
+  enable: () => defaultLogger.setLevel(
+    process.env.NODE_ENV === 'production' && !EXTENSION_CONFIG.FORCE_LOGS_IN_PROD 
+      ? LogLevel.ERROR 
+      : LogLevel.DEBUG
+  ),
   LogLevel, // Export LogLevel enum for direct access
 };
 

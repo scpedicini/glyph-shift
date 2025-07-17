@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Reload active tabs to apply changes
         const tabs = await browser.tabs.query({ active: true });
         tabs.forEach(tab => {
-            if (tab.id && tab.url && (tab.url.includes('wikipedia.org') || tab.url.includes('0.0.0.0'))) {
+            if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
                 browser.tabs.reload(tab.id);
             }
         });
@@ -119,12 +119,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         regenerateButton.classList.add('regenerating');
         regenerateButton.disabled = true;
         
-        // Send regeneration message to active tabs
-        const tabs = await browser.tabs.query({ active: true, currentWindow: true });
-        for (const tab of tabs) {
-            if (tab.id && tab.url && (tab.url.includes('wikipedia.org') || tab.url.includes('0.0.0.0'))) {
-                await browser.tabs.sendMessage(tab.id, { type: 'regenerateContent' });
+        try {
+            // Get active tabs
+            const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+            
+            for (const tab of tabs) {
+                if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
+                    try {
+                        // First try to send message to content script
+                        await browser.tabs.sendMessage(tab.id, { type: 'regenerateContent' });
+                        logger.debug(`Regeneration message sent to tab ${tab.id}`);
+                    } catch (error) {
+                        // If message fails (due to bfcache or other issues), reload the tab directly
+                        logger.warn(`Failed to send message to tab ${tab.id}, reloading tab instead:`, error);
+                        await browser.tabs.reload(tab.id);
+                    }
+                }
             }
+        } catch (error) {
+            logger.error('Failed to regenerate content:', error);
         }
         
         // Remove regenerating class and re-enable button after a delay

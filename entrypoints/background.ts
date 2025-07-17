@@ -36,7 +36,7 @@ export default defineBackground(() => {
                     // Get all active tabs and send regeneration message
                     const tabs = await browser.tabs.query({ active: true, currentWindow: true });
                     for (const tab of tabs) {
-                        if (tab.id && tab.url && (tab.url.includes('wikipedia.org') || tab.url.includes('0.0.0.0'))) {
+                        if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
                             logger.debug('Sending regeneration message to tab:', tab.url);
                             await browser.tabs.sendMessage(tab.id, { type: 'regenerateContent' });
                         }
