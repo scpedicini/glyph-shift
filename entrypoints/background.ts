@@ -1,6 +1,6 @@
 import {onMessage} from "webext-bridge/background";
 import { storage } from '#imports';
-import {CanSwapMessage, SwapMessage, SwapLangs, GetSwapInfoMessage, SwapInfo, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
+import {CanSwapMessage, SwapMessage, GetSwapInfoMessage, SwapInfo, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
 import {IPhoneticSwap, LanguageFactory} from "@/utils/phonetic-swap";
 import { logger } from "@/utils/logger";
 import { EXTENSION_CONFIG } from "@/utils/config";
@@ -10,6 +10,61 @@ import { EXTENSION_CONFIG } from "@/utils/config";
 
 export default defineBackground(() => {
     logger.debug('Hello background!', {id: browser.runtime.id});
+
+    // Update icon based on enabled state
+    async function updateIcon() {
+        const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
+        const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
+        
+        const iconPath = phoneticConfig.enabled ? 'icon' : 'icon-disabled';
+        
+        // Set icon for all sizes
+        await browser.action.setIcon({
+            path: {
+                16: `${iconPath}/16.png`,
+                32: `${iconPath}/32.png`,
+                48: `${iconPath}/48.png`,
+                128: `${iconPath}/128.png`
+            }
+        });
+        
+        // Set badge to show on/off state
+        await browser.action.setBadgeText({
+            text: phoneticConfig.enabled ? '' : 'OFF'
+        });
+        
+        await browser.action.setBadgeBackgroundColor({
+            color: '#FF0000'
+        });
+    }
+
+    // Dev-only function to simulate fresh extension install
+    if (import.meta.env.DEV) {
+        (globalThis as any).clearPhoneticMapperSettings = async () => {
+            try {
+                // Clear all stored settings to simulate fresh install
+                await storage.removeItem('local:phoneticConfig');
+                await storage.removeItem('local:settingsChanged');
+                
+                logger.info('✅ Phonetic Mapper reset to fresh install state!');
+                logger.info('Storage cleared - extension will use DEFAULT_CONFIG:');
+                logger.info('  - enabled: true');
+                logger.info('  - swapFrequency: 5');
+                logger.info('  - all swap types: disabled');
+                logger.info('Refresh the extension or reload tabs to see changes.');
+                
+                // Update icon to reflect default state (enabled = true)
+                await updateIcon();
+                
+                return true;
+            } catch (error) {
+                logger.error('❌ Failed to clear settings:', error);
+                return false;
+            }
+        };
+        
+        logger.info('🔧 Dev mode: clearPhoneticMapperSettings() available - simulates fresh install');
+    }
 
     // Handle popup port connections
     browser.runtime.onConnect.addListener((port) => {
@@ -45,33 +100,6 @@ export default defineBackground(() => {
             });
         }
     });
-
-    // Update icon based on enabled state
-    async function updateIcon() {
-        const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
-        const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
-        
-        const iconPath = phoneticConfig.enabled ? 'icon' : 'icon-disabled';
-        
-        // Set icon for all sizes
-        await browser.action.setIcon({
-            path: {
-                16: `${iconPath}/16.png`,
-                32: `${iconPath}/32.png`,
-                48: `${iconPath}/48.png`,
-                128: `${iconPath}/128.png`
-            }
-        });
-        
-        // Set badge to show on/off state
-        await browser.action.setBadgeText({
-            text: phoneticConfig.enabled ? '' : 'OFF'
-        });
-        
-        await browser.action.setBadgeBackgroundColor({
-            color: '#FF0000'
-        });
-    }
 
     // Initialize icon on startup
     updateIcon();

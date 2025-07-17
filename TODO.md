@@ -1,5 +1,9 @@
 # Unfinished Tasks
 
+## Refresh and also Toggle Button
+
+When "toggling" the extension off, it almost looked like it was trying to fix EVERY SINGLE TAB. That is completely unacceptable - in fact a user might be very angry that the extension is defacto messing with every single tab they have open.
+
 # Finished Tasks
 
 ## Vorticon Alphabet
