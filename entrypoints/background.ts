@@ -9,7 +9,7 @@ import { EXTENSION_CONFIG } from "@/utils/config";
 
 
 export default defineBackground(() => {
-    logger.debug('Glyphshift v1.0.2', {id: browser.runtime.id});
+    logger.debug('Glyphshift v1.0.5', {id: browser.runtime.id});
 
     // Update icon based on enabled state
     async function updateIcon() {
@@ -18,8 +18,16 @@ export default defineBackground(() => {
         
         const iconPath = phoneticConfig.enabled ? 'icon' : 'icon-disabled';
         
+        // Use action API for Manifest V3 (Chrome) or browserAction for older Firefox versions
+        const actionApi = browser.action || browser.browserAction;
+        
+        if (!actionApi) {
+            logger.warn('Neither browser.action nor browser.browserAction is available');
+            return;
+        }
+        
         // Set icon for all sizes
-        await browser.action.setIcon({
+        await actionApi.setIcon({
             path: {
                 16: `${iconPath}/16.png`,
                 32: `${iconPath}/32.png`,
@@ -29,11 +37,11 @@ export default defineBackground(() => {
         });
         
         // Set badge to show on/off state
-        await browser.action.setBadgeText({
+        await actionApi.setBadgeText({
             text: phoneticConfig.enabled ? '' : 'OFF'
         });
         
-        await browser.action.setBadgeBackgroundColor({
+        await actionApi.setBadgeBackgroundColor({
             color: '#FF0000'
         });
     }

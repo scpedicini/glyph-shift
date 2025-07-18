@@ -4,11 +4,16 @@ import {sendMessage, onMessage} from 'webext-bridge/content-script';
 import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG, GetSwapInfoMessage, SwapInfo} from "@/utils/common";
 import {isStringPopulated} from "@/utils/misc-functions";
 import { logger } from "@/utils/logger";
+import { injectExtensionFonts } from "@/utils/font-loader";
 
 export default defineContentScript({
     matches: ['<all_urls>'],
     main() {
         logger.debug('main() content script');
+        
+        // Inject fonts with proper cross-browser URLs
+        injectExtensionFonts();
+        
         let currentObserver: MutationObserver | null = null;
         
         window.addEventListener('pageshow', async () => {

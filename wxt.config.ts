@@ -7,7 +7,7 @@ export default defineConfig({
     name: 'Glyphshift',
     version: '1.0.1',
     description: 'Transform web text into 9 different writing systems. Learn Hiragana, Braille, Morse Code, and more while browsing.',
-    permissions: ['storage'],
+    permissions: ['storage', 'tabs', 'activeTab'],
     action: {
       default_popup: 'popup.html',
       default_icon: {

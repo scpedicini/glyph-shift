@@ -43,10 +43,7 @@
     visibility: visible;
 } */
 
-@font-face {
-    font-family: 'ASL Hands';
-    src: url('chrome-extension://__MSG_@@extension_id__/fonts/asl-hands.woff2') format('woff2');
-}
+/* Font faces are now dynamically injected by font-loader.ts for cross-browser compatibility */
 
 .pmapper-swapped {
 
@@ -57,10 +54,6 @@
     font-size: 1.5em;
 }
 
-@font-face {
-    font-family: 'Braille Unicode Alt';
-    src: url('chrome-extension://__MSG_@@extension_id__/fonts/braille-unicode-alt.woff2') format('woff2');
-}
 
 .braille-unicode {
     font-family: 'Braille Unicode Alt' !important;
@@ -87,15 +80,7 @@
     vertical-align: -0.1em !important;
 }
 
-@font-face {
-    font-family: 'Morse Code';
-    src: url('chrome-extension://__MSG_@@extension_id__/fonts/morse-code.woff2') format('woff2');
-}
 
-@font-face {
-    font-family: 'Vorticon SGA';
-    src: url('chrome-extension://__MSG_@@extension_id__/fonts/sga-k3-direct.otf.woff2') format('woff2');
-}
 
 .vorticon-sga {
     font-family: 'Vorticon SGA' !important;
