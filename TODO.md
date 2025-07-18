@@ -129,12 +129,7 @@ Add font attributions to the README.md file
 Morse code font attribution:
 https://www.fontspace.com/morso-kode-font-f7440
 Designed by Morten L T
-
-Permanent Marker Regular
-Name: Permanent Marker Regular. Version 1.001
-It was designed by Font Diner, Inc Manufacturer: Font Diner, Inc
-© Copyright (c) 2010 by Font Diner, Inc. All rights reserved.
-License: Licensed under the Apache License, Version 2.0
+100% Freeware
 
 ASL Fingerspelling font attribution:
 https://www.dafont.com/asl-hands-by-frank.font
