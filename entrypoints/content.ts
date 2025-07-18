@@ -9,7 +9,7 @@ import { injectExtensionFonts } from "@/utils/font-loader";
 export default defineContentScript({
     matches: ['<all_urls>'],
     main() {
-        logger.debug('main() content script!~');
+        logger.debug('main() content script 1.0.6 loaded');
         
         // Inject fonts with proper cross-browser URLs
         injectExtensionFonts();
@@ -96,6 +96,20 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
 
 // Setup tooltip overflow fix for problematic sites
 function setupTooltipOverflowFix() {
+    // Add CSS to ensure tooltip isolation
+    const style = document.createElement('style');
+    style.textContent = `
+        #pmapper-tooltip-container,
+        #pmapper-tooltip-container *,
+        #pmapper-tooltip,
+        #pmapper-tooltip *,
+        .pmapper-system-tooltip,
+        .pmapper-system-tooltip * {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+        }
+    `;
+    document.head.appendChild(style);
+    
     // Create a container for tooltips at the body level
     const tooltipContainer = document.createElement('div');
     tooltipContainer.id = 'pmapper-tooltip-container';
@@ -111,54 +125,137 @@ function setupTooltipOverflowFix() {
     // Create the actual tooltip element
     const tooltip = document.createElement('div');
     tooltip.id = 'pmapper-tooltip';
+    // Add a unique class that won't match any font-specific selectors
+    tooltip.className = 'pmapper-system-tooltip';
     tooltip.style.cssText = `
         position: absolute;
         background-color: rgba(0, 0, 0, 0.9);
         color: white;
         padding: 6px 12px;
         border-radius: 4px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.4;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        line-height: 1.4 !important;
         white-space: nowrap;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         opacity: 0;
         transition: opacity 0.2s;
         display: none;
+        /* Prevent any font inheritance */
+        font-style: normal !important;
+        letter-spacing: normal !important;
+        text-transform: none !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        /* Extra isolation */
+        all: initial;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+        position: absolute !important;
+        background-color: rgba(0, 0, 0, 0.9) !important;
+        color: white !important;
+        padding: 6px 12px !important;
+        border-radius: 4px !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.2s;
     `;
     tooltipContainer.appendChild(tooltip);
     
-    // Handle hover events
-    document.addEventListener('mouseover', (e) => {
+    // Store tooltip data to prevent changes
+    let currentTooltipData: { element: HTMLElement; originalText: string } | null = null;
+    
+    // Single mousemove handler for all tooltip functionality
+    document.addEventListener('mousemove', (e) => {
         const target = e.target as HTMLElement;
-        if (target.classList.contains('pmapper-tooltip')) {
-            const originalText = target.getAttribute('data-pmapper-original');
-            if (originalText) {
-                const rect = target.getBoundingClientRect();
-                tooltip.textContent = originalText;
-                tooltip.style.display = 'block';
+        
+        // Find the closest tooltip element (handles nested elements)
+        let tooltipElement: HTMLElement | null = null;
+        let checkElement = target;
+        
+        while (checkElement && checkElement !== document.body) {
+            if (checkElement.classList.contains('pmapper-tooltip')) {
+                tooltipElement = checkElement;
+                break;
+            }
+            checkElement = checkElement.parentElement as HTMLElement;
+        }
+        
+        // If we found a tooltip element
+        if (tooltipElement) {
+            // Only process if it's a new element
+            if (!currentTooltipData || currentTooltipData.element !== tooltipElement) {
+                const originalText = tooltipElement.getAttribute('data-pmapper-original');
                 
-                // Position tooltip
-                const tooltipRect = tooltip.getBoundingClientRect();
-                const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                const top = rect.top - tooltipRect.height - 5;
+                if (originalText && originalText.length > 0) {
+                    // Lock in this tooltip data
+                    currentTooltipData = {
+                        element: tooltipElement,
+                        originalText: originalText
+                    };
+                    
+                    // Hide tooltip briefly to ensure clean update
+                    tooltip.style.display = 'none';
+                    tooltip.style.opacity = '0';
+                    
+                    // Clear tooltip completely
+                    while (tooltip.firstChild) {
+                        tooltip.removeChild(tooltip.firstChild);
+                    }
+                    
+                    // Create a span with explicit font to ensure no inheritance
+                    const span = document.createElement('span');
+                    span.style.cssText = `
+                        font-family: Arial, sans-serif !important;
+                        font-size: 14px !important;
+                        font-weight: normal !important;
+                        font-style: normal !important;
+                        line-height: 1.4 !important;
+                        color: white !important;
+                        letter-spacing: normal !important;
+                    `;
+                    span.textContent = currentTooltipData.originalText;
+                    
+                    tooltip.appendChild(span);
+                    
+                    // Show tooltip
+                    tooltip.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        tooltip.style.opacity = '1';
+                    });
+                    
+                    // Debug log
+                    const elementClasses = tooltipElement.className || 'no-classes';
+                    logger.debug(`Tooltip shown: "${originalText}" for element with classes: "${elementClasses}"`);
+                }
+            }
+            
+            // Always update position based on mouse cursor
+            if (currentTooltipData && tooltipElement === currentTooltipData.element) {
+                const x = e.clientX;
+                const y = e.clientY;
                 
-                tooltip.style.left = `${left}px`;
-                tooltip.style.top = `${top}px`;
-                tooltip.style.opacity = '1';
+                // Position tooltip above cursor
+                tooltip.style.left = `${x - tooltip.offsetWidth / 2}px`;
+                tooltip.style.top = `${y - tooltip.offsetHeight - 10}px`;
+            }
+        } else {
+            // Not hovering over a tooltip element - hide it
+            if (currentTooltipData) {
+                currentTooltipData = null;
+                tooltip.style.opacity = '0';
+                setTimeout(() => {
+                    if (!currentTooltipData) {
+                        tooltip.style.display = 'none';
+                    }
+                }, 200);
             }
         }
-    });
-    
-    document.addEventListener('mouseout', (e) => {
-        const target = e.target as HTMLElement;
-        if (target.classList.contains('pmapper-tooltip')) {
-            tooltip.style.opacity = '0';
-            setTimeout(() => {
-                tooltip.style.display = 'none';
-            }, 200);
-        }
-    });
+    }, true); // Use capture phase
 }
 
 // Helper interface for word with punctuation info
