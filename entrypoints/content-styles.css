@@ -1,53 +1,10 @@
 .pmapper-tooltip {
-    position: relative;
-    display: inline-block;
     cursor: pointer;
 }
 
-.pmapper-tooltip::after {
-    content: attr(data-pmapper-original);
-    position: absolute;
-    bottom: 100%; /* Position above the element */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: black;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s;
-    z-index: 9999; /* Increased z-index to ensure tooltip appears above links */
-    font-family: 'Arial', sans-serif;
-    font-size: 14px !important; /* Fixed font size for readability */
-    line-height: 1.4 !important; /* Consistent line height */
-    letter-spacing: normal !important;
-    pointer-events: none; /* Ensure tooltip doesn't interfere with mouse events */
-}
-
-.pmapper-tooltip:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Ensure tooltips work properly inside links */
-/* a .pmapper-tooltip {
-    position: relative;
-    z-index: 1;
-} */
-
-/* Maintain tooltip visibility when hovering over links */
-/* a:hover .pmapper-tooltip::after {
-    opacity: 1;
-    visibility: visible;
-} */
-
 /* Font faces are now dynamically injected by font-loader.ts for cross-browser compatibility */
 
-.pmapper-swapped {
-
-}
+/* .pmapper-swapped class is used for general identification of swapped elements */
 
 .finger-spelling {
     font-family: 'ASL Hands' !important;

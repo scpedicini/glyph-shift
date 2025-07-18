@@ -9,7 +9,7 @@ import { injectExtensionFonts } from "@/utils/font-loader";
 export default defineContentScript({
     matches: ['<all_urls>'],
     main() {
-        logger.debug('main() content script');
+        logger.debug('main() content script!~');
         
         // Inject fonts with proper cross-browser URLs
         injectExtensionFonts();
@@ -28,6 +28,7 @@ export default defineContentScript({
             // Only setup highlighting if the extension is enabled
             if (phoneticConfig.enabled) {
                 currentObserver = setupHighlighting(phoneticConfig);
+                setupTooltipOverflowFix();
             }
         });
         
@@ -91,6 +92,73 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
     }
 
     return langs;
+}
+
+// Setup tooltip overflow fix for problematic sites
+function setupTooltipOverflowFix() {
+    // Create a container for tooltips at the body level
+    const tooltipContainer = document.createElement('div');
+    tooltipContainer.id = 'pmapper-tooltip-container';
+    tooltipContainer.style.cssText = `
+        position: fixed;
+        z-index: 2147483647;
+        pointer-events: none;
+        left: 0;
+        top: 0;
+    `;
+    document.body.appendChild(tooltipContainer);
+    
+    // Create the actual tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.id = 'pmapper-tooltip';
+    tooltip.style.cssText = `
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.4;
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: opacity 0.2s;
+        display: none;
+    `;
+    tooltipContainer.appendChild(tooltip);
+    
+    // Handle hover events
+    document.addEventListener('mouseover', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains('pmapper-tooltip')) {
+            const originalText = target.getAttribute('data-pmapper-original');
+            if (originalText) {
+                const rect = target.getBoundingClientRect();
+                tooltip.textContent = originalText;
+                tooltip.style.display = 'block';
+                
+                // Position tooltip
+                const tooltipRect = tooltip.getBoundingClientRect();
+                const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                const top = rect.top - tooltipRect.height - 5;
+                
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
+                tooltip.style.opacity = '1';
+            }
+        }
+    });
+    
+    document.addEventListener('mouseout', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains('pmapper-tooltip')) {
+            tooltip.style.opacity = '0';
+            setTimeout(() => {
+                tooltip.style.display = 'none';
+            }, 200);
+        }
+    });
 }
 
 // Helper interface for word with punctuation info
