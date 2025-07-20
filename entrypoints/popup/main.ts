@@ -1,24 +1,23 @@
 import { storage } from '#imports'
 import {DEFAULT_CONFIG, PhoneticConfig} from "@/utils/common";
 import { logger } from "@/utils/logger";
-import { sendMessage } from 'webext-bridge/popup';
+import { sendToBackground } from '@/utils/native-messaging';
 
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        logger.debug("DOM loaded")
+        logger.debug("[POPUP] DOM loaded v1.0.4 with native messaging")
+        
+        // Notify background that popup opened
+        await sendToBackground('popup-opened', {});
+        logger.debug("[POPUP] Current URL:", window.location.href)
+        
         const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG
-        logger.debug('Loaded config:', phoneticConfig)
+        logger.debug('[POPUP] Loaded config:', phoneticConfig)
 
-    // Track if settings have changed (dirty state)
-    let settingsChanged = false;
-    
     // Clear dirty state on popup open
     await storage.setItem('local:settingsChanged', false);
-    
-    // Connect to background script to detect popup close
-    const port = browser.runtime.connect({ name: "popup" });
 
     // Set initial values
     const extensionToggle = document.getElementById('extensionEnabled') as HTMLInputElement
@@ -98,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     extensionToggle.addEventListener('change', async (e) => {
         if(lockEvents) return;
         const enabled = (e.target as HTMLInputElement).checked;
+        logger.debug('[POPUP] Extension toggle changed to:', enabled);
         updateStatusText(enabled);
         
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
@@ -106,27 +106,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             ...mergedConfig,
             enabled: enabled
         });
+        logger.debug('[POPUP] Saved new enabled state:', enabled);
         
         // Update the phoneticConfig reference for popup close handler
         phoneticConfig.enabled = enabled;
         
         // Reset dirty flag when extension is toggled to enabled since page will reload
         if (enabled) {
-            settingsChanged = false;
             await storage.setItem('local:settingsChanged', false);
+            logger.debug('[POPUP] Reset settingsChanged flag');
         }
         
         // Reload only the current active tab to apply changes
+        logger.debug('[POPUP] Querying for active tab to reload');
         const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
         if (activeTab && activeTab.id && activeTab.url && 
             !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
+            logger.debug('[POPUP] Reloading tab after extension toggle:', activeTab.id, activeTab.url);
             browser.tabs.reload(activeTab.id);
+        } else {
+            logger.debug('[POPUP] Not reloading tab - system page or invalid');
         }
     });
 
     // Add regenerate button handler
     regenerateButton.addEventListener('click', async () => {
-        logger.debug('Manual regeneration triggered');
+        logger.debug('[POPUP] Manual regeneration button clicked');
         
         // Add regenerating class and disable button
         regenerateButton.classList.add('regenerating');
@@ -134,22 +139,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         try {
             // Get only the active tab in current window
+            logger.debug('[POPUP] Querying for active tab');
             const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
+            logger.debug('[POPUP] Active tab found:', activeTab);
             
             if (activeTab && activeTab.id && activeTab.url && 
                 !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
-                try {
-                    // Use webext-bridge to send message to content script
-                    await sendMessage('regenerateContent', {}, `content-script@${activeTab.id}`);
-                    logger.debug(`Regeneration message sent to tab ${activeTab.id}`);
-                } catch (error) {
-                    // If message fails (due to bfcache or other issues), reload the tab directly
-                    logger.warn(`Failed to send message to tab ${activeTab.id}, reloading tab instead:`, error);
-                    await browser.tabs.reload(activeTab.id);
-                }
+                logger.debug('[POPUP] Tab is valid, attempting to send regenerateContent message');
+                logger.debug('[POPUP] Tab details - id:', activeTab.id, 'url:', activeTab.url);
+                
+                // Send regeneration message to the active tab
+                logger.debug(`[POPUP] Sending regeneration message to tab ${activeTab.id}`);
+                // Note: We can't use sendToTab from popup, so we'll just reload the tab
+                await browser.tabs.reload(activeTab.id);
+                logger.debug(`[POPUP] Tab reload initiated for tab ${activeTab.id}`);
+            } else {
+                logger.debug('[POPUP] Tab is not valid for regeneration - system page or invalid');
             }
         } catch (error) {
-            logger.error('Failed to regenerate content:', error);
+            logger.error('[POPUP] Failed to regenerate content:', error);
         }
         
         // Remove regenerating class and re-enable button after a delay
@@ -164,8 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         logger.debug("slider input event!");
             const value = parseInt((e.target as HTMLInputElement).value)
             percentageDisplay.textContent = `${value}%`
-            settingsChanged = true; // Mark settings as dirty
-            await storage.setItem('local:settingsChanged', true);
+            await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
             const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
             const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
             await storage.setItem('local:phoneticConfig', {
@@ -177,8 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Add event listeners
     aslCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -189,8 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     morseCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -201,8 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     braille1Checkbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -222,8 +226,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     vorticonCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -234,8 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     katakanaCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         const katakanaChecked = (e.target as HTMLInputElement).checked
@@ -256,8 +258,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     trueKanaCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         const trueKanaChecked = (e.target as HTMLInputElement).checked
@@ -280,8 +281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     trueKanaModeRadios.forEach(radio => {
         radio.addEventListener('change', async (e) => {
             if(lockEvents) return;
-            settingsChanged = true; // Mark settings as dirty
-            await storage.setItem('local:settingsChanged', true);
+            await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
             const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
             const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
             await storage.setItem('local:phoneticConfig', {
@@ -293,8 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     hiraganaCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -305,8 +304,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     romanCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -317,8 +315,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     hexCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -329,8 +326,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     cockneyCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {
@@ -341,8 +337,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     cockneyFullRhymeCheckbox.addEventListener('change', async (e) => {
         if(lockEvents) return;
-        settingsChanged = true; // Mark settings as dirty
-        await storage.setItem('local:settingsChanged', true);
+        await storage.setItem('local:settingsChanged', true); // Mark settings as dirty
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
         await storage.setItem('local:phoneticConfig', {

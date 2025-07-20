@@ -1,15 +1,18 @@
 import { storage } from '#imports';
 import './content-styles.css'
-import {sendMessage, onMessage} from 'webext-bridge/content-script';
+import { logger } from "@/utils/logger";
 import {BrailleOptions, CanSwapMessage, SwapLangs, SwapMessage, PhoneticConfig, DEFAULT_CONFIG, GetSwapInfoMessage, SwapInfo} from "@/utils/common";
 import {isStringPopulated} from "@/utils/misc-functions";
-import { logger } from "@/utils/logger";
 import { injectExtensionFonts } from "@/utils/font-loader";
+import { sendToBackground, onContentMessage, setupMessageCleanup } from "@/utils/native-messaging";
 
 export default defineContentScript({
     matches: ['<all_urls>'],
     main() {
-        logger.debug('main() content script 1.0.6 loaded');
+        logger.debug('[CONTENT] main() content script 1.0.4 loaded - with native messaging');
+        
+        // Set up message cleanup handlers
+        setupMessageCleanup();
         
         // Inject fonts with proper cross-browser URLs
         injectExtensionFonts();
@@ -17,10 +20,13 @@ export default defineContentScript({
         let currentObserver: MutationObserver | null = null;
         
         window.addEventListener('pageshow', async () => {
-            logger.debug('Content script loaded');
+            logger.debug('[CONTENT] pageshow event fired');
+            logger.debug('[CONTENT] Current URL:', window.location.href);
+            logger.debug('[CONTENT] Document ready state:', document.readyState);
 
-            const rndNumber = await sendMessage('get-random-number', {data: 'Hello from content script'});
-            logger.debug('Received random number:', rndNumber);
+            logger.debug('[CONTENT] About to send get-random-number message');
+            const rndNumber = await sendToBackground<number>('get-random-number', {data: 'Hello from content script'});
+            logger.debug('[CONTENT] Received random number response:', rndNumber);
 
             const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
             const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
@@ -44,10 +50,15 @@ export default defineContentScript({
             }
         });
         
-        // Listen for regeneration messages using webext-bridge
-        onMessage('regenerateContent', () => {
-            logger.debug('Received regeneration request from popup');
-            window.location.reload();
+        // Listen for regeneration messages using native messaging
+        logger.debug('[CONTENT] Setting up native message listener');
+        onContentMessage(async (message) => {
+            if (message.type === 'regenerateContent') {
+                logger.debug('[CONTENT] Received regenerateContent message:', message);
+                logger.debug('[CONTENT] About to reload window');
+                window.location.reload();
+                return { status: 'reloading' };
+            }
         });
     },
 });
@@ -378,7 +389,9 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                     for (let i = 0; i < neglectedSwapModules.length; i++) {
                         const neglectedLang = neglectedSwapModules[i];
                         const options = getOptionsForLanguage(neglectedLang, phoneticConfig);
-                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: neglectedLang, input: cleanWord, options} as CanSwapMessage);
+                        logger.debug(`[CONTENT] Checking neglected module ${neglectedLang} for word: "${cleanWord}"`);
+                        const canSwap = await sendToBackground<boolean>('can-swap', {swapLanguage: neglectedLang, input: cleanWord, options} as CanSwapMessage);
+                        logger.debug(`[CONTENT] Neglected module ${neglectedLang} canSwap result:`, canSwap);
                         if (canSwap) {
                             // Found a neglected module that can handle this word
                             selectedLang = neglectedLang;
@@ -397,7 +410,9 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
 
                         for (const lang of enabledLangs) {
                             const options = getOptionsForLanguage(lang, phoneticConfig);
-                            const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: cleanWord, options} as CanSwapMessage);
+                            logger.debug(`[CONTENT] Checking if ${lang} can swap word: "${cleanWord}"`);
+                            const canSwap = await sendToBackground<boolean>('can-swap', {swapLanguage: lang, input: cleanWord, options} as CanSwapMessage);
+                            logger.debug(`[CONTENT] ${lang} canSwap result:`, canSwap);
                             if (canSwap) {
                                 viableLangs.push(lang);
                             } else {
@@ -409,8 +424,10 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                         for (const failedLang of failedLangs) {
                             if (!neglectedSwapModules.includes(failedLang)) {
                                 // Check if this module is neglectable
-                                const swapInfo = await sendMessage<SwapInfo>('get-swap-info', {swapLanguage: failedLang} as GetSwapInfoMessage);
-                                if (swapInfo.isNeglectable) {
+                                logger.debug(`[CONTENT] Getting swap info for failed lang: ${failedLang}`);
+                                const swapInfo = await sendToBackground<SwapInfo>('get-swap-info', {swapLanguage: failedLang} as GetSwapInfoMessage);
+                                logger.debug(`[CONTENT] Swap info for ${failedLang}:`, swapInfo);
+                                if (swapInfo && swapInfo.isNeglectable) {
                                     neglectedSwapModules.push(failedLang);
                                     logger.info(`Added ${failedLang} to neglected modules for word "${word}". Neglected list: ${neglectedSwapModules}`);
                                 }
@@ -429,7 +446,9 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
 
                         const options = getOptionsForLanguage(lang, phoneticConfig);
 
-                        const swapped = await sendMessage<string>('swap', {swapLanguage: lang, input: cleanWord, options } as SwapMessage);
+                        logger.debug(`[CONTENT] Performing swap with ${lang} for word: "${cleanWord}"`);
+                        const swapped = await sendToBackground<string>('swap', {swapLanguage: lang, input: cleanWord, options } as SwapMessage);
+                        logger.debug(`[CONTENT] Swap result from ${lang}:`, swapped);
 
                         if (isStringPopulated(swapped)) {
                             if(shuffleText) {
@@ -488,6 +507,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
     // Use 'pagehide' instead of 'unload' to avoid permissions policy violations
     // 'unload' is deprecated and blocked by modern browser security policies
     window.addEventListener('pagehide', () => {
+        logger.debug('[CONTENT] pagehide in setupHighlighting - disconnecting observer');
         observer.disconnect();
     });
 

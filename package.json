@@ -2,7 +2,7 @@
   "name": "glyphshift",
   "description": "Transform web text into 9 different phonetic alphabets by randomly replacing words. Learn Hiragana, Braille, Morse Code, and more while browsing normally.",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
     "dev": "wxt --debug --mode development --port 9411",
@@ -30,8 +30,5 @@
     "typescript": "^5.6.3",
     "vitest": "^2.1.8",
     "wxt": "^0.20.7"
-  },
-  "dependencies": {
-    "webext-bridge": "^6.0.1"
   }
 }

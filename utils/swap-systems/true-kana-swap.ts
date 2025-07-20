@@ -57,7 +57,6 @@ export class TrueKanaSwap implements IPhoneticSwap {
         }
 
         const mode = options?.mode || this.mode;
-        logger.debug(`TrueKanaSwap.swap called with input: "${input}", options: ${JSON.stringify(options)}, effective mode: ${mode}`);
 
         // Normalize input to lowercase for lookup
         const normalizedInput = input.toLowerCase();
@@ -66,7 +65,6 @@ export class TrueKanaSwap implements IPhoneticSwap {
         const entries = this.trueKanaMap[normalizedInput];
         
         if (!entries || entries.length === 0) {
-            logger.debug(`No True Katakana equivalent found for: ${input}`);
             return null;
         }
 
@@ -79,14 +77,12 @@ export class TrueKanaSwap implements IPhoneticSwap {
         }
 
         if (validEntries.length === 0) {
-            logger.debug(`No valid True Katakana entries for mode ${mode}: ${input}`);
             return null;
         }
 
         // For now, use the first valid entry (could randomize in the future)
         const katakana = validEntries[0].katakana;
         
-        logger.debug(`True Katakana equivalent for "${input}" is "${katakana}" (mode: ${mode})`);
 
         // Return the Katakana wrapped in HTML
         return `<span class="true-kana-text pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}">${katakana}</span>`;
@@ -101,7 +97,6 @@ export class TrueKanaSwap implements IPhoneticSwap {
         }
 
         const mode = options?.mode || this.mode;
-        logger.debug(`TrueKanaSwap.canSwap called with input: "${input}", options: ${JSON.stringify(options)}, effective mode: ${mode}`);
         
         const normalizedInput = input.toLowerCase();
         

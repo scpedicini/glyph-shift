@@ -1,15 +1,16 @@
-import {onMessage, sendMessage} from "webext-bridge/background";
+import { logger } from "@/utils/logger";
 import { storage } from '#imports';
 import {CanSwapMessage, SwapMessage, GetSwapInfoMessage, SwapInfo, PhoneticConfig, DEFAULT_CONFIG} from "@/utils/common";
 import {IPhoneticSwap, LanguageFactory} from "@/utils/phonetic-swap";
-import { logger } from "@/utils/logger";
 import { EXTENSION_CONFIG } from "@/utils/config";
+import { onBackgroundMessage, sendToTab } from "@/utils/native-messaging";
+
 
 
 
 
 export default defineBackground(() => {
-    logger.debug('Glyphshift', {id: browser.runtime.id});
+    logger.debug('[BACKGROUND] Extension starting - Glyphshift v1.1.0 with native messaging', {id: browser.runtime.id});
 
     // Update icon based on enabled state
     async function updateIcon() {
@@ -74,96 +75,114 @@ export default defineBackground(() => {
         logger.info('🔧 Dev mode: clearPhoneticMapperSettings() available - simulates fresh install');
     }
 
-    // Handle popup port connections
-    browser.runtime.onConnect.addListener((port) => {
-        if (port.name === "popup") {
-            logger.debug('Popup connected');
+    // Store popup window ID to detect when it closes
+    let popupWindowId: number | null = null;
+    
+    // Listen for popup connection via extension API
+    browser.windows.onRemoved.addListener(async (windowId) => {
+        if (windowId === popupWindowId) {
+            logger.debug('[BACKGROUND] Popup window closed');
+            popupWindowId = null;
             
-            // When popup disconnects, check if we need to regenerate
-            port.onDisconnect.addListener(async () => {
-                logger.debug('Popup disconnected');
+            // Check if settings changed and extension is enabled
+            const settingsChanged = await storage.getItem<boolean>('local:settingsChanged');
+            const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
+            const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
+            
+            logger.debug('[BACKGROUND] Popup close state:', { settingsChanged, enabled: phoneticConfig.enabled, regenerateOnChanges: EXTENSION_CONFIG.REGENERATE_ON_CHANGES });
+            
+            if (EXTENSION_CONFIG.REGENERATE_ON_CHANGES && settingsChanged && phoneticConfig.enabled) {
+                logger.debug('[BACKGROUND] Settings changed and extension enabled, triggering regeneration');
                 
-                // Check if settings changed and extension is enabled
-                const settingsChanged = await storage.getItem<boolean>('local:settingsChanged');
-                const storedConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig');
-                const phoneticConfig = storedConfig ? {...DEFAULT_CONFIG, ...storedConfig} : DEFAULT_CONFIG;
+                // Reset the dirty flag
+                await storage.setItem('local:settingsChanged', false);
                 
-                logger.debug('Popup close state:', { settingsChanged, enabled: phoneticConfig.enabled, regenerateOnChanges: EXTENSION_CONFIG.REGENERATE_ON_CHANGES });
-                
-                if (EXTENSION_CONFIG.REGENERATE_ON_CHANGES && settingsChanged && phoneticConfig.enabled) {
-                    logger.debug('Settings changed and extension enabled, triggering regeneration');
+                // Get only the active tab in current window
+                const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
+                if (activeTab && activeTab.id && activeTab.url && 
+                    !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
+                    logger.debug('[BACKGROUND] About to send regeneration message to tab:', activeTab.url, 'tabId:', activeTab.id);
+                    const sent = await sendToTab(activeTab.id, 'regenerateContent', {});
                     
-                    // Reset the dirty flag
-                    await storage.setItem('local:settingsChanged', false);
-                    
-                    // Get only the active tab in current window
-                    const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
-                    if (activeTab && activeTab.id && activeTab.url && 
-                        !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
-                        logger.debug('Sending regeneration message to tab:', activeTab.url);
-                        try {
-                            await sendMessage('regenerateContent', {}, `content-script@${activeTab.id}`);
-                        } catch (error) {
-                            logger.warn('Failed to send regeneration message, reloading tab instead:', error);
-                            await browser.tabs.reload(activeTab.id);
-                        }
+                    if (sent === undefined) {
+                        logger.debug('[BACKGROUND] Message failed, reloading tab instead');
+                        await browser.tabs.reload(activeTab.id);
+                        logger.debug('[BACKGROUND] Tab reload completed');
+                    } else {
+                        logger.debug('[BACKGROUND] Regeneration message sent successfully');
                     }
                 }
-            });
+            }
         }
     });
 
     // Initialize icon on startup
+    logger.debug('[BACKGROUND] Initializing icon on startup');
     updateIcon();
 
     // Listen for storage changes to update icon
+    logger.debug('[BACKGROUND] Setting up storage watcher for phoneticConfig');
     storage.watch<PhoneticConfig>('local:phoneticConfig', (newConfig, oldConfig) => {
         if (newConfig?.enabled !== oldConfig?.enabled) {
+            logger.debug('[BACKGROUND] Enabled state changed, updating icon');
             updateIcon();
         }
     });
 
-    onMessage("get-random-number", ({data}) => {
-        logger.debug('Received message:', data);
-        return Math.random();
-    });
-
-    onMessage('can-swap', async ({data}) => {
-        logger.debug('Received can-swap message:', data);
-
-        const { swapLanguage, input, options } = data as CanSwapMessage;
-        logger.debug(`Can-swap details - language: ${swapLanguage}, input: "${input}", options:`, options);
-
-        const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
-
-        const response = phoneticSwapper && await phoneticSwapper.canSwap(input, options);
-        return response;
-    });
-
-    onMessage('swap', async ({data}) => {
-        logger.debug('Received swap message:', data);
-
-        const { swapLanguage, input, options } = data as SwapMessage;
-        logger.debug(`Swap details - language: ${swapLanguage}, input: "${input}", options:`, options);
-
-        const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
-
-        const response = phoneticSwapper && await phoneticSwapper.swap(input, options);
-        return response;
-    });
-
-    onMessage('get-swap-info', async ({data}) => {
-        logger.debug('Received message:', data);
-
-        const { swapLanguage } = data as GetSwapInfoMessage;
-
-        const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
-
-        const info: SwapInfo = {
-            isNeglectable: phoneticSwapper?.isNeglectable ?? false
-        };
+    logger.debug('[BACKGROUND] Setting up native message listeners');
+    
+    // Set up message handlers using native messaging
+    onBackgroundMessage(async (message, sender) => {
+        const { type, data } = message;
         
-        return info;
+        switch (type) {
+            case 'popup-opened': {
+                // Track popup window ID
+                if (sender.tab?.windowId) {
+                    popupWindowId = sender.tab.windowId;
+                    logger.debug('[BACKGROUND] Popup opened, window ID:', popupWindowId);
+                }
+                return { status: 'connected' };
+            }
+            
+            case 'get-random-number': {
+                logger.debug('[BACKGROUND] Received get-random-number message:', data);
+                const random = Math.random();
+                logger.debug('[BACKGROUND] Returning random number:', random);
+                return random;
+            }
+            
+            case 'can-swap': {
+                const { swapLanguage, input, options } = data as CanSwapMessage;
+                const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
+                const response = phoneticSwapper && await phoneticSwapper.canSwap(input, options);
+                return response;
+            }
+            
+            case 'swap': {
+                const { swapLanguage, input, options } = data as SwapMessage;
+
+                const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
+
+                const response = phoneticSwapper && await phoneticSwapper.swap(input, options);
+                return response;
+            }
+            
+            case 'get-swap-info': {
+                const { swapLanguage } = data as GetSwapInfoMessage;
+                const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
+
+                const info: SwapInfo = {
+                    isNeglectable: phoneticSwapper?.isNeglectable ?? false
+                };
+                
+                return info;
+            }
+            
+            default:
+                logger.warn('[BACKGROUND] Unknown message type:', type);
+                throw new Error(`Unknown message type: ${type}`);
+        }
     });
 
 
