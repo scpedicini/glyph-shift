@@ -18,6 +18,11 @@ Glyphshift uses storage permission to save user preferences including: which wri
 Glyphshift requires <all_urls> permission to transform text content on any website the user visits. As an educational tool that converts text into different writing systems (Hiragana, Katakana, Braille, Morse Code, ASL fingerspelling, etc.), it must inject content scripts on all pages to identify and transform text elements in real-time. This core functionality cannot work without broad host access. The extension only reads and modifies text locally - no data is ever collected, stored externally, or transmitted to any servers.
 ```
 
+### ActiveTab Permission Justification
+```
+Glyphshift uses the activeTab permission to ensure the extension only operates on the currently active tab when the user explicitly interacts with it. This permission is requested alongside host permissions to provide users with more granular control over when text transformations occur. The activeTab permission allows the extension to transform text only on the tab the user is actively viewing, enhancing privacy and giving users explicit control over the extension's behavior.
+```
+
 ### Remote Code Usage
 - **Selection**: No, I am not using remote code
 - **Note**: The extension uses only bundled JavaScript code and does not download or execute any external scripts.
