@@ -1,6 +1,6 @@
 # Privacy Policy for Glyphshift
 
-*Last updated: January 16, 2025*
+*Last updated: Jul 20, 2025*
 
 ## Overview
 
@@ -99,12 +99,12 @@ We may update this privacy policy to reflect changes in the extension. Any updat
 ## Verification
 
 Glyphshift is open source. You can verify our privacy practices by reviewing our code:
-https://github.com/scpedicini/phonetic-mapper
+https://github.com/scpedicini/glyph-shift
 
 ## Contact
 
 For privacy-related questions, please open an issue on our GitHub repository:
-https://github.com/scpedicini/phonetic-mapper/issues
+https://github.com/scpedicini/glyph-shift/issues
 
 ---
 

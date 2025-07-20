@@ -116,13 +116,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             await storage.setItem('local:settingsChanged', false);
         }
         
-        // Reload active tabs to apply changes
-        const tabs = await browser.tabs.query({ active: true });
-        tabs.forEach(tab => {
-            if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('edge://')) {
-                browser.tabs.reload(tab.id);
-            }
-        });
+        // Reload only the current active tab to apply changes
+        const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true });
+        if (activeTab && activeTab.id && activeTab.url && 
+            !activeTab.url.startsWith('chrome://') && !activeTab.url.startsWith('edge://')) {
+            browser.tabs.reload(activeTab.id);
+        }
     });
 
     // Add regenerate button handler
