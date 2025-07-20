@@ -1,25 +1,15 @@
-# Comprehensive Security & Release Readiness Report for Glyphshift
+# Comprehensive Release Readiness Report for Glyphshift
 
 After conducting a thorough analysis of your extension repository, here's a detailed plan organized by priority to prepare for Chrome Web Store release:
 
 ## 🔴 CRITICAL SECURITY ISSUES
 
-### 1. NPM Vulnerability (HIGH PRIORITY)
-- **Issue**: Found 5 moderate severity vulnerabilities in dependencies
-- **Details**: esbuild enables any website to send requests to development server
-- **Action**: Run `npm audit fix --force` (will update vitest to 3.2.4)
-- **Alternative**: Manually update dependencies in package.json
-
-### 2. innerHTML Usage (MEDIUM PRIORITY)
-- **Location**: entrypoints/content.ts:439
-- **Current Code**: `masterSpan.innerHTML = sb;`
-- **Risk**: Potential XSS if `sb` contains unsanitized user input
-- **Fix**: Verify `sb` only contains properly escaped HTML or use safer DOM manipulation
-
-### 3. Overly Broad Permissions
+### 1. Overly Broad Permissions
 - **Current**: `tabs` permission gives access to all tabs
 - **Recommended**: Use only `activeTab` permission instead
 - **Fix**: In wxt.config.ts:10 - remove 'tabs', keep only 'activeTab'
+
+> I am fine with this, but you'll need to adjust the code (for enabling/disabling, and possibly refresh button) to make sure it *ONLY* affects the currently active tab, not all tabs.
 
 ## 🟡 POLISH & CLEANUP ISSUES
 

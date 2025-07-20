@@ -66,6 +66,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     braille1Checkbox.checked = phoneticConfig.braille1Enabled;
     // braille2Checkbox.checked = phoneticConfig.braille2Enabled;
     vorticonCheckbox.checked = phoneticConfig.vorticonEnabled || false
+    // Ensure mutual exclusivity on load - if both are enabled, disable katakana
+    if (phoneticConfig.katakanaEnabled && phoneticConfig.trueKanaEnabled) {
+        phoneticConfig.katakanaEnabled = false;
+        await storage.setItem('local:phoneticConfig', phoneticConfig);
+    }
+    
     katakanaCheckbox.checked = phoneticConfig.katakanaEnabled || false
     trueKanaCheckbox.checked = phoneticConfig.trueKanaEnabled || false
     // Set the correct radio button for TrueKana mode
@@ -233,9 +239,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         await storage.setItem('local:settingsChanged', true);
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        const katakanaChecked = (e.target as HTMLInputElement).checked
+        
+        // If enabling katakana, disable trueKana
+        if (katakanaChecked && mergedConfig.trueKanaEnabled) {
+            lockEvents = true;
+            trueKanaCheckbox.checked = false;
+            lockEvents = false;
+        }
+        
         await storage.setItem('local:phoneticConfig', {
             ...mergedConfig,
-            katakanaEnabled: (e.target as HTMLInputElement).checked
+            katakanaEnabled: katakanaChecked,
+            trueKanaEnabled: katakanaChecked ? false : mergedConfig.trueKanaEnabled
         })
     });
 
@@ -245,9 +261,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         await storage.setItem('local:settingsChanged', true);
         const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
         const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        const trueKanaChecked = (e.target as HTMLInputElement).checked
+        
+        // If enabling trueKana, disable katakana
+        if (trueKanaChecked && mergedConfig.katakanaEnabled) {
+            lockEvents = true;
+            katakanaCheckbox.checked = false;
+            lockEvents = false;
+        }
+        
         await storage.setItem('local:phoneticConfig', {
             ...mergedConfig,
-            trueKanaEnabled: (e.target as HTMLInputElement).checked
+            trueKanaEnabled: trueKanaChecked,
+            katakanaEnabled: trueKanaChecked ? false : mergedConfig.katakanaEnabled
         })
     });
 
