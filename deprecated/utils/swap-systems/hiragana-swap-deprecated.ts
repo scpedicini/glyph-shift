@@ -1,5 +1,5 @@
-import {IPhoneticSwap} from './interfaces';
-import {IHiraganaDataLoader_Deprecated, ExtensionDataLoader_Deprecated} from '@/utils/data-loaders';
+import {IPhoneticSwap} from '@/utils/swap-systems/interfaces';
+import {IHiraganaDataLoader_Deprecated, ExtensionDataLoader_Deprecated} from '@/deprecated/utils/data-loaders-deprecated';
 import { logger } from '@/utils/logger';
 
 /**

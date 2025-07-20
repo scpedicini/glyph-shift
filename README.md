@@ -54,7 +54,7 @@ https://chromewebstore.google.com/detail/mind-the-word/fabjlaokbhaoehejcoblhahce
 
 Unlike the other extensions which focus more on language translation, Glyphshift focuses more on learning "writing systems" or "alphabets". These methods of communication are relatively simple and can usually be learned in a few hours. This extension is meant to be a fun way to review your knowledge of these alphabets.
 
-# Font Attributions
+# Attributions
 
 ## Morse Code Font
 - **Font:** Morso Kode Font

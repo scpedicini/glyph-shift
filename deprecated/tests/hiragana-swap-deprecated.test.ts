@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { HiraganaSwap_Deprecated } from '@/utils/swap-systems/hiragana-swap-deprecated';
-import { InMemoryDataLoader_Deprecated } from '@/utils/data-loaders';
+import { HiraganaSwap_Deprecated } from '@/deprecated/utils/swap-systems/hiragana-swap-deprecated';
+import { InMemoryDataLoader_Deprecated } from '@/deprecated/utils/data-loaders-deprecated';
 
 describe('HiraganaSwap_DeprecatedTests', () => {
     let hiraganaSwap: HiraganaSwap_Deprecated;

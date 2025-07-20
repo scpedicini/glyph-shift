@@ -9,7 +9,7 @@ import { EXTENSION_CONFIG } from "@/utils/config";
 
 
 export default defineBackground(() => {
-    logger.debug('Glyphshift v1.0.5', {id: browser.runtime.id});
+    logger.debug('Glyphshift', {id: browser.runtime.id});
 
     // Update icon based on enabled state
     async function updateIcon() {

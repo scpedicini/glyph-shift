@@ -1,59 +1,5 @@
 // Browser-compatible data loader interfaces and implementations
 
-export interface IHiraganaDataLoader_Deprecated {
-    loadWordToIpa(): Promise<Array<[string, string[]]>>;
-    loadIpaToHiragana(): Promise<Record<string, { hiragana: string; score: number }>>;
-}
-
-// For use in browser extensions
-export class ExtensionDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
-    async loadWordToIpa(): Promise<Array<[string, string[]]>> {
-        const url = browser.runtime.getURL('/data/hiragana-word-to-ipa.json');
-        const response = await fetch(url);
-        return response.json();
-    }
-
-    async loadIpaToHiragana(): Promise<Record<string, { hiragana: string; score: number }>> {
-        const url = browser.runtime.getURL('/data/hiragana-ipa-to-hiragana.json');
-        const response = await fetch(url);
-        return response.json();
-    }
-}
-
-// For use in tests with predefined data
-export class InMemoryDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
-    constructor(
-        private wordToIpaData: Array<[string, string[]]>,
-        private ipaToHiraganaData: Record<string, { hiragana: string; score: number }>
-    ) {}
-
-    async loadWordToIpa(): Promise<Array<[string, string[]]>> {
-        return Promise.resolve(this.wordToIpaData);
-    }
-
-    async loadIpaToHiragana(): Promise<Record<string, { hiragana: string; score: number }>> {
-        return Promise.resolve(this.ipaToHiraganaData);
-    }
-}
-
-// For use with remote URLs (web apps)
-export class RemoteDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
-    constructor(
-        private wordToIpaUrl: string,
-        private ipaToHiraganaUrl: string
-    ) {}
-
-    async loadWordToIpa(): Promise<Array<[string, string[]]>> {
-        const response = await fetch(this.wordToIpaUrl);
-        return response.json();
-    }
-
-    async loadIpaToHiragana(): Promise<Record<string, { hiragana: string; score: number }>> {
-        const response = await fetch(this.ipaToHiraganaUrl);
-        return response.json();
-    }
-}
-
 // New Hiragana data loader
 export interface IHiraganaDataLoader {
     loadEngKanaDict(): Promise<Record<string, string[]>>;

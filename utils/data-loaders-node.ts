@@ -3,30 +3,11 @@
 
 import { promises as fs } from 'fs';
 import type { 
-    IHiraganaDataLoader_Deprecated, 
     IHiraganaDataLoader, 
     IKatakanaDataLoader, 
     ICockneyDataLoader,
     ProcessedCockneyData 
 } from './data-loaders-browser';
-
-// For use in Node.js environments
-export class FileSystemDataLoader_Deprecated implements IHiraganaDataLoader_Deprecated {
-    constructor(
-        private wordToIpaPath: string,
-        private ipaToHiraganaPath: string
-    ) {}
-
-    async loadWordToIpa(): Promise<Array<[string, string[]]>> {
-        const content = await fs.readFile(this.wordToIpaPath, 'utf-8');
-        return JSON.parse(content);
-    }
-
-    async loadIpaToHiragana(): Promise<Record<string, { hiragana: string; score: number }>> {
-        const content = await fs.readFile(this.ipaToHiraganaPath, 'utf-8');
-        return JSON.parse(content);
-    }
-}
 
 export class FileSystemHiraganaDataLoader implements IHiraganaDataLoader {
     constructor(private engKanaDictPath: string) {}

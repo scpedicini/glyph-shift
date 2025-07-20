@@ -5,7 +5,7 @@
  */
 
 import { HiraganaSwap_Deprecated } from '../utils/swap-systems/hiragana-swap-deprecated';
-import { FileSystemDataLoader_Deprecated } from '../utils/data-loaders-node';
+import { FileSystemDataLoader_Deprecated } from '../utils/data-loaders-node-deprecated';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,7 +16,7 @@ async function main() {
     console.log('HiraganaSwap Node.js Example\n');
 
     // Create paths to the JSON data files
-    const dataDir = path.join(__dirname, '../public/data');
+    const dataDir = path.join(__dirname, '../data');
     const wordToIpaPath = path.join(dataDir, 'hiragana-word-to-ipa.json');
     const ipaToHiraganaPath = path.join(dataDir, 'hiragana-ipa-to-hiragana.json');
 
