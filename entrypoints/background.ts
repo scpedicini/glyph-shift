@@ -129,20 +129,22 @@ export default defineBackground(() => {
     });
 
     onMessage('can-swap', async ({data}) => {
-        logger.debug('Received message:', data);
+        logger.debug('Received can-swap message:', data);
 
-        const { swapLanguage, input } = data as CanSwapMessage;
+        const { swapLanguage, input, options } = data as CanSwapMessage;
+        logger.debug(`Can-swap details - language: ${swapLanguage}, input: "${input}", options:`, options);
 
         const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
 
-        const response = phoneticSwapper && await phoneticSwapper.canSwap(input);
+        const response = phoneticSwapper && await phoneticSwapper.canSwap(input, options);
         return response;
     });
 
     onMessage('swap', async ({data}) => {
-        logger.debug('Received message:', data);
+        logger.debug('Received swap message:', data);
 
         const { swapLanguage, input, options } = data as SwapMessage;
+        logger.debug(`Swap details - language: ${swapLanguage}, input: "${input}", options:`, options);
 
         const phoneticSwapper: IPhoneticSwap = LanguageFactory.getSwapInstance(swapLanguage);
 

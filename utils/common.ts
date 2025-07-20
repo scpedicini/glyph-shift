@@ -7,6 +7,8 @@ export type PhoneticConfig = {
     braille2Enabled: boolean;
     vorticonEnabled: boolean;
     katakanaEnabled: boolean;
+    trueKanaEnabled: boolean;
+    trueKanaMode: 'OnlyTransliterations' | 'AllWords';
     hiraganaEnabled: boolean;
     romanEnabled: boolean;
     hexEnabled: boolean;
@@ -23,6 +25,8 @@ export const DEFAULT_CONFIG: PhoneticConfig = {
     braille2Enabled: false,
     vorticonEnabled: false,
     katakanaEnabled: false,
+    trueKanaEnabled: false,
+    trueKanaMode: 'OnlyTransliterations',
     hiraganaEnabled: false,
     romanEnabled: false,
     hexEnabled: false,
@@ -33,6 +37,7 @@ export const DEFAULT_CONFIG: PhoneticConfig = {
 export enum SwapLangs {
     Hiragana = 'Hiragana',
     Katakana = 'Katakana',
+    TrueKana = 'TrueKana',
     Fingerspelling = 'Fingerspelling',
     Braille = 'Braille',
     MorseCode = 'MorseCode',
@@ -45,6 +50,7 @@ export enum SwapLangs {
 export type CanSwapMessage = {
     swapLanguage: SwapLangs;
     input: string;
+    options?: any;
 }
 
 export type SwapMessage = {

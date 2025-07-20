@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // const braille2Checkbox = document.getElementById('braille2Enabled') as HTMLInputElement
     const vorticonCheckbox = document.getElementById('vorticonEnabled') as HTMLInputElement
     const katakanaCheckbox = document.getElementById('katakanaEnabled') as HTMLInputElement
+    const trueKanaCheckbox = document.getElementById('trueKanaEnabled') as HTMLInputElement
+    const trueKanaModeRadios = document.getElementsByName('trueKanaMode') as NodeListOf<HTMLInputElement>
     const hiraganaCheckbox = document.getElementById('hiraganaEnabled') as HTMLInputElement
     const romanCheckbox = document.getElementById('romanEnabled') as HTMLInputElement
     const hexCheckbox = document.getElementById('hexEnabled') as HTMLInputElement
@@ -65,6 +67,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // braille2Checkbox.checked = phoneticConfig.braille2Enabled;
     vorticonCheckbox.checked = phoneticConfig.vorticonEnabled || false
     katakanaCheckbox.checked = phoneticConfig.katakanaEnabled || false
+    trueKanaCheckbox.checked = phoneticConfig.trueKanaEnabled || false
+    // Set the correct radio button for TrueKana mode
+    trueKanaModeRadios.forEach(radio => {
+        radio.checked = radio.value === (phoneticConfig.trueKanaMode || 'OnlyTransliterations')
+    })
     hiraganaCheckbox.checked = phoneticConfig.hiraganaEnabled || false
     romanCheckbox.checked = phoneticConfig.romanEnabled || false
     hexCheckbox.checked = phoneticConfig.hexEnabled || false
@@ -230,6 +237,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             ...mergedConfig,
             katakanaEnabled: (e.target as HTMLInputElement).checked
         })
+    });
+
+    trueKanaCheckbox.addEventListener('change', async (e) => {
+        if(lockEvents) return;
+        settingsChanged = true; // Mark settings as dirty
+        await storage.setItem('local:settingsChanged', true);
+        const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
+        const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+        await storage.setItem('local:phoneticConfig', {
+            ...mergedConfig,
+            trueKanaEnabled: (e.target as HTMLInputElement).checked
+        })
+    });
+
+    // Add event listeners for TrueKana mode radio buttons
+    trueKanaModeRadios.forEach(radio => {
+        radio.addEventListener('change', async (e) => {
+            if(lockEvents) return;
+            settingsChanged = true; // Mark settings as dirty
+            await storage.setItem('local:settingsChanged', true);
+            const currentConfig = await storage.getItem<PhoneticConfig>('local:phoneticConfig')
+            const mergedConfig = currentConfig ? {...DEFAULT_CONFIG, ...currentConfig} : DEFAULT_CONFIG
+            await storage.setItem('local:phoneticConfig', {
+                ...mergedConfig,
+                trueKanaMode: (e.target as HTMLInputElement).value as 'OnlyTransliterations' | 'AllWords'
+            })
+        });
     });
 
     hiraganaCheckbox.addEventListener('change', async (e) => {

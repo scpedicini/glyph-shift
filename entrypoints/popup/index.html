@@ -118,10 +118,37 @@
         <div class="label-text">
           <span class="language-name">Katakana</span>
           <span class="language-description">
-                Replaces English loan words with their Japanese Katakana equivalents
+                Practice reading Katakana with phonetic approximations of English words
           </span>
         </div>
       </label>
+    </div>
+    <div class="language-option">
+      <label class="checkbox-container">
+        <input type="checkbox" id="trueKanaEnabled">
+        <span class="checkmark"></span>
+        <div class="label-text">
+          <span class="language-name">True Katakana</span>
+          <span class="language-description">
+                Replaces English words with authentic Katakana loan words from various languages
+          </span>
+        </div>
+      </label>
+      <div class="sub-option">
+        <label class="radio-group">
+          <span class="small-text">Mode:</span>
+          <label class="radio-container small">
+            <input type="radio" name="trueKanaMode" value="OnlyTransliterations" checked>
+            <span class="radio-mark small"></span>
+            <span class="small-text">Direct transliterations only</span>
+          </label>
+          <label class="radio-container small">
+            <input type="radio" name="trueKanaMode" value="AllWords">
+            <span class="radio-mark small"></span>
+            <span class="small-text">All loan words</span>
+          </label>
+        </label>
+      </div>
     </div>
     <div class="language-option">
       <label class="checkbox-container">

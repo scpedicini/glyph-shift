@@ -50,7 +50,9 @@ That data structure will look like this:
 }
 ```
 
-Basically if the katakana word has a transliteration in that column, it should be marked as `isTransliteration: true`, otherwise it should be `false`. The `katakana` field should contain the original Katakana word. All additional words in the Additional column should be treated as synonyms and included in the JSON structure with `isTransliteration` set to `false`.
+Basically if the katakana word has a transliteration in that column, it should be marked as `isTransliteration: true`, otherwise it should be `false`. The `katakana` field should contain the original Katakana word. All additional words in the Additional column are comma-delimited and should be treated as synonyms and included in the JSON structure with `isTransliteration` set to `false`.
+
+Some Kana words may have multiple kanas in the same cell separated by the word "or"/"OR", a semicolon, even a space. You will need to handle this by creating separate entries for each Kana word in the JSON output.
 
 There may be accidental duplicates in the Additional column. While that is fine, once we have built a Katakana<->English mapping where  `isTransliteration` is `true` it should always stay true, even if it appears again in the Additional column.
 

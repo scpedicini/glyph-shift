@@ -75,6 +75,10 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
         langs.push(SwapLangs.Katakana);
     }
 
+    if (phoneticConfig.trueKanaEnabled) {
+        langs.push(SwapLangs.TrueKana);
+    }
+
     if (phoneticConfig.hiraganaEnabled) {
         langs.push(SwapLangs.Hiragana);
     }
@@ -92,6 +96,24 @@ function getEnabledLangs(phoneticConfig: PhoneticConfig) {
     }
 
     return langs;
+}
+
+function getOptionsForLanguage(lang: SwapLangs, phoneticConfig: PhoneticConfig): any {
+    let options: any = {};
+    if (lang === SwapLangs.Braille) {
+        options = {
+            advancedWords: phoneticConfig.braille2Enabled
+        } as BrailleOptions;
+    } else if (lang === SwapLangs.Cockney) {
+        options = {
+            useFullRhyme: phoneticConfig.cockneyFullRhyme
+        };
+    } else if (lang === SwapLangs.TrueKana) {
+        options = {
+            mode: phoneticConfig.trueKanaMode || 'OnlyTransliterations'
+        };
+    }
+    return options;
 }
 
 // Setup tooltip overflow fix for problematic sites
@@ -355,7 +377,8 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                     // First, check neglected modules for one that can handle this word
                     for (let i = 0; i < neglectedSwapModules.length; i++) {
                         const neglectedLang = neglectedSwapModules[i];
-                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: neglectedLang, input: cleanWord} as CanSwapMessage);
+                        const options = getOptionsForLanguage(neglectedLang, phoneticConfig);
+                        const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: neglectedLang, input: cleanWord, options} as CanSwapMessage);
                         if (canSwap) {
                             // Found a neglected module that can handle this word
                             selectedLang = neglectedLang;
@@ -373,7 +396,8 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                         const failedLangs: SwapLangs[] = [];
 
                         for (const lang of enabledLangs) {
-                            const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: cleanWord} as CanSwapMessage);
+                            const options = getOptionsForLanguage(lang, phoneticConfig);
+                            const canSwap = await sendMessage<boolean>('can-swap', {swapLanguage: lang, input: cleanWord, options} as CanSwapMessage);
                             if (canSwap) {
                                 viableLangs.push(lang);
                             } else {
@@ -403,16 +427,7 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                     if (selectedLang) {
                         const lang = selectedLang;
 
-                        let options: any = { };
-                        if(lang === SwapLangs.Braille) {
-                            options = {
-                                advancedWords: phoneticConfig.braille2Enabled
-                            } as BrailleOptions;
-                        } else if(lang === SwapLangs.Cockney) {
-                            options = {
-                                useFullRhyme: phoneticConfig.cockneyFullRhyme
-                            };
-                        }
+                        const options = getOptionsForLanguage(lang, phoneticConfig);
 
                         const swapped = await sendMessage<string>('swap', {swapLanguage: lang, input: cleanWord, options } as SwapMessage);
 

@@ -7,5 +7,5 @@ export interface IPhoneticSwap {
     readonly isNeglectable: boolean;
     swap: (input: string, options?: any) => Promise<string | null>;
     initialize: () => void;
-    canSwap: (input: string) => Promise<boolean>;
+    canSwap: (input: string, options?: any) => Promise<boolean>;
 }

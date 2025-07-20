@@ -53,7 +53,7 @@ export abstract class DelimitedNumberSwapBase implements IPhoneticSwap {
         // Override if needed
     }
 
-    async canSwap(input: string): Promise<boolean> {
+    async canSwap(input: string, options?: any): Promise<boolean> {
         // First check if it's a simple number without delimiters
         const simpleNum = parseInt(input);
         const range = this.getRange();

@@ -1,5 +1,5 @@
 import {IPhoneticSwap} from './interfaces';
-import {IKatakanaDataLoader, ExtensionKatakanaDataLoader} from '@/utils/data-loaders';
+import {IHiraganaDataLoader, ExtensionHiraganaDataLoader} from '@/utils/data-loaders';
 import { logger } from '@/utils/logger';
 
 export class KatakanaSwap implements IPhoneticSwap {
@@ -8,14 +8,14 @@ export class KatakanaSwap implements IPhoneticSwap {
     readonly isNeglectable = true;
 
     // Instance data storage
-    private loanWordsMap: Map<string, string> = new Map();
+    private engKanaMap: Map<string, string[]> = new Map();
     private isInitialized: boolean = false;
     private initPromise: Promise<void> | null = null;
-    private dataLoader: IKatakanaDataLoader;
+    private dataLoader: IHiraganaDataLoader;
 
-    constructor(dataLoader?: IKatakanaDataLoader) {
-        // Default to ExtensionKatakanaDataLoader if not provided
-        this.dataLoader = dataLoader || new ExtensionKatakanaDataLoader();
+    constructor(dataLoader?: IHiraganaDataLoader) {
+        // Default to ExtensionHiraganaDataLoader if not provided
+        this.dataLoader = dataLoader || new ExtensionHiraganaDataLoader();
     }
 
     initialize(): void {
@@ -27,12 +27,12 @@ export class KatakanaSwap implements IPhoneticSwap {
     private async loadData(): Promise<void> {
         try {
             // Load data using the injected loader
-            const loanWordsData = await this.dataLoader.loadLoanWords();
+            const engKanaData = await this.dataLoader.loadEngKanaDict();
             
-            // Populate loanWordsMap
-            this.loanWordsMap.clear();
-            for (const [english, katakana] of Object.entries(loanWordsData)) {
-                this.loanWordsMap.set(english, katakana);
+            // Populate engKanaMap
+            this.engKanaMap.clear();
+            for (const [english, kana] of Object.entries(engKanaData)) {
+                this.engKanaMap.set(english, kana);
             }
 
             this.isInitialized = true;
@@ -49,25 +49,28 @@ export class KatakanaSwap implements IPhoneticSwap {
             return null;
         }
 
-        // Normalize input to uppercase for lookup
-        const normalizedInput = input.toUpperCase();
+        // Normalize input to lowercase for lookup (matching HiraganaSwap pattern)
+        const normalizedInput = input.toLowerCase();
         
         // Look up the katakana equivalent
-        const katakana = this.loanWordsMap.get(normalizedInput);
+        const katakanaOptions = this.engKanaMap.get(normalizedInput);
         
 
-        if (!katakana) {
+        if (!katakanaOptions || katakanaOptions.length === 0) {
             logger.debug(`No Katakana equivalent found for: ${input}`);
             return null;
-        } else {
-            logger.debug(`Katakana equivalent for "${input}" is "${katakana}"`);
         }
+
+        // Choose a random katakana representation
+        const katakana = katakanaOptions[Math.floor(Math.random() * katakanaOptions.length)];
+        
+        logger.debug(`Katakana equivalent for "${input}" is "${katakana}"`);
 
         // Return the Katakana wrapped in HTML
         return `<span class="katakana-text pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}">${katakana}</span>`;
     }
 
-    async canSwap(input: string): Promise<boolean> {
+    async canSwap(input: string, options?: any): Promise<boolean> {
         await this.initPromise;
         
         if (!this.isInitialized) {
@@ -75,7 +78,7 @@ export class KatakanaSwap implements IPhoneticSwap {
             return false;
         }
         logger.debug(`Checking if we can swap: ${input}`);
-        const normalizedInput = input.toUpperCase();
-        return typeof input === 'string' && input.length > 2 && this.loanWordsMap.has(normalizedInput);
+        const normalizedInput = input.toLowerCase();
+        return typeof input === 'string' && input.length > 2 && this.engKanaMap.has(normalizedInput);
     }
 }

@@ -78,7 +78,7 @@ export class CockneySwap implements IPhoneticSwap {
         return `<span class="cockney-text pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}" ${notesAttr}>${translation}</span>`;
     }
 
-    async canSwap(input: string): Promise<boolean> {
+    async canSwap(input: string, options?: any): Promise<boolean> {
         await this.initPromise;
         
         if (!this.isInitialized) {

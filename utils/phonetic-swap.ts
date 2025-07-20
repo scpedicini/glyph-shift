@@ -8,6 +8,7 @@ import {
     HexSwap,
     IPhoneticSwap,
     KatakanaSwap,
+    TrueKanaSwap,
     MorseCodeSwap,
     RomanSwap,
     VorticonSwap
@@ -22,6 +23,7 @@ export {
     IPhoneticSwap,
     ISwapConfig,
     KatakanaSwap,
+    TrueKanaSwap,
     MorseCodeSwap,
     RomanSwap,
     VorticonSwap
@@ -40,6 +42,9 @@ export class LanguageFactory {
                     break;
                 case SwapLangs.Katakana:
                     _swapLang = new KatakanaSwap();
+                    break;
+                case SwapLangs.TrueKana:
+                    _swapLang = new TrueKanaSwap();
                     break;
                 case SwapLangs.Fingerspelling:
                     _swapLang = new FingerspellingSwap();

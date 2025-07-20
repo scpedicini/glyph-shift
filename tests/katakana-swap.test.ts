@@ -1,29 +1,29 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { KatakanaSwap } from '../utils/swap-systems/katakana-swap';
-import { InMemoryKatakanaDataLoader } from '../utils/data-loaders';
-import { FileSystemKatakanaDataLoader } from '../utils/data-loaders-node';
+import { InMemoryHiraganaDataLoader } from '../utils/data-loaders';
+import { FileSystemHiraganaDataLoader } from '../utils/data-loaders-node';
 import * as path from 'path';
 
-describe('KatakanaSwap with InMemoryKatakanaDataLoader', () => {
+describe('KatakanaSwap with InMemoryHiraganaDataLoader', () => {
     let katakanaSwap: KatakanaSwap;
 
     beforeAll(() => {
-        // Create test data
-        const testLoanWords = {
-            "PERCENT": "パーセント",
-            "AMERICA": "アメリカ",
-            "PAGE": "ページ",
-            "CENTER": "センター",
-            "SERVICE": "サービス",
-            "SYSTEM": "システム",
-            "HOTEL": "ホテル",
-            "BLOG": "ブログ",
-            "DATA": "データ",
-            "ENERGY": "エネルギー"
+        // Create test data matching eng_10k_common_to_kana.json format
+        const testEngKanaData = {
+            "percent": ["パーセント"],
+            "america": ["アメリカ"],
+            "page": ["ページ"],
+            "center": ["センター"],
+            "service": ["サービス"],
+            "system": ["システム"],
+            "hotel": ["ホテル"],
+            "blog": ["ブログ"],
+            "data": ["データ"],
+            "energy": ["エネルギー"]
         };
 
         // Create an in-memory data loader with test data
-        const dataLoader = new InMemoryKatakanaDataLoader(testLoanWords);
+        const dataLoader = new InMemoryHiraganaDataLoader(testEngKanaData);
         katakanaSwap = new KatakanaSwap(dataLoader);
         katakanaSwap.initialize();
     });
@@ -94,14 +94,14 @@ describe('KatakanaSwap with InMemoryKatakanaDataLoader', () => {
     });
 });
 
-describe('KatakanaSwap with FileSystemKatakanaDataLoader', () => {
+describe('KatakanaSwap with FileSystemHiraganaDataLoader', () => {
     let katakanaSwap: KatakanaSwap;
 
     beforeAll(async () => {
-        // Use the actual generated JSON file
-        const loanWordsPath = path.join(__dirname, '..', 'public', 'data', 'katakana-loan-words.json');
+        // Use the actual eng_10k_common_to_kana.json file
+        const engKanaPath = path.join(__dirname, '..', 'public', 'data', 'eng_10k_common_to_kana.json');
         
-        const dataLoader = new FileSystemKatakanaDataLoader(loanWordsPath);
+        const dataLoader = new FileSystemHiraganaDataLoader(engKanaPath);
         katakanaSwap = new KatakanaSwap(dataLoader);
         katakanaSwap.initialize();
         
@@ -113,29 +113,35 @@ describe('KatakanaSwap with FileSystemKatakanaDataLoader', () => {
         it('should convert common English loan words to Katakana', async () => {
             // Test some common loan words that should be in the full dataset
             const testCases = [
-                { input: 'hotel', expected: 'ホテル' },
-                { input: 'blog', expected: 'ブログ' },
-                { input: 'data', expected: 'データ' },
+                { input: 'hotel', expected: 'ホーテル' },  // Updated from eng_10k_common_to_kana.json
+                { input: 'blog', expected: 'ブロッグ' },    // Updated from eng_10k_common_to_kana.json
+                { input: 'data', expected: ['デイタ', 'ダタ'] },  // Multiple options
                 { input: 'system', expected: 'システム' },
                 { input: 'service', expected: 'サービス' }
             ];
 
             for (const testCase of testCases) {
                 const result = await katakanaSwap.swap(testCase.input);
-                expect(result).toContain(testCase.expected);
+                if (Array.isArray(testCase.expected)) {
+                    // Check that result contains one of the expected values
+                    const containsExpected = testCase.expected.some(exp => result?.includes(exp));
+                    expect(containsExpected).toBe(true);
+                } else {
+                    expect(result).toContain(testCase.expected);
+                }
                 expect(result).toContain(`data-pmapper-original="${testCase.input}"`);
             }
         });
 
         it('should handle case variations', async () => {
-            const result1 = await katakanaSwap.swap('TELEVISION');
-            const result2 = await katakanaSwap.swap('television');
-            const result3 = await katakanaSwap.swap('Television');
+            const result1 = await katakanaSwap.swap('HOTEL');
+            const result2 = await katakanaSwap.swap('hotel');
+            const result3 = await katakanaSwap.swap('Hotel');
             
             // All should produce the same katakana
-            expect(result1).toContain('テレビジョン');
-            expect(result2).toContain('テレビジョン');
-            expect(result3).toContain('テレビジョン');
+            expect(result1).toContain('ホーテル');
+            expect(result2).toContain('ホーテル');
+            expect(result3).toContain('ホーテル');
         });
 
         it('should return null for non-loan words', async () => {

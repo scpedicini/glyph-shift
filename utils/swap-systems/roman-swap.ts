@@ -24,7 +24,7 @@ export class RomanSwap extends DelimitedNumberSwapBase {
     }
 
     // Override canSwap to add logging if needed
-    async canSwap(input: string): Promise<boolean> {
+    async canSwap(input: string, options?: any): Promise<boolean> {
         const result = await super.canSwap(input);
         logger.debug(`Checking if we can swap: ${input} -> ${result}`);
         return result;

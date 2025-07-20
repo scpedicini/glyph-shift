@@ -4,9 +4,10 @@
 import { promises as fs } from 'fs';
 import type { 
     IHiraganaDataLoader, 
-    IKatakanaDataLoader, 
     ICockneyDataLoader,
-    ProcessedCockneyData 
+    ITrueKanaDataLoader,
+    ProcessedCockneyData,
+    TrueKanaMapping
 } from './data-loaders-browser';
 
 export class FileSystemHiraganaDataLoader implements IHiraganaDataLoader {
@@ -18,17 +19,17 @@ export class FileSystemHiraganaDataLoader implements IHiraganaDataLoader {
     }
 }
 
-// For use in Node.js environments
-export class FileSystemKatakanaDataLoader implements IKatakanaDataLoader {
-    constructor(
-        private loanWordsPath: string
-    ) {}
+// For use in Node.js environments - DEPRECATED: KatakanaSwap now uses FileSystemHiraganaDataLoader
+// export class FileSystemKatakanaDataLoader implements IKatakanaDataLoader {
+//     constructor(
+//         private loanWordsPath: string
+//     ) {}
 
-    async loadLoanWords(): Promise<Record<string, string>> {
-        const content = await fs.readFile(this.loanWordsPath, 'utf-8');
-        return JSON.parse(content);
-    }
-}
+//     async loadLoanWords(): Promise<Record<string, string>> {
+//         const content = await fs.readFile(this.loanWordsPath, 'utf-8');
+//         return JSON.parse(content);
+//     }
+// }
 
 // For use in Node.js environments
 export class FileSystemCockneyDataLoader implements ICockneyDataLoader {
@@ -38,6 +39,18 @@ export class FileSystemCockneyDataLoader implements ICockneyDataLoader {
 
     async loadCockneyData(): Promise<ProcessedCockneyData> {
         const content = await fs.readFile(this.cockneyDataPath, 'utf-8');
+        return JSON.parse(content);
+    }
+}
+
+// For use in Node.js environments
+export class FileSystemTrueKanaDataLoader implements ITrueKanaDataLoader {
+    constructor(
+        private trueKanaDataPath: string
+    ) {}
+
+    async loadTrueKanaData(): Promise<TrueKanaMapping> {
+        const content = await fs.readFile(this.trueKanaDataPath, 'utf-8');
         return JSON.parse(content);
     }
 }

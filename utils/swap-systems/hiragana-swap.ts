@@ -73,7 +73,7 @@ export class HiraganaSwap implements IPhoneticSwap {
         return `<span class="hiragana-text pmapper-swapped pmapper-tooltip" data-pmapper-original="${input}">${hiragana}</span>`;
     }
 
-    async canSwap(input: string): Promise<boolean> {
+    async canSwap(input: string, options?: any): Promise<boolean> {
         await this.initPromise;
         
         if (!this.isInitialized) {
@@ -82,6 +82,6 @@ export class HiraganaSwap implements IPhoneticSwap {
         }
         logger.debug(`Checking if we can swap: ${input}`);
         const normalizedInput = input.toLowerCase();
-        return (typeof input === 'string') && (input.length > 2) &&this.engKanaMap.has(normalizedInput);
+        return (typeof input === 'string') && (input.length > 2) && this.engKanaMap.has(normalizedInput);
     }
 }

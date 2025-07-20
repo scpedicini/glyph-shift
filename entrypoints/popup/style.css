@@ -470,8 +470,79 @@ h2 {
   color: var(--text-secondary);
 }
 
+/* Radio button styles */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-top: 0.25em;
+}
 
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  cursor: pointer;
+  padding: 0.25em 0;
+}
 
+.radio-container input {
+  display: none;
+}
+
+.radio-mark {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.radio-container:hover .radio-mark {
+  border-color: var(--secondary-color);
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.radio-container input:checked + .radio-mark {
+  border-color: var(--primary-color);
+}
+
+.radio-container input:checked + .radio-mark:after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: radiomark 0.2s ease-out;
+}
+
+@keyframes radiomark {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.radio-mark.small {
+  width: 14px;
+  height: 14px;
+}
+
+.radio-container input:checked + .radio-mark.small:after {
+  width: 6px;
+  height: 6px;
+}
 
 .description {
   color: var(--text-secondary);
@@ -679,6 +750,25 @@ h2 {
   
   .checkbox-container input:checked + .checkmark.small:after {
     border-color: white !important;
+  }
+  
+  /* Radio button styles for light mode */
+  .radio-mark {
+    border-color: rgba(0, 0, 0, 0.4) !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .radio-container:hover .radio-mark {
+    border-color: var(--primary-color) !important;
+    background: rgba(124, 58, 237, 0.1) !important;
+  }
+  
+  .radio-container input:checked + .radio-mark {
+    border-color: var(--primary-color) !important;
+  }
+  
+  .radio-container input:checked + .radio-mark:after {
+    background: var(--primary-color) !important;
   }
   
   .footer {

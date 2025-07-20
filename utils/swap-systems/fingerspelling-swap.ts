@@ -14,7 +14,7 @@ export class FingerspellingSwap implements IPhoneticSwap {
     }
 
     // only return true if the input is composed entirely of A-Z or a-z characters
-    async canSwap(input: string): Promise<boolean> {
+    async canSwap(input: string, options?: any): Promise<boolean> {
         return isAlphabetical(input, 4);
     }
 }

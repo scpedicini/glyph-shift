@@ -8,7 +8,7 @@ describe('HiraganaSwap with FileSystemDataLoader', () => {
 
     beforeEach(async () => {
         const dataLoader = new FileSystemHiraganaDataLoader(
-            path.resolve(__dirname, '../public/data/eng_kana_dict.json')
+            path.resolve(__dirname, '../public/data/eng_10k_common_to_kana.json')
         );
         hiraganaSwap = new HiraganaSwap(dataLoader);
         await hiraganaSwap.initialize();
