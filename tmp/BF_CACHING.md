@@ -15,8 +15,7 @@ If it is relevant, this error message does NOT seem to happen with Firefox, only
 It indicates that your Chrome extension (in this case, WXT) is attempting to send a message or keep a port open to a page that has just been moved into the browser’s back/forward cache (bfcache). When a page enters this special cache (to enable instant navigation when users use the back/forward buttons), Chrome suspends the page—including any open extension ports or message channels. As a result, further communication attempts with that page fail, resulting in the error.
 
 Technical Background
-Back/forward cache (bfcache) optimizes browser navigation speed by "freezing" the entire page and its scripts, which includes disconnecting any open message ports related to Chrome extensions.
-When an extension tries to send messages to a page that is no longer active (because it's cached), the message channel (port) closes, causing this error.
+Back/forward cache (bfcache) optimizes browser navigation speed by "freezing" the entire page and its scripts, which includes disconnecting any open message ports related to Chrome extensions. When an extension tries to send messages to a page that is no longer active (because it's cached), the message channel (port) closes, causing this error.
 
 For Extension Developers (WXT or Others)
 Check if content scripts still exist before sending messages from the background script.

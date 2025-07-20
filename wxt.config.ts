@@ -5,7 +5,7 @@ export default defineConfig({
   // extensionApi: 'webextension-polyfill',  // <- deprecated
   manifest: {
     name: 'Glyphshift',
-    version: '1.0.4',
+    version: '1.0.5',
     description: 'Transform web text into 9 different writing systems. Learn Hiragana, Braille, Morse Code, and more while browsing.',
     permissions: ['storage', 'activeTab'],
     action: {

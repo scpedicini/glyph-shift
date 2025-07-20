@@ -1,7 +1,7 @@
 # Chrome Web Store Publishing Plan for Glyphshift
 
 ## Overview
-This document outlines all tasks required to publish Glyphshift (formerly phonetic-mapper) to the Chrome Web Store. Target audience: language learners who want to practice reading different writing systems.
+This document outlines all tasks required to publish Glyphshift to the Chrome Web Store. Target audience: language learners who want to practice reading different writing systems.
 
 ## Required Store Assets (Minimum)
 
@@ -31,10 +31,10 @@ This document outlines all tasks required to publish Glyphshift (formerly phonet
 ### 1. Privacy Policy (REQUIRED)
 - [ ] Create PRIVACY.md in repository root
 - [ ] Include: no data collection, local storage only, page content modification
-- [ ] Use URL: https://github.com/scpedicini/phonetic-mapper/blob/main/PRIVACY.md
+- [ ] Use URL: https://github.com/scpedicini/glyph-shift/blob/main/PRIVACY.md
 
 ### 2. Extension Rebranding
-- [ ] Change name from "phonetic-mapper" to "Glyphshift" in:
+- [ ] Change name from "glyph-shift" to "Glyphshift" in:
   - [ ] package.json
   - [ ] wxt.config.ts (manifest name)
   - [ ] popup HTML title

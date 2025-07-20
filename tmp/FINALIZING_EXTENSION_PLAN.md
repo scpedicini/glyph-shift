@@ -21,7 +21,7 @@ Files to remove:
 
 These are no longer used and add unnecessary bulk.
 
-> Again please just run `npm run build` and look at the `/Users/shaun/dev/phonetic-mapper/.output` folder to see if these are actually used / bundled / incorporated into the extension. If they are not, then this is not an issue at all.
+> Again please just run `npm run build` and look at the `/Users/shaun/dev/glyph-shift/.output` folder to see if these are actually used / bundled / incorporated into the extension. If they are not, then this is not an issue at all.
 
 ### 2. Large Data Files
 - **Total extension size**: 8.75 MB (concerning for Chrome Store)
