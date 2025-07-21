@@ -5,7 +5,7 @@ export default defineConfig({
   // extensionApi: 'webextension-polyfill',  // <- deprecated
   manifest: {
     name: 'Glyphshift',
-    version: '1.0.6',
+    version: '1.0.7',
     description: 'Transform web text into 9 different writing systems. Learn Hiragana, Braille, Morse Code, and more while browsing.',
     permissions: ['storage', 'activeTab'],
     action: {
@@ -25,7 +25,13 @@ export default defineConfig({
         ],
         matches: ['<all_urls>']
       }
-    ]
+    ],
+    browser_specific_settings: {
+      gecko: {
+        id: 'glyphshift@mordenstar.com',
+        strict_min_version: '58.0'
+      }
+    }
   },
   webExt: {                       // was: runner
     chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
