@@ -53,10 +53,10 @@ jobs:
             ## Changes in this release
             
             ### Chrome Extension
-            - Download: phonetic-mapper-${{ steps.version.outputs.VERSION }}-chrome.zip
+            - Download: glyphshift-${{ steps.version.outputs.VERSION }}-chrome.zip
             
             ### Firefox Extension
-            - Download: phonetic-mapper-${{ steps.version.outputs.VERSION }}-firefox.zip
+            - Download: glyphshift-${{ steps.version.outputs.VERSION }}-firefox.zip
             
             ---
             *This release was automatically generated from the prod branch.*
@@ -69,8 +69,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .output/phonetic-mapper-${{ steps.version.outputs.VERSION }}-chrome.zip
-          asset_name: phonetic-mapper-${{ steps.version.outputs.VERSION }}-chrome.zip
+          asset_path: .output/glyphshift-${{ steps.version.outputs.VERSION }}-chrome.zip
+          asset_name: glyphshift-${{ steps.version.outputs.VERSION }}-chrome.zip
           asset_content_type: application/zip
 
       - name: Upload Firefox Extension
@@ -79,6 +79,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .output/phonetic-mapper-${{ steps.version.outputs.VERSION }}-firefox.zip
-          asset_name: phonetic-mapper-${{ steps.version.outputs.VERSION }}-firefox.zip
+          asset_path: .output/glyphshift-${{ steps.version.outputs.VERSION }}-firefox.zip
+          asset_name: glyphshift-${{ steps.version.outputs.VERSION }}-firefox.zip
           asset_content_type: application/zip

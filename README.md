@@ -41,7 +41,7 @@ Glyphshift is available on the Chrome Web Store. [Install it here](#) *(link com
 If you prefer to install the extension manually or want to use the latest development version:
 
 #### For Chrome/Edge/Brave:
-1. Download the latest `phonetic-mapper-*-chrome.zip` from the [Releases page](https://github.com/shaun/phonetic-mapper/releases)
+1. Download the latest `glyphshift-*-chrome.zip` from the [Releases page](https://github.com/scpedicini/glyph-shift/releases)
 2. Extract the zip file to a folder on your computer
 3. Open your browser and navigate to the extensions page:
    - Chrome: `chrome://extensions`
@@ -52,7 +52,7 @@ If you prefer to install the extension manually or want to use the latest develo
 6. The extension is now installed and ready to use
 
 #### For Firefox:
-1. Download the latest `phonetic-mapper-*-firefox.zip` from the [Releases page](https://github.com/shaun/phonetic-mapper/releases)
+1. Download the latest `glyphshift-*-firefox.zip` from the [Releases page](https://github.com/scpedicini/glyph-shift/releases)
 2. Open Firefox and navigate to `about:debugging`
 3. Click "This Firefox" in the left sidebar
 4. Click "Load Temporary Add-on"
