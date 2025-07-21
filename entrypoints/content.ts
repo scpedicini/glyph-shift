@@ -470,7 +470,16 @@ function setupHighlighting(phoneticConfig: PhoneticConfig): MutationObserver {
                 // wrap the entire text node in a span since we'll have multiple child spans depending on the matches
                 const masterSpan = document.createElement('span');
                 masterSpan.setAttribute('data-pmapper-processed', 'true');
-                masterSpan.innerHTML = sb;
+                
+                // Parse the HTML string safely using DOMParser
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(sb, 'text/html');
+                
+                // Move all child nodes from the parsed body to our span
+                while (doc.body.firstChild) {
+                    masterSpan.appendChild(doc.body.firstChild);
+                }
+                
                 node.parentNode?.replaceChild(masterSpan, node);
             }
 
