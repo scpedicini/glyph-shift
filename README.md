@@ -33,7 +33,41 @@ Does one of the following describe you?
 
 ## Installation
 
+### From Extension Stores
 Glyphshift is available on the Chrome Web Store. [Install it here](#) *(link coming soon)*
+
+### Manual Installation
+
+If you prefer to install the extension manually or want to use the latest development version:
+
+#### For Chrome/Edge/Brave:
+1. Download the latest `phonetic-mapper-*-chrome.zip` from the [Releases page](https://github.com/shaun/phonetic-mapper/releases)
+2. Extract the zip file to a folder on your computer
+3. Open your browser and navigate to the extensions page:
+   - Chrome: `chrome://extensions`
+   - Edge: `edge://extensions`
+   - Brave: `brave://extensions`
+4. Enable "Developer mode" (toggle in the top right)
+5. Click "Load unpacked" and select the extracted folder
+6. The extension is now installed and ready to use
+
+#### For Firefox:
+1. Download the latest `phonetic-mapper-*-firefox.zip` from the [Releases page](https://github.com/shaun/phonetic-mapper/releases)
+2. Open Firefox and navigate to `about:debugging`
+3. Click "This Firefox" in the left sidebar
+4. Click "Load Temporary Add-on"
+5. Select the downloaded zip file
+6. The extension is now installed (Note: In Firefox, manually loaded extensions are temporary and will be removed when Firefox restarts. For permanent installation, the extension needs to be signed by Mozilla)
+
+#### Building from Source:
+If you want to build the extension yourself:
+1. Clone this repository
+2. Install dependencies: `npm install`
+3. Build the extension:
+   - For Chrome: `npm run build`
+   - For Firefox: `npm run build:firefox`
+4. The built extension will be in the `.output/chrome-mv3` or `.output/firefox-mv2` directory
+5. Follow the manual installation steps above using the built directory
 
 # FAQ
 

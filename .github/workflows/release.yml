@@ -1,0 +1,84 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Chrome extension
+        run: npm run zip
+
+      - name: Build Firefox extension
+        run: npm run zip:firefox
+
+      - name: List build artifacts
+        run: ls -la .output/
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.TAG }}
+          release_name: Release ${{ steps.version.outputs.TAG }}
+          body: |
+            ## Changes in this release
+            
+            ### Chrome Extension
+            - Download: phonetic-mapper-${{ steps.version.outputs.VERSION }}-chrome.zip
+            
+            ### Firefox Extension
+            - Download: phonetic-mapper-${{ steps.version.outputs.VERSION }}-firefox.zip
+            
+            ---
+            *This release was automatically generated from the prod branch.*
+          draft: false
+          prerelease: false
+
+      - name: Upload Chrome Extension
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .output/phonetic-mapper-${{ steps.version.outputs.VERSION }}-chrome.zip
+          asset_name: phonetic-mapper-${{ steps.version.outputs.VERSION }}-chrome.zip
+          asset_content_type: application/zip
+
+      - name: Upload Firefox Extension
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .output/phonetic-mapper-${{ steps.version.outputs.VERSION }}-firefox.zip
+          asset_name: phonetic-mapper-${{ steps.version.outputs.VERSION }}-firefox.zip
+          asset_content_type: application/zip
