@@ -31,6 +31,19 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "TAG=v$VERSION" >> $GITHUB_OUTPUT
+          
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          if git ls-remote --tags origin | grep -q "refs/tags/v${{ steps.version.outputs.VERSION }}"; then
+            echo "TAG_EXISTS=true" >> $GITHUB_OUTPUT
+            # Create a unique tag with timestamp
+            TIMESTAMP=$(date +%Y%m%d%H%M%S)
+            echo "UNIQUE_TAG=v${{ steps.version.outputs.VERSION }}-build-$TIMESTAMP" >> $GITHUB_OUTPUT
+          else
+            echo "TAG_EXISTS=false" >> $GITHUB_OUTPUT
+            echo "UNIQUE_TAG=v${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Build Chrome extension
         run: npm run zip
@@ -47,8 +60,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.version.outputs.TAG }}
-          release_name: Release ${{ steps.version.outputs.TAG }}
+          tag_name: ${{ steps.tag_check.outputs.UNIQUE_TAG }}
+          release_name: Release ${{ steps.tag_check.outputs.UNIQUE_TAG }}
           body: |
             ## Changes in this release
             
@@ -60,6 +73,7 @@ jobs:
             
             ---
             *This release was automatically generated from the prod branch.*
+            ${{ steps.tag_check.outputs.TAG_EXISTS == 'true' && '\n**Note:** This is a rebuild of version ' || '' }}${{ steps.tag_check.outputs.TAG_EXISTS == 'true' && steps.version.outputs.VERSION || '' }}
           draft: false
           prerelease: false
 
