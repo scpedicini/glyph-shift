@@ -28,7 +28,7 @@ export default defineConfig({
     ],
     browser_specific_settings: {
       gecko: {
-        id: 'glyphshift@mordenstar.com',
+        id: 'glyphshift@github.com',
         strict_min_version: '58.0'
       }
     }
