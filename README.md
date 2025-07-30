@@ -26,7 +26,7 @@ Does one of the following describe you?
 ## Key Features
 
 - 🌐 Works on any website
-- 📚 Support for multiple writing systems: ASL fingerspelling, Morse Code, Braille, Hiragana, Katakana, and more
+- 📚 Support for multiple writing systems: ASL fingerspelling, Morse Code, Braille, Hiragana, Katakana, etc.
 - 🎛️ Adjustable swap frequency (0-100%)
 - 💾 Saves your preferences across browser sessions
 - 🔒 Privacy-focused: all processing happens locally, no data collection

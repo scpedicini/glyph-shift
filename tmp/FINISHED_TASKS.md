@@ -106,28 +106,12 @@ The popup interface looks perfect in dark mode, but it needs to be properly adju
 
 See the `tmp/Glyphshift-Bad-Light-Mode.png` screenshot for reference.
 
-
-
 ## The hover-over text (the original English) size should not be relative to the font size of the transformed text.
 
 The hover text should always be the same size, regardless of the font size of the transformed text to ensure readability. 
-
 
 ## Extension Permissions
 
 Based on the repository's overall functionality, please set the appropriate permissions in the `wxt.config.ts` file.
 
 
-## Add Font Attributions
-
-Add font attributions to the README.md file
-
-Morse code font attribution:
-https://www.fontspace.com/morso-kode-font-f7440
-Designed by Morten L T
-100% Freeware
-
-ASL Fingerspelling font attribution:
-https://www.dafont.com/asl-hands-by-frank.font
-Designed by Frank Gemignani
-100% Freeware

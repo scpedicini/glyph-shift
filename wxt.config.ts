@@ -27,6 +27,7 @@ export default defineConfig({
       }
     ],
     browser_specific_settings: {
+      /// needed for Firefox
       gecko: {
         id: 'glyphshift@github.com',
         strict_min_version: '58.0'
