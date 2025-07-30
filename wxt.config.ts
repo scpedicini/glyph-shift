@@ -5,7 +5,7 @@ export default defineConfig({
   // extensionApi: 'webextension-polyfill',  // <- deprecated
   manifest: {
     name: 'Glyphshift',
-    version: '1.0.7',
+    version: '1.0.8',
     description: 'Transform web text into 9 different writing systems. Learn Hiragana, Braille, Morse Code, and more while browsing.',
     permissions: ['storage', 'activeTab'],
     action: {
@@ -27,6 +27,7 @@ export default defineConfig({
       }
     ],
     browser_specific_settings: {
+      /// needed for Firefox
       gecko: {
         id: 'glyphshift@github.com',
         strict_min_version: '58.0'

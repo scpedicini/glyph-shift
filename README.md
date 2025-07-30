@@ -4,6 +4,14 @@
 
 **Transform text on web pages into different writing systems like Hiragana, Braille, and Morse Code to help you learn and practice reading these alphabets.**
 
+<div align="center">
+  
+  **[🌐 Demo](http://mordenstar.com/projects/glyphshift)** • 
+  **[🔧 Chrome Extension](https://chromewebstore.google.com/detail/dhgpacdmcjpjilnhlmpmdlbmafjipeki)** • 
+  **[🦊 Firefox Add-on](https://addons.mozilla.org/addon/glyph-shift)**
+  
+</div>
+
 Glyphshift is a browser extension that randomly replaces words with their phonetic or symbolic equivalents based on user-selected writing systems and frequency settings, creating an immersive learning experience while browsing the web.
 
 ## Screenshots
@@ -26,15 +34,28 @@ Does one of the following describe you?
 ## Key Features
 
 - 🌐 Works on any website
-- 📚 Support for multiple writing systems: ASL fingerspelling, Morse Code, Braille, Hiragana, Katakana, and more
+- 📚 Support for multiple writing systems: ASL fingerspelling, Morse Code, Braille, Hiragana, Katakana, etc.
 - 🎛️ Adjustable swap frequency (0-100%)
 - 💾 Saves your preferences across browser sessions
 - 🔒 Privacy-focused: all processing happens locally, no data collection
 
 ## Installation
 
+**Want to try it first?** Check out our [online demo](http://mordenstar.com/projects/glyphshift) to see Glyphshift in action!
+
 ### From Extension Stores
-Glyphshift is available on the Chrome Web Store. [Install it here](#) *(link coming soon)*
+
+<div align="center">
+  <a href="https://chromewebstore.google.com/detail/dhgpacdmcjpjilnhlmpmdlbmafjipeki">
+    <img src="https://img.shields.io/badge/Chrome-Install-blue?style=for-the-badge&logo=google-chrome" alt="Install for Chrome">
+  </a>
+  <a href="https://addons.mozilla.org/addon/glyph-shift">
+    <img src="https://img.shields.io/badge/Firefox-Install-orange?style=for-the-badge&logo=firefox" alt="Install for Firefox">
+  </a>
+</div>
+
+- **Chrome/Edge/Brave**: [Install from Chrome Web Store](https://chromewebstore.google.com/detail/dhgpacdmcjpjilnhlmpmdlbmafjipeki)
+- **Firefox**: [Install from Firefox Add-ons](https://addons.mozilla.org/addon/glyph-shift)
 
 ### Manual Installation
 
