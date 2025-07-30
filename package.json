@@ -4,10 +4,12 @@
   "private": true,
   "version": "1.0.8",
   "type": "module",
+  "author": "Shaun Pedicini",
   "repository": {
     "type": "git",
     "url": "https://github.com/scpedicini/glyph-shift.git"
   },
+  "homepage": "http://mordenstar.com/projects/glyphshift",
   "scripts": {
     "dev": "wxt --debug --mode development --port 9411",
     "dev:firefox": "wxt -b firefox",
