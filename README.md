@@ -39,6 +39,18 @@ Does one of the following describe you?
 - 💾 Saves your preferences across browser sessions
 - 🔒 Privacy-focused: all processing happens locally, no data collection
 
+## What writing systems are supported?
+
+- **Katakana and Hiragana**: Japanese phonetic scripts
+- **Morse Code**: International Morse code for letters and numbers
+- **ASL Fingerspelling**: American Sign Language fingerspelling
+- **Braille**: Standard Braille for letters and numbers
+- **Cockney Rhyming Slang**: British slang with rhyming phrases
+- **Vorticon Alphabet**: A fictional alphabet from the Commander Keen video game series
+- **Hexideimal**: Converts numbers between 0-255 to hexadecimal representation (e.g. 255 becomes Fleventy Five)
+- **Roman Numerals**: Converts numbers to Roman numeral representation (e.g. 2025 becomes MMXXV)
+
+
 ## Installation
 
 **Want to try it first?** Check out our [online demo](http://mordenstar.com/projects/glyphshift) to see Glyphshift in action!
