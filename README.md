@@ -66,9 +66,6 @@ Does one of the following describe you?
   </a>
 </div>
 
-- **Chrome/Edge/Brave**: [Install from Chrome Web Store](https://chromewebstore.google.com/detail/dhgpacdmcjpjilnhlmpmdlbmafjipeki)
-- **Firefox**: [Install from Firefox Add-ons](https://addons.mozilla.org/addon/glyph-shift)
-
 ### Manual Installation
 
 If you prefer to install the extension manually or want to use the latest development version:
