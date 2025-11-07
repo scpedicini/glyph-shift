@@ -47,7 +47,7 @@ Does one of the following describe you?
 - **Braille**: Standard Braille for letters and numbers
 - **Cockney Rhyming Slang**: British slang with rhyming phrases
 - **Vorticon Alphabet**: A fictional alphabet from the Commander Keen video game series
-- **Hexideimal**: Converts numbers between 0-255 to hexadecimal representation (e.g. 255 becomes Fleventy Five)
+- **Hexadecimal**: Converts numbers between 0-255 to hexadecimal representation (e.g. 255 becomes Fleventy Five)
 - **Roman Numerals**: Converts numbers to Roman numeral representation (e.g. 2025 becomes MMXXV)
 
 
