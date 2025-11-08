@@ -1,0 +1,11 @@
+# Exclude dictionary data files from language statistics
+scripts/cmudict-* linguist-vendored
+
+# Exclude other data files and documentation from language statistics
+data-sources/*.csv linguist-vendored
+deprecated/** linguist-vendored
+docs/*.md linguist-documentation
+
+# Exclude image files
+*.pxd linguist-generated
+images/** linguist-vendored
