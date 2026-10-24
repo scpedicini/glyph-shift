@@ -103,7 +103,7 @@ If you want to build the extension yourself:
 
 ## How is Glyphshift different from other language learning tools?
 
-Unlike many other swap-based extensions, Glyphshift focuses on phonetic and symbolic systems (such as Morse code or ASL fingerspelling) rather than full languages (such as Spanish or German) - making it significantly easier to use and more accessible for quick learning and practice.
+Unlike many other [swap-based extensions](https://mordenstar.com/projects/linguaswap), Glyphshift focuses on phonetic and symbolic systems (such as Morse code or ASL fingerspelling) rather than full languages (such as Spanish or German) - making it significantly easier to use and more accessible for quick learning and practice.
 
 ## Prior Art
 
